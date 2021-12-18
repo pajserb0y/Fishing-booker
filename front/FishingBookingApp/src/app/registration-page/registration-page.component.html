@@ -1,0 +1,90 @@
+<div class="stepper">
+    <h1>Registration form</h1>
+  <form name="rform" #registerForm="ngForm">
+      <mat-stepper orientation="vertical" linear #stepper >
+          <mat-step label="Fill in personal info">
+            
+            <ul>
+              <li>
+                <mat-form-field appearance="fill">
+                  <mat-label>First name</mat-label>
+                  <input matInput type="text" name="firstname" [(ngModel)]="customer.firstName" required>
+                  <mat-icon matSuffix></mat-icon>
+                </mat-form-field>
+              </li>
+              <li>
+                <mat-form-field appearance="fill">
+                  <mat-label>Last name</mat-label>
+                  <input matInput type="text" name="lastname" [(ngModel)]="customer.lastName" required>
+                </mat-form-field>
+              </li>
+              <li>
+                <mat-form-field appearance="fill">
+                  <mat-label>Address</mat-label>
+                  <input matInput type="text" name="address" [(ngModel)]="customer.address" required>
+                </mat-form-field>
+              </li>
+              <li>
+                <mat-form-field appearance="fill">
+                  <mat-label>City</mat-label>
+                  <input matInput type="text" name="city" [(ngModel)]="customer.city" required>
+                </mat-form-field>
+              </li>
+              <li>
+                <mat-form-field appearance="fill">
+                  <mat-label>Country</mat-label>
+                  <input matInput type="text" name="country" [(ngModel)]="customer.country" required>
+                </mat-form-field>
+              </li>
+              <li>
+                <mat-form-field appearance="fill">
+                  <mat-label>Phone number</mat-label>
+                  <input matInput type="text" name="phoneNumber" [(ngModel)]="customer.phone" required>
+                </mat-form-field>
+              </li>
+              
+            </ul>
+            <div>
+              <button mat-button matStepperNext color="primary">Next</button>
+            </div>
+  
+          </mat-step>
+          <mat-step label="Fill in account info">
+            
+              <div>
+                <mat-form-field appearance="fill">
+                  <mat-label>E-mail</mat-label>
+                  <input matInput type="email" name="email" [formControl]="emailControl" [(ngModel)]="customer.email" required>
+                </mat-form-field>
+              </div>              
+              <div>
+                <mat-form-field hintLabel="Between 6 and 16 characters" appearance="fill">
+                  <mat-label>Password</mat-label>
+                  <input matInput type="password" name="password" id="password" minlength="6" maxlength="16" [(ngModel)]="customer.password" required>
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field appearance="fill">
+                  <mat-label>Confirm password</mat-label>
+                  <input matInput type="password" name="repassword" [(ngModel)]="repassword" required>
+                </mat-form-field>
+              </div>
+            
+  
+                <div>
+                  <button mat-button matStepperPrevious>Back</button>
+                  <button mat-button matStepperNext color="primary">Next</button>
+                </div>
+            </mat-step>
+            
+            <mat-step label="Submit registration request">
+              <p><b>Before submiting, please check info you filled</b></p>
+              <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-raised-button color="accent" (click)="submit()" [disabled]="!(registerForm.valid && customer.password === repassword)" [routerLink]="['/']">Submit</button>
+              </div>
+            </mat-step>
+      </mat-stepper>
+     </form>
+    </div>
+  
