@@ -14,7 +14,7 @@ import { map, switchMap, catchError, mergeMap } from 'rxjs/operators'; */
 })
 export class CustomerService {
 
-  private _baseUrl = "http://localhost:8080/";
+  private _baseUrl = 'http://localhost:8080/';
   private _patientRegistration = this._baseUrl + 'api/customers';
   private _submitRegistration  = this._patientRegistration + '/create';
 
@@ -29,7 +29,7 @@ export class CustomerService {
    });
     const body=JSON.stringify(customer);
     console.log(body)
-    return this._http.post(this._submitRegistration, body)
+    return this._http.post(this._submitRegistration, body, {'headers':headers})
   }   
 
 

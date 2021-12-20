@@ -5,15 +5,19 @@ import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.service.CustomerService;
 import com.springboot.app.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
-@CrossOrigin(origins = "http://localhost:4200")  //sluzi za povezivanje sa frontom
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")  //sluzi za povezivanje sa frontom
 @RequestMapping("/api/customers")
 public class CustomerController {
     private final CustomerService customerService;
@@ -31,9 +35,44 @@ public class CustomerController {
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
 //            return new ModelAndView("createCustomer", "formErrors", result.getAllErrors());
         }
-        Customer newCustomer = customerService.createCustomer(new Customer(customerDto));
+        Customer newCustomer = customerService.saveCustomer(new Customer(customerDto));
         emailService.sendActivationMailAsync(newCustomer);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
+    public ResponseEntity<?> activateCustomerAccount(ModelAndView modelAndView, @RequestParam("hashCode") String hashCode) {
+
+        Customer verificationCustomer = customerService.findByHashCode(hashCode);
+        if (verificationCustomer == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        verificationCustomer.setActivated(true);
+        customerService.saveCustomer(verificationCustomer);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "http://localhost:8080/");
+        return new ResponseEntity<String>(headers,HttpStatus.FOUND);
+    }
+
+//    @GetMapping(path = "/activate")
+//    public ResponseEntity<?> activateCustomerAccount(WebRequest request, @RequestParam("hashCode") String hashCode) {
+//        Locale locale = request.getLocale();
+//
+//        Customer verificationCustomer = customerService.findByHashCode(hashCode);
+//        if (verificationCustomer == null) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//
+//        verificationCustomer.setActivated(true);
+//        customerService.saveCustomer(verificationCustomer);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Location", "http://localhost:8080/");
+//        return new ResponseEntity<String>(headers,HttpStatus.FOUND);
+//    }
+
+
 }

@@ -13,9 +13,12 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    @Override
-    public Customer createCustomer(Customer customer) {
+    public Customer saveCustomer(Customer customer) {
         customerRepository.save(customer);
         return customer;
+    }
+
+    public Customer findByHashCode(String hashCode) {
+        return customerRepository.findByHashCode(hashCode);
     }
 }

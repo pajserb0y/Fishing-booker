@@ -9,6 +9,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -18,12 +25,17 @@ public class EmailServiceImpl implements EmailService {
     private Environment env;
 
     @Async
-    public void sendActivationMailAsync(Customer customer) throws MailException, InterruptedException {
+    public void sendActivationMailAsync(Customer customer) throws MailException {
+
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(customer.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
-        mail.setSubject("Primer slanja emaila pomoÄ‡u asinhronog Spring taska");
-        mail.setText("Pozdrav " + customer.getFirstName() + ",\n\nhvala Å¡to pratiÅ¡ ISA.");
+        mail.setSubject("Activation mail");
+        mail.setText("Hi, " + customer.getFirstName() + ".\n\nWelcome to our site." +
+                    "\nWe hope that you will be satisfied with our services." +
+                    "\nIn order to activate your account click on this link: " +
+                    "http://localhost:8080/api/customers/activate?hashCode=" + customer.getHashCode());
+
         javaMailSender.send(mail);
     }
 }

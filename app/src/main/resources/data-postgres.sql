@@ -1,2 +1,2 @@
-insert into customer (first_name, last_name, email, password, address, city, country, phone) values
-            ('Luka', 'Matic', 'luka@gmail.com', 'luka', 'Kozaracka 14', 'Pozega', 'Serbia', '064528456');
+insert into customer (first_name, last_name, email, password, address, city, country, phone, is_deleted, is_activated) values
+            ('Luka', 'Matic', 'luka@gmail.com', 'luka', 'Kozaracka 14', 'Pozega', 'Serbia', '064528456', false, true);

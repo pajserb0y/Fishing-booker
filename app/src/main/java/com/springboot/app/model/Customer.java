@@ -2,10 +2,14 @@ package com.springboot.app.model;
 
 import com.springboot.app.model.dto.CustomerDTO;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
 
 @Entity
 public class Customer {
@@ -40,6 +44,7 @@ public class Customer {
 
     private boolean isDeleted = false;
     private boolean isActivated;
+    private String hashCode;
 
     public Customer(int id, String firstName, String lastName, String email, String password, String address, String city, String country, String phone) {
         this.id = id;
@@ -65,9 +70,10 @@ public class Customer {
         this.city = customerDto.getCity();
         this.country = customerDto.getCountry();
         this.phone = customerDto.getPhone();
+        this.hashCode = generateHashCode(this.password);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -103,7 +109,7 @@ public class Customer {
         return phone;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -137,6 +143,45 @@ public class Customer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
+    public String getHashCode() {
+        return hashCode;
+    }
+
+    public void setHashCode(String hashCode) {
+        this.hashCode = hashCode;
+    }
+
+    public String generateHashCode(String password){
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        try {
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = factory.generateSecret(spec).getEncoded();
+            return hash.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
 
