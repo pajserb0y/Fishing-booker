@@ -41,11 +41,12 @@ public class CustomerController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<?> activateCustomerAccount(ModelAndView modelAndView, @RequestParam("hashCode") String hashCode) {
+    @GetMapping(path = "/activate")
+    public ResponseEntity<?> activateCustomerAccount(WebRequest request, @RequestParam("hashCode") String hashCode) {
+        Locale locale = request.getLocale();
 
         Customer verificationCustomer = customerService.findByHashCode(hashCode);
-        if (verificationCustomer == null) {
+        if (verificationCustomer == null || verificationCustomer.isActivated()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -53,26 +54,9 @@ public class CustomerController {
         customerService.saveCustomer(verificationCustomer);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "http://localhost:8080/");
+        headers.add("Location", "http://localhost:4200");
         return new ResponseEntity<String>(headers,HttpStatus.FOUND);
     }
-
-//    @GetMapping(path = "/activate")
-//    public ResponseEntity<?> activateCustomerAccount(WebRequest request, @RequestParam("hashCode") String hashCode) {
-//        Locale locale = request.getLocale();
-//
-//        Customer verificationCustomer = customerService.findByHashCode(hashCode);
-//        if (verificationCustomer == null) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//
-//        verificationCustomer.setActivated(true);
-//        customerService.saveCustomer(verificationCustomer);
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Location", "http://localhost:8080/");
-//        return new ResponseEntity<String>(headers,HttpStatus.FOUND);
-//    }
 
 
 }

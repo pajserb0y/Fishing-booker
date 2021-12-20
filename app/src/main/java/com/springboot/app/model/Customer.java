@@ -1,6 +1,8 @@
 package com.springboot.app.model;
 
 import com.springboot.app.model.dto.CustomerDTO;
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+import org.springframework.util.DigestUtils;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -8,6 +10,10 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 
@@ -170,18 +176,56 @@ public class Customer {
     }
 
     public String generateHashCode(String password){
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+//        MessageDigest digest = null;
+//        try {
+//            digest = MessageDigest.getInstance("SHA-256");
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+//        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+//        String sha256hex = HexBin.encode(hash);
+//        return sha256hex;
+
+
+        MessageDigest md = null;
         try {
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            byte[] hash = factory.generateSecret(spec).getEncoded();
-            return hash.toString();
-        } catch (Exception e) {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return "";
+        // Change this to UTF-16 if needed
+        md.update(password.getBytes(StandardCharsets.UTF_8));
+        byte[] digest = md.digest();
+
+        String hex = String.format("%064x", new BigInteger(1, digest));
+        return hex;
+
+
+
+//        SecureRandom random = new SecureRandom();
+//        byte[] salt = new byte[16];
+//        random.nextBytes(salt);
+//        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+//        try {
+//            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+//            byte[] hash = factory.generateSecret(spec).getEncoded();
+//            return hash.toString();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return "";
+    }
+
+    private static String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 }
 
