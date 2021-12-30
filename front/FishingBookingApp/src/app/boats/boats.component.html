@@ -1,0 +1,54 @@
+<div style="margin-left: 15%; margin-top: 3%;">
+    <h2>Boats</h2>
+    
+    <table mat-table [dataSource]="boats" class="mat-elevation-z8" style="width: 70%;">
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Boat name </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.name}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="address">
+            <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.address}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="details">
+            <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.details}} </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="freeTerms">
+            <mat-header-cell *matHeaderCellDef> Free terms </mat-header-cell>
+            <mat-cell *matCellDef="let element">  </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="priceList">
+            <mat-header-cell *matHeaderCellDef> Price list </mat-header-cell>
+            <mat-cell *matCellDef="let element">  </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="additionalServes">
+            <mat-header-cell *matHeaderCellDef> Additional serves </mat-header-cell>
+            <mat-cell *matCellDef="let element">  </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="grade">
+            <mat-header-cell *matHeaderCellDef> Grade </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.grade}} </mat-cell>
+          </ng-container>
+    
+          <!-- <ng-container matColumnDef="block">
+            <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+                <button [attr.id]="row.id" mat-button (click)="block(row)"> Block </button>
+             </mat-cell>
+          </ng-container> -->
+    
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </table>
+    </div>

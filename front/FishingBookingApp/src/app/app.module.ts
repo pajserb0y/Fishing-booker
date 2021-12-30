@@ -39,6 +39,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RegistrationPageComponent } from './registration-page/registration-page.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { CustomerService } from './service/customer.service';
+import { BoatsComponent } from './boats/boats.component';
+import { WeekendHousesComponent } from './weekend-houses/weekend-houses.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+import { FishingLessonsComponent } from './fishing-lessons/fishing-lessons.component';
+import { CustomerProfileComponent } from './customer-profile/customer-profile.component';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -73,7 +78,12 @@ const MaterialComponents = [
     LandingPageComponent,
     HeaderComponent, 
     FooterComponent,
-    RegistrationPageComponent
+    RegistrationPageComponent,
+    BoatsComponent,
+    WeekendHousesComponent,
+    LoginPageComponent,
+    FishingLessonsComponent,
+    CustomerProfileComponent
   ],
   imports: [
     BrowserModule,
