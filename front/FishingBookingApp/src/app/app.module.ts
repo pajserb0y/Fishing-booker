@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
 import {MatTableModule} from '@angular/material/table';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -44,6 +45,9 @@ import { WeekendHousesComponent } from './weekend-houses/weekend-houses.componen
 import { LoginPageComponent } from './login-page/login-page.component';
 import { FishingLessonsComponent } from './fishing-lessons/fishing-lessons.component';
 import { CustomerProfileComponent } from './customer-profile/customer-profile.component';
+import { InterceptorService } from './service/interceptor.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -96,7 +100,9 @@ const MaterialComponents = [
     ReactiveFormsModule
     
   ],
-  providers: [CustomerService],
+  providers: [CustomerService,
+                { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
+                { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,11 +1,11 @@
 package com.springboot.app.model;
 
 import com.springboot.app.model.dto.CustomerDTO;
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
-import org.springframework.util.DigestUtils;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -14,11 +14,11 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.KeySpec;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-public class Customer {
+public class Customer implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -32,6 +32,9 @@ public class Customer {
     @Email(message = "Email is in wrong format")
     @NotBlank(message = "Please fill out email")
     private String email;
+
+    @NotEmpty(message = "Please fill out username")
+    private String username;
 
     @NotEmpty(message = "Please fill out password")
     private String password;
@@ -52,6 +55,14 @@ public class Customer {
     private boolean isActivated;
     private String hashCode;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
+
+
+
     public Customer(int id, String firstName, String lastName, String email, String password, String address, String city, String country, String phone) {
         this.id = id;
         this.firstName = firstName;
@@ -67,11 +78,14 @@ public class Customer {
     public Customer() { }
 
     public Customer(CustomerDTO customerDto) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
         this.id = customerDto.getId();
         this.firstName = customerDto.getFirstName();
         this.lastName = customerDto.getLastName();
         this.email = customerDto.getEmail();
-        this.password = customerDto.getPassword();
+        this.username = customerDto.getUsername();
+        this.password = passwordEncoder.encode(customerDto.getPassword());
         this.address = customerDto.getAddress();
         this.city = customerDto.getCity();
         this.country = customerDto.getCountry();
@@ -95,6 +109,11 @@ public class Customer {
         return email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -113,6 +132,42 @@ public class Customer {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isActivated;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setId(Integer id) {

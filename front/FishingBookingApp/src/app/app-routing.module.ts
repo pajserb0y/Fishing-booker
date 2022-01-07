@@ -6,6 +6,7 @@ import { FishingLessonsComponent } from './fishing-lessons/fishing-lessons.compo
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { RegistrationPageComponent } from './registration-page/registration-page.component'; 
+import { AuthGuard } from './service/auth.guard';
 import { WeekendHousesComponent } from './weekend-houses/weekend-houses.component';
 
 const routes: Routes = [
@@ -15,7 +16,7 @@ const routes: Routes = [
   { path: 'fishing-lessons', component: FishingLessonsComponent },
   { path: 'boats', component: BoatsComponent },
   { path: 'login', component: LoginPageComponent },
-  { path: 'customer-profile', component: CustomerProfileComponent },
+  { path: 'customer-profile', component: CustomerProfileComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

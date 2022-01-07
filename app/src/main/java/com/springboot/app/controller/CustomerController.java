@@ -4,6 +4,7 @@ import com.springboot.app.model.Customer;
 import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.service.CustomerService;
 import com.springboot.app.service.EmailService;
+import com.springboot.app.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,16 +18,18 @@ import javax.validation.Valid;
 import java.util.Locale;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")  //sluzi za povezivanje sa frontom
+//@CrossOrigin(origins = "http://localhost:4200")  //sluzi za povezivanje sa frontom
 @RequestMapping("/api/customers")
 public class CustomerController {
     private final CustomerService customerService;
     private final EmailService emailService;
+   // private final RoleService roleService;
 
     @Autowired
     public CustomerController(CustomerService customerService, EmailService emailService) {
         this.customerService = customerService;
         this.emailService = emailService;
+       // this.roleService = roleService;
     }
 
     @PostMapping(path = "/create")

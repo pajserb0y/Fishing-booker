@@ -20,7 +20,7 @@ export class CustomerService {
   private _baseUrl = 'http://localhost:8080/';
   private _patientRegistration = this._baseUrl + 'api/customers';
   private _submitRegistration  = this._patientRegistration + '/create';
-  private _authenticate        = this._patientRegistration + '/authenticate';
+  private _login               = this._baseUrl + '/auth/login';
 
   constructor(private _http: HttpClient) { }
 
@@ -39,7 +39,7 @@ export class CustomerService {
   logIn(credentials: Credentials): Observable<any> {
     const body=JSON.stringify(credentials);
     console.log(body)
-    return this._http.post(this._authenticate, body,{headers, responseType: 'text'})
+    return this._http.post(this._login, body,{headers, responseType: 'text'})
   }
 
 

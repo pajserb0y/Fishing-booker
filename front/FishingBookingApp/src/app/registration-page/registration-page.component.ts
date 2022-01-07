@@ -17,6 +17,7 @@ export class RegistrationPageComponent implements OnInit {
     firstName: "",
     lastName: "",
     email: "",
+    username:  "",
     password: "",
     address: "",
     city: "",

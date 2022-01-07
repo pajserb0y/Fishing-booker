@@ -56,7 +56,14 @@
                   <mat-label>E-mail</mat-label>
                   <input matInput type="email" name="email" [formControl]="emailControl" [(ngModel)]="customer.email" required>
                 </mat-form-field>
-              </div>              
+              </div>  
+              <div>
+                <mat-form-field appearance="fill">
+                  <mat-label>Username</mat-label>
+                  <input matInput type="text" name="username" [(ngModel)]="customer.username" required>               
+                </mat-form-field>
+                <!-- <div *ngIf="usernames.includes(customer.username)" class="errorText">Username already exists!</div> -->
+              </div>   
               <div>
                 <mat-form-field hintLabel="Between 6 and 16 characters" appearance="fill">
                   <mat-label>Password</mat-label>

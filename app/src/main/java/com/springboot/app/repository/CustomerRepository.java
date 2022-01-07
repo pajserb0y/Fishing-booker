@@ -4,5 +4,6 @@ import com.springboot.app.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
-    public Customer findByHashCode(String hashCode);
+    Customer findByHashCode(String hashCode);
+    Customer findByUsername(String username);
 }

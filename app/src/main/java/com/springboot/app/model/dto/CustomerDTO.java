@@ -13,6 +13,8 @@ public class CustomerDTO {
     @Email(message = "Email is in wrong format")
     @NotBlank(message = "Please fill out email")
     private String email;
+    @NotEmpty(message = "Please fill out username")
+    private String username;
     @NotEmpty(message = "Please fill out password")
     private String password;
     @NotEmpty(message = "Please fill out address")
@@ -72,6 +74,14 @@ public class CustomerDTO {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setId(int id) {
