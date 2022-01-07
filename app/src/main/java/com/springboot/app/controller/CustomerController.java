@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -41,7 +42,7 @@ public class CustomerController {
         Customer newCustomer = customerService.saveCustomer(new Customer(customerDto));
         emailService.sendActivationMailAsync(newCustomer);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/activate")
@@ -61,5 +62,18 @@ public class CustomerController {
         return new ResponseEntity<String>(headers,HttpStatus.FOUND);
     }
 
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @GetMapping(path = "/{username}")
+    public CustomerDTO getCustomerByUsername(@PathVariable String username) {
+        Customer customer = customerService.findByUsername(username);
+        return new CustomerDTO(customer);
+    }
 
+//    @PreAuthorize("hasRole('CUSTOMER')")
+//    @PostMapping(path = "/{username}")
+//    public CustomerDTO getCustomerByUsername(@PathVariable String username) {
+//        Customer customer = customerService.findByUsername(username);
+//        //return new ResponseEntity<>(new CustomerDTO(customer), HttpStatus.FOUND);
+//        return new CustomerDTO(customer);
+//    }
 }

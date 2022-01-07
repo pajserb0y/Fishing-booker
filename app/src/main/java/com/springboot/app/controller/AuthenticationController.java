@@ -38,7 +38,7 @@ public class AuthenticationController {
     // Prvi endpoint koji pogadja korisnik kada se loguje.
     // Tada zna samo svoje korisnicko ime i lozinku i to prosledjuje na backend.
     @PostMapping("/login")
-    public ResponseEntity<JwtToken> createAuthenticationToken(@RequestBody UserCredentials authenticationRequest, HttpServletResponse response) {
+    public String createAuthenticationToken(@RequestBody UserCredentials authenticationRequest, HttpServletResponse response) {
 
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se AuthenticationException
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -53,7 +53,7 @@ public class AuthenticationController {
         int expiresIn = tokenUtils.getExpiredIn();
 
         // Vrati token kao odgovor na uspesnu autentifikaciju
-        return ResponseEntity.ok(new JwtToken(jwt, expiresIn));
+        return jwt;
     }
 
 }

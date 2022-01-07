@@ -25,6 +25,9 @@ export class InterceptorService implements HttpInterceptor {
     });
 
     request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
+    request = request.clone({ headers: request.headers.set('Access-Control-Allow-Origin', '*') });
+    //request = request.clone({ headers: request.headers.set('Access-Control-Allow-Headers', 'Content-Type') });
+    request = request.clone({ headers: request.headers.set('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT') });
 
     return next.handle(request);
   }

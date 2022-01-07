@@ -13,7 +13,7 @@ import jwt_decode from 'jwt-decode';
 export class LoginPageComponent implements OnInit {
 
   credentials: Credentials = {
-    email: '',
+    username: '',
     password: ''
   }
 
@@ -30,7 +30,7 @@ export class LoginPageComponent implements OnInit {
       data => {
         localStorage.setItem('jwtToken', data)
         let tokeninfo = this.getDecodedAccessToken(data)
-        localStorage.setItem('id', tokeninfo.id)
+        localStorage.setItem('username', tokeninfo.sub)
         localStorage.setItem('role', tokeninfo.role)
         localStorage.setItem('exp', tokeninfo.exp)
         console.log('Dobio: ', data)

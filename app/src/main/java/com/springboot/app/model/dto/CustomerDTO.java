@@ -1,5 +1,9 @@
 package com.springboot.app.model.dto;
 
+import com.springboot.app.model.Customer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -26,11 +30,12 @@ public class CustomerDTO {
     @NotEmpty(message = "Please fill out phone")
     private String phone;
 
-    public CustomerDTO(int id, String firstName, String lastName, String email, String password, String address, String city, String country, String phone) {
+    public CustomerDTO(int id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.username = username;
         this.password = password;
         this.address = address;
         this.city = city;
@@ -39,6 +44,19 @@ public class CustomerDTO {
     }
 
     public CustomerDTO() { }
+
+    public CustomerDTO(Customer customer) {
+        this.id = customer.getId();
+        this.firstName = customer.getFirstName();
+        this.lastName = customer.getLastName();
+        this.email = customer.getEmail();
+        this.username = customer.getUsername();
+        this.password = customer.getPassword();
+        this.address = customer.getAddress();
+        this.city = customer.getCity();
+        this.country = customer.getCountry();
+        this.phone = customer.getPhone();
+    }
 
     public int getId() {
         return id;

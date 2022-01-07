@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Customer } from '../model/customer';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { Credentials } from '../model/credentials';
-/* import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch'; */
-/* import 'rxjs/add/operator/of';
-import 'rxjs/add/operator/map'; */
-/* import { of } from 'rxjs';
-import { map, switchMap, catchError, mergeMap } from 'rxjs/operators'; */
+import { Observable, throwError } from 'rxjs';
+import { map, catchError, tap } from 'rxjs/operators';
+/* import { do } from "rxjs/operators"; */
+import { of } from 'rxjs';
+import 'rxjs/add/operator/catch';
 
 const headers = { 'content-type': 'application/json'} 
 
@@ -18,9 +16,14 @@ const headers = { 'content-type': 'application/json'}
 export class CustomerService {
 
   private _baseUrl = 'http://localhost:8080/';
-  private _patientRegistration = this._baseUrl + 'api/customers';
-  private _submitRegistration  = this._patientRegistration + '/create';
-  private _login               = this._baseUrl + '/auth/login';
+  private _customerRegistration = this._baseUrl + 'api/customers';
+  private _submitRegistration  = this._customerRegistration + '/create';
+  private _editCustomer  = this._customerRegistration + '/edit';
+  private _getCustomerByUsername  = this._customerRegistration + '/';
+  private _login = this._baseUrl + 'auth/login';
+
+
+  returnedCustomer!: Customer;
 
   constructor(private _http: HttpClient) { }
 
@@ -42,10 +45,38 @@ export class CustomerService {
     return this._http.post(this._login, body,{headers, responseType: 'text'})
   }
 
+  edit(customer : Customer):Observable<any>{
+    const body = JSON.stringify(customer);
+    return this._http.put(this._editCustomer, body)
+                     .pipe(catchError(this.handleError));
+  }
 
-  private handleError(err : HttpErrorResponse) {
-    console.log(err.message);
-    return Observable.throw(err.message);
-    throw new Error('Method not implemented.');
+  getCustomerByUsername(username: string): Observable<Customer> {
+    return this._http.get<Customer>(this._getCustomerByUsername + username)
+                           .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                                catchError(this.handleError)); 
+  }
+
+  /* getCustomerByUsername(username: string): Observable<Customer> {
+    return this._http.get(this._getCustomerByUsername + username)
+                           .pipe(map(this.extractData),                         
+                                catchError(this.handleError)); 
+  } */
+
+  /* getCustomerByUsername(username: string): Observable<Customer> {
+    return this._http.get<Customer>(this._getCustomerByUsername + username).pipe(
+                         tap(data =>  console.log('Iz service-a: ' + JSON.stringify(data))))
+  } */
+
+  /* getCustomerByUsername(username: string): Observable<any> {
+    const body=JSON.stringify(username);
+    console.log(body)
+    return this._http.post(this._getCustomerByUsername + username, body)
+  } */
+  
+
+  private handleError(error: any) {
+    console.error(error.message || error);
+        return throwError(error);
   }
 }

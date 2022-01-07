@@ -28,4 +28,9 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer findByHashCode(String hashCode) {
         return customerRepository.findByHashCode(hashCode);
     }
+
+    @Override
+    public Customer findByUsername(String username) {
+        return customerRepository.findByUsername(username);
+    }
 }

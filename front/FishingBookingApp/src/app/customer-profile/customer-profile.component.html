@@ -1,1 +1,50 @@
-<p>customer-profile works!</p>
+<div class="stepper">
+    <h1>{{customer.firstName}}'s informations</h1>
+  <form name="rform" #registerForm="ngForm">            
+              
+                <mat-form-field appearance="fill" style="margin-right: 2%;">
+                  <mat-label>First name</mat-label>
+                  <input matInput type="text" name="firstname" [(ngModel)]="customer.firstName" required>
+                  <mat-icon matSuffix></mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Last name</mat-label>
+                  <input matInput type="text" name="lastname" [(ngModel)]="customer.lastName" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="margin-right: 2%;">
+                  <mat-label>Address</mat-label>
+                  <input matInput type="text" name="address" [(ngModel)]="customer.address" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>City</mat-label>
+                  <input matInput type="text" name="city" [(ngModel)]="customer.city" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" style="margin-right: 2%;">
+                  <mat-label>Country</mat-label>
+                  <input matInput type="text" name="country" [(ngModel)]="customer.country" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Phone number</mat-label>
+                  <input matInput type="text" name="phoneNumber" [(ngModel)]="customer.phone" required>
+                </mat-form-field>
+              
+            
+              <div>
+                <mat-form-field appearance="fill">
+                  <mat-label>Username</mat-label>
+                  <input matInput type="text" name="username" [(ngModel)]="customer.username" required>               
+                </mat-form-field>
+                <!-- <div *ngIf="usernames.includes(customer.username)" class="errorText">Username already exists!</div> -->
+              </div>   
+            
+              <div>
+                <button mat-raised-button color="accent" (click)="edit()"  >Edit</button>
+              </div>
+     </form>
+    </div>
+  
