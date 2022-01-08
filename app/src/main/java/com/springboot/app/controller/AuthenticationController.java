@@ -3,14 +3,11 @@ package com.springboot.app.controller;
 import javax.servlet.http.HttpServletResponse;
 
 import com.springboot.app.model.Customer;
-import com.springboot.app.model.Role;
-import com.springboot.app.model.dto.JwtToken;
 import com.springboot.app.model.dto.UserCredentials;
 import com.springboot.app.security.tokenUtils.JwtTokenUtils;
 import com.springboot.app.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,7 +46,7 @@ public class AuthenticationController {
 
         // Kreiraj token za tog korisnika
         Customer customer = (Customer) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(customer.getUsername(), customer.getRoles());
+        String jwt = tokenUtils.generateToken(customer.getUsername(), customer.getRole());
         int expiresIn = tokenUtils.getExpiredIn();
 
         // Vrati token kao odgovor na uspesnu autentifikaciju

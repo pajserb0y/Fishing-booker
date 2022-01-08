@@ -1,6 +1,5 @@
 package com.springboot.app.model.dto;
 
-import com.springboot.app.model.User;
 import com.springboot.app.model.WeekendHouseOwner;
 
 public class WeekendHouseOwnerDTO extends UserDTO{

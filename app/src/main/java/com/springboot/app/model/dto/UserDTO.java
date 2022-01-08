@@ -1,7 +1,6 @@
 package com.springboot.app.model.dto;
 
-import com.springboot.app.model.User;
-import com.springboot.app.model.WeekendHouseOwner;
+import com.springboot.app.model.SystemUser;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -41,18 +40,18 @@ public class UserDTO {
         this.country = country;
         this.phone = phone;
     }
-    public UserDTO(User user)
+    public UserDTO(SystemUser systemUser)
     {
-        this.id = user.getId();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.address = user.getAddress();
-        this.city = user.getCity();
-        this.country = user.getCountry();
-        this.phone = user.getPhone();
+        this.id = systemUser.getId();
+        this.firstName = systemUser.getFirstName();
+        this.lastName = systemUser.getLastName();
+        this.email = systemUser.getEmail();
+        this.username = systemUser.getUsername();
+        this.password = systemUser.getPassword();
+        this.address = systemUser.getAddress();
+        this.city = systemUser.getCity();
+        this.country = systemUser.getCountry();
+        this.phone = systemUser.getPhone();
     }
     UserDTO()
     {

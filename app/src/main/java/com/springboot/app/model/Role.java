@@ -3,20 +3,34 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 // POJO koji implementira Spring Security GrantedAuthority kojim se mogu definisati role u aplikaciji
 @Entity
-@Table(name="ROLE")
+@Table(name="role")
 public class Role implements GrantedAuthority {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name="name")
     String name;
+
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Customer> customer = new HashSet<Customer>();
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<WeekendHouseOwner> weekendHouseOwners = new HashSet<WeekendHouseOwner>();
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Instructor> instructors = new HashSet<Instructor>();
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<BoatOwner> boatOwners = new HashSet<BoatOwner>();
 
     @JsonIgnore
     @Override

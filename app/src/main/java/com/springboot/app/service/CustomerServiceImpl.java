@@ -21,7 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     public Customer saveCustomer(Customer customer) {
         List<Role> roles = roleService.findByName("ROLE_CUSTOMER");
-        customer.setRoles(roles);
+        customer.setRole(roles.get(0));
         customerRepository.save(customer);
         return customer;
     }

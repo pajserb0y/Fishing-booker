@@ -57,9 +57,9 @@ public class JwtTokenUtils {
      * @param roles
      * @return JWT token
      */
-    public String generateToken(String username, List<Role> roles) {
+    public String generateToken(String username, Role roles) {
         return Jwts.builder()
-                .claim("role", roles.get(0).getName())
+                .claim("role", roles.getName())
                 .setIssuer(APP_NAME)
                 .setSubject(username)
                 .setAudience(generateAudience())

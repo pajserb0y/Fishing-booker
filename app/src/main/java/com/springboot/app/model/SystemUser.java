@@ -11,10 +11,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
+import java.util.Collections;
 import javax.persistence.Id;
 
 @MappedSuperclass
-public class User implements UserDetails {
+public class SystemUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
@@ -50,7 +51,9 @@ public class User implements UserDetails {
     protected boolean isDeleted = false;
     protected boolean isActivated;
 
-    public User(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated) {
+
+    public SystemUser(Integer id, String firstName, String lastName, String email, String username, String password, String address,
+                      String city, String country, String phone, boolean isDeleted, boolean isActivated, Role role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,8 +66,10 @@ public class User implements UserDetails {
         this.phone = phone;
         this.isDeleted = isDeleted;
         this.isActivated = isActivated;
+        //this.role = role;
     }
-    public User(UserDTO userDTO)
+
+    public SystemUser(UserDTO userDTO)
     {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -79,7 +84,7 @@ public class User implements UserDetails {
         this.country = userDTO.getCountry();
         this.phone = userDTO.getPhone();
     }
-    public User()
+    public SystemUser()
     {}
     public Integer getId() {
         return id;
@@ -169,38 +174,15 @@ public class User implements UserDetails {
         isActivated = activated;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 
-    @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
-    @Override
+
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return isActivated;
-    }
 }

@@ -7,72 +7,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 @Entity
-public class Customer implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @NotEmpty(message = "Please fill out first name")
-    private String firstName;
-
-    @NotEmpty(message = "Please fill out last name")
-    private String lastName;
-
-    @Email(message = "Email is in wrong format")
-    @NotBlank(message = "Please fill out email")
-    private String email;
-
-    @NotEmpty(message = "Please fill out username")
-    private String username;
-
-    @NotEmpty(message = "Please fill out password")
-    private String password;
-
-    @NotEmpty(message = "Please fill out address")
-    private String address;
-
-    @NotEmpty(message = "Please fill out city")
-    private String city;
-
-    @NotEmpty(message = "Please fill out country")
-    private String country;
-
-    @NotEmpty(message = "Please fill out phone")
-    private String phone;
-
-    private boolean isDeleted = false;
-    private boolean isActivated;
+public class Customer extends SystemUser implements UserDetails {
     private String hashCode;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private List<Role> roles;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
-
-
-    public Customer(int id, String firstName, String lastName, String email, String password, String address, String city, String country, String phone) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.city = city;
-        this.country = country;
-        this.phone = phone;
+    public Customer(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String hashCode) {
+        super(id, firstName, lastName, email, username, password, address, city, country, phone, isDeleted, isActivated, roles);
+        this.hashCode = hashCode;
+        this.role = roles;
     }
 
     public Customer() { }
@@ -93,133 +46,12 @@ public class Customer implements UserDetails {
         this.hashCode = generateHashCode(this.password);
     }
 
-    public Integer getId() {
-        return id;
+    public Role getRole() {
+        return role;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.isActivated;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public boolean isActivated() {
-        return isActivated;
-    }
-
-    public void setActivated(boolean activated) {
-        isActivated = activated;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getHashCode() {
@@ -243,6 +75,31 @@ public class Customer implements UserDetails {
 
         String hex = String.format("%064x", new BigInteger(1, digest));
         return hex;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList( this.role);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isActivated;
     }
 }
 
