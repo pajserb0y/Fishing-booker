@@ -1,5 +1,6 @@
 package com.springboot.app.controller;
 
+import com.springboot.app.adapter.CustomerAdapter;
 import com.springboot.app.model.Customer;
 import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.service.CustomerService;
@@ -24,20 +25,17 @@ import java.util.Locale;
 public class CustomerController {
     private final CustomerService customerService;
     private final EmailService emailService;
-   // private final RoleService roleService;
 
     @Autowired
     public CustomerController(CustomerService customerService, EmailService emailService) {
         this.customerService = customerService;
         this.emailService = emailService;
-       // this.roleService = roleService;
     }
 
     @PostMapping(path = "/create")
     public ResponseEntity<?> createCustomer(@RequestBody @Valid CustomerDTO customerDto, BindingResult result) throws Exception {
         if(result.hasErrors()){
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
-//            return new ModelAndView("createCustomer", "formErrors", result.getAllErrors());
         }
         Customer newCustomer = customerService.saveCustomer(new Customer(customerDto));
         emailService.sendActivationMailAsync(newCustomer);
@@ -47,8 +45,6 @@ public class CustomerController {
 
     @GetMapping(path = "/activate")
     public ResponseEntity<?> activateCustomerAccount(WebRequest request, @RequestParam("hashCode") String hashCode) {
-        Locale locale = request.getLocale();
-
         Customer verificationCustomer = customerService.findByHashCode(hashCode);
         if (verificationCustomer == null || verificationCustomer.isActivated()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -59,7 +55,7 @@ public class CustomerController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "http://localhost:4200");
-        return new ResponseEntity<String>(headers,HttpStatus.FOUND);
+        return new ResponseEntity<String>(headers, HttpStatus.FOUND);
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")
@@ -70,10 +66,17 @@ public class CustomerController {
     }
 
 //    @PreAuthorize("hasRole('CUSTOMER')")
-//    @PostMapping(path = "/{username}")
-//    public CustomerDTO getCustomerByUsername(@PathVariable String username) {
-//        Customer customer = customerService.findByUsername(username);
-//        //return new ResponseEntity<>(new CustomerDTO(customer), HttpStatus.FOUND);
-//        return new CustomerDTO(customer);
+//    @PutMapping(path = "/edit")
+//    public CustomerDTO editCustomer(@RequestBody CustomerDTO customerDto) {
+//        Customer editedCustomer = customerService.changeCustomer(customerDto);
+//        return new CustomerDTO(editedCustomer);
 //    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/edit")
+    public CustomerDTO editCustomer(@RequestBody CustomerDTO customerDto) {
+        Customer editedCustomer = customerService.changeCustomer(customerDto);
+        return new CustomerDTO(editedCustomer);
+    }
+
 }
