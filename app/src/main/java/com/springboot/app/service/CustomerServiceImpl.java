@@ -2,6 +2,7 @@ package com.springboot.app.service;
 
 import com.springboot.app.model.Customer;
 import com.springboot.app.model.Role;
+import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,20 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findByUsername(String username) {
         return customerRepository.findByUsername(username);
+    }
+
+    @Override
+    public Customer changeCustomer(CustomerDTO customerDTO) {
+        Customer customer = findByUsername(customerDTO.getUsername());
+
+        customer.setPhone(customerDTO.getPhone());
+        customer.setCountry(customerDTO.getCountry());
+        customer.setCity(customerDTO.getCity());
+        customer.setAddress(customerDTO.getAddress());
+        customer.setLastName(customerDTO.getLastName());
+        customer.setFirstName(customerDTO.getFirstName());
+
+        saveCustomer(customer);
+        return customer;
     }
 }

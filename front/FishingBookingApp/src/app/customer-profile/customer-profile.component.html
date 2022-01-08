@@ -4,13 +4,13 @@
               
                 <mat-form-field appearance="fill" style="margin-right: 2%;">
                   <mat-label>First name</mat-label>
-                  <input matInput type="text" name="firstname" [(ngModel)]="customer.firstName" required>
+                  <input matInput type="text" name="firstName" [(ngModel)]="customer.firstName" required>
                   <mat-icon matSuffix></mat-icon>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
                   <mat-label>Last name</mat-label>
-                  <input matInput type="text" name="lastname" [(ngModel)]="customer.lastName" required>
+                  <input matInput type="text" name="lastName" [(ngModel)]="customer.lastName" required>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill" style="margin-right: 2%;">
@@ -30,17 +30,8 @@
 
                 <mat-form-field appearance="fill">
                   <mat-label>Phone number</mat-label>
-                  <input matInput type="text" name="phoneNumber" [(ngModel)]="customer.phone" required>
-                </mat-form-field>
-              
-            
-              <div>
-                <mat-form-field appearance="fill">
-                  <mat-label>Username</mat-label>
-                  <input matInput type="text" name="username" [(ngModel)]="customer.username" required>               
-                </mat-form-field>
-                <!-- <div *ngIf="usernames.includes(customer.username)" class="errorText">Username already exists!</div> -->
-              </div>   
+                  <input matInput type="text" name="phone" [(ngModel)]="customer.phone" required>
+                </mat-form-field>  
             
               <div>
                 <button mat-raised-button color="accent" (click)="edit()"  >Edit</button>

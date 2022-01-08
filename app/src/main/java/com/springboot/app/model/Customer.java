@@ -230,18 +230,7 @@ public class Customer implements UserDetails {
         this.hashCode = hashCode;
     }
 
-    public String generateHashCode(String password){
-//        MessageDigest digest = null;
-//        try {
-//            digest = MessageDigest.getInstance("SHA-256");
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
-//        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-//        String sha256hex = HexBin.encode(hash);
-//        return sha256hex;
-
-
+    public static String generateHashCode(String password){
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-256");
@@ -254,33 +243,6 @@ public class Customer implements UserDetails {
 
         String hex = String.format("%064x", new BigInteger(1, digest));
         return hex;
-
-
-
-//        SecureRandom random = new SecureRandom();
-//        byte[] salt = new byte[16];
-//        random.nextBytes(salt);
-//        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-//        try {
-//            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-//            byte[] hash = factory.generateSecret(spec).getEncoded();
-//            return hash.toString();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return "";
-    }
-
-    private static String bytesToHex(byte[] hash) {
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
     }
 }
 

@@ -45,10 +45,15 @@ export class CustomerService {
     return this._http.post(this._login, body,{headers, responseType: 'text'})
   }
 
-  edit(customer : Customer):Observable<any>{
+  /* edit(customer : Customer):Observable<any>{
     const body = JSON.stringify(customer);
     return this._http.put(this._editCustomer, body)
                      .pipe(catchError(this.handleError));
+  } */
+
+  edit(customer : Customer):Observable<any>{
+    const body = JSON.stringify(customer);
+    return this._http.post(this._editCustomer, body)
   }
 
   getCustomerByUsername(username: string): Observable<Customer> {
@@ -56,27 +61,11 @@ export class CustomerService {
                            .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
                                 catchError(this.handleError)); 
   }
-
-  /* getCustomerByUsername(username: string): Observable<Customer> {
-    return this._http.get(this._getCustomerByUsername + username)
-                           .pipe(map(this.extractData),                         
-                                catchError(this.handleError)); 
-  } */
-
-  /* getCustomerByUsername(username: string): Observable<Customer> {
-    return this._http.get<Customer>(this._getCustomerByUsername + username).pipe(
-                         tap(data =>  console.log('Iz service-a: ' + JSON.stringify(data))))
-  } */
-
-  /* getCustomerByUsername(username: string): Observable<any> {
-    const body=JSON.stringify(username);
-    console.log(body)
-    return this._http.post(this._getCustomerByUsername + username, body)
-  } */
   
 
-  private handleError(error: any) {
-    console.error(error.message || error);
-        return throwError(error);
-  }
+  private handleError(err : HttpErrorResponse) {
+    console.log(err.message);
+    return Observable.throw(err.message);
+    throw new Error('Method not implemented.');
+  } 
 }

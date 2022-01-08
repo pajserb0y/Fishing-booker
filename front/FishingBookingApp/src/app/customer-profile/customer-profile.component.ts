@@ -11,7 +11,18 @@ import { CustomerService } from '../service/customer.service';
 })
 export class CustomerProfileComponent implements OnInit {
 
-  customer!: Customer;
+  customer: Customer = {
+    id: 0,
+    firstName: "",
+    lastName: "",
+    email: "",
+    username:  "",
+    password: "",
+    address: "",
+    city: "",
+    country: "",
+    phone: ""
+  };
   oldCustomer!: Customer;
   errorMessage : string  = '';
 
