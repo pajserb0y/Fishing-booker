@@ -50,6 +50,7 @@ public class SystemUser {
 
     protected boolean isDeleted = false;
     protected boolean isActivated;
+    protected boolean wantDeleting = false;
 
 
     public SystemUser(Integer id, String firstName, String lastName, String email, String username, String password, String address,
@@ -174,14 +175,20 @@ public class SystemUser {
         isActivated = activated;
     }
 
-
     public String getPassword() {
         return this.password;
     }
 
-
     public String getUsername() {
         return this.username;
+    }
+
+    public boolean isWantDeleting() {
+        return wantDeleting;
+    }
+
+    public void setWantDeleting(boolean wantDeleting) {
+        this.wantDeleting = wantDeleting;
     }
 
 

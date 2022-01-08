@@ -4,9 +4,12 @@ import com.springboot.app.model.Customer;
 import com.springboot.app.model.Role;
 import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.repository.CustomerRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -48,5 +51,19 @@ public class CustomerServiceImpl implements CustomerService {
 
         saveCustomer(customer);
         return customer;
+    }
+
+    @Override
+    public void setWantedToDelete(Integer id) {
+        Optional<Customer> customer = findById(id);
+        if(customer.isPresent()) {
+            customer.get().setWantDeleting(true);
+            saveCustomer(customer.get());
+        }
+    }
+
+    @Override
+    public Optional<Customer> findById(Integer id) {
+        return customerRepository.findById(id);
     }
 }

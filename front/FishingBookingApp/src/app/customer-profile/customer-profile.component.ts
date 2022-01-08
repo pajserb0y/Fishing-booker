@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { subscribeTo } from 'rxjs/internal-compatibility';
 import { Customer } from '../model/customer';
+import { DeleteDto } from '../model/deleteDto';
 import { CustomerService } from '../service/customer.service';
 
 @Component({
@@ -25,11 +26,16 @@ export class CustomerProfileComponent implements OnInit {
   };
   oldCustomer!: Customer;
   errorMessage : string  = '';
+  deleteDto : DeleteDto = {
+    id: 0,
+    note: "",
+  };
 
   constructor(public _customerService: CustomerService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getCustomerByUsername();
+    //this.deleteDto.id = this.customer.id;
   }
 
 
@@ -49,11 +55,20 @@ export class CustomerProfileComponent implements OnInit {
          .subscribe(data => {
                      this.customer = data
                      this.oldCustomer = data
+                     this.deleteDto.id = this.customer.id
                      console.log('Dobio: ', data)},
                    error => this.errorMessage = <any>error);    
   }
 
+  delete() {
+    this._customerService.sendDelete(this.deleteDto)
+            .subscribe(data => {
+              console.log('Dobio: ', data)},
+            error => this.errorMessage = <any>error); 
 
+    this.deleteDto.note = '';
+    this._snackBar.open('Your request has been successfuly sent. Please wait while we proccess your request', 'Close', {duration: 5000});
+  }
 
 }
 

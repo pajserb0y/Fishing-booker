@@ -3,6 +3,7 @@ package com.springboot.app.controller;
 import com.springboot.app.adapter.CustomerAdapter;
 import com.springboot.app.model.Customer;
 import com.springboot.app.model.dto.CustomerDTO;
+import com.springboot.app.model.dto.DeleteDTO;
 import com.springboot.app.service.CustomerService;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.RoleService;
@@ -77,6 +78,18 @@ public class CustomerController {
     public CustomerDTO editCustomer(@RequestBody CustomerDTO customerDto) {
         Customer editedCustomer = customerService.changeCustomer(customerDto);
         return new CustomerDTO(editedCustomer);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/delete")
+    public ResponseEntity<?> proccessCustomerDeleting(@RequestBody DeleteDTO dto) {
+        if(!customerService.findById(dto.id).isPresent())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        customerService.setWantedToDelete(dto.id);
+        emailService.sendNotificationForDeletingToAdmin(dto.note, dto.id);
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
 }

@@ -38,4 +38,17 @@ public class EmailServiceImpl implements EmailService {
 
         javaMailSender.send(mail);
     }
+
+    @Async
+    public void sendNotificationForDeletingToAdmin(String note, Integer id) throws MailException {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo("health.care.clinic.psw+admin@gmail.com");       //ovde treba da se iscupaju svi admini iz baze i da im se posalje
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Deleting request for " + id.toString());
+        mail.setText("User with id: '" + id.toString() + "' has submited a request for deleting." +
+                "\nHere is their note:" +
+                "\n'" + note + "'");
+
+        javaMailSender.send(mail);
+    }
 }

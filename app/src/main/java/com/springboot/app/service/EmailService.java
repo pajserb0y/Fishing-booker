@@ -7,4 +7,6 @@ import org.springframework.scheduling.annotation.Async;
 public interface EmailService {
     @Async
     public void sendActivationMailAsync(Customer customer) throws MailException, InterruptedException;
+
+    void sendNotificationForDeletingToAdmin(String note, Integer id) throws MailException;
 }

@@ -7,6 +7,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 /* import { do } from "rxjs/operators"; */
 import { of } from 'rxjs';
 import 'rxjs/add/operator/catch';
+import { DeleteDto } from '../model/deleteDto';
 
 const headers = { 'content-type': 'application/json'} 
 
@@ -20,6 +21,7 @@ export class CustomerService {
   private _submitRegistration  = this._customerRegistration + '/create';
   private _editCustomer  = this._customerRegistration + '/edit';
   private _getCustomerByUsername  = this._customerRegistration + '/';
+  private _deleteCustomer  = this._customerRegistration + '/delete';
   private _login = this._baseUrl + 'auth/login';
 
 
@@ -62,6 +64,12 @@ export class CustomerService {
                                 catchError(this.handleError)); 
   }
   
+  sendDelete(deleteDto: DeleteDto):Observable<any>{
+    const body = JSON.stringify(deleteDto);
+    return this._http.post(this._deleteCustomer, body )
+  }
+
+
 
   private handleError(err : HttpErrorResponse) {
     console.log(err.message);
