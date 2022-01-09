@@ -1,5 +1,6 @@
 package com.springboot.app.service;
 
+import com.springboot.app.model.BoatOwner;
 import com.springboot.app.model.Customer;
 import com.springboot.app.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     // Funkcija koja na osnovu username-a iz baze vraca objekat User-a
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Customer user = userRepository.findByUsername(username);
-        if (user == null) {
+        Customer customer = userRepository.findByUsername(username);
+        //BoatOwner boatOwner = boatOwnerRepository.findByUsername(username);
+
+        if (customer == null)
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
-        } else {
-            return user;
-        }
+        else if (customer != null)
+            return customer;
+        else
+            return customer;
     }
 
 }

@@ -3,19 +3,22 @@ package com.springboot.app.controller;
 import javax.servlet.http.HttpServletResponse;
 
 import com.springboot.app.model.Customer;
+import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.model.dto.UserCredentials;
 import com.springboot.app.security.tokenUtils.JwtTokenUtils;
 import com.springboot.app.service.CustomerService;
+import com.springboot.app.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 //Kontroler zaduzen za autentifikaciju korisnika
@@ -23,14 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 
-    @Autowired
-    private JwtTokenUtils tokenUtils;
+    private final JwtTokenUtils tokenUtils;
+    private final AuthenticationManager authenticationManager;
+    private final CustomerService customerService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private CustomerService userService;
+    public AuthenticationController(CustomerService customerService, AuthenticationManager authenticationManager, JwtTokenUtils tokenUtils) {
+        this.tokenUtils = tokenUtils;
+        this.authenticationManager = authenticationManager;
+        this.customerService = customerService;
+    }
 
     // Prvi endpoint koji pogadja korisnik kada se loguje.
     // Tada zna samo svoje korisnicko ime i lozinku i to prosledjuje na backend.
@@ -51,6 +56,14 @@ public class AuthenticationController {
 
         // Vrati token kao odgovor na uspesnu autentifikaciju
         return jwt;
+    }
+
+    @GetMapping(path = "/getAllUsernames")
+    public Set<String> getCustomerByUsername() {
+        Set<String> usernameList = new HashSet<String>();
+        usernameList.addAll(customerService.findAllUsernames());
+
+        return usernameList;
     }
 
 }

@@ -75,7 +75,9 @@ public class CustomerController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping(path = "/edit")
-    public CustomerDTO editCustomer(@RequestBody CustomerDTO customerDto) {
+    public CustomerDTO editCustomer(@RequestBody @Valid CustomerDTO customerDto, BindingResult result) throws Exception {
+        if(result.hasErrors())
+            return null;
         Customer editedCustomer = customerService.changeCustomer(customerDto);
         return new CustomerDTO(editedCustomer);
     }

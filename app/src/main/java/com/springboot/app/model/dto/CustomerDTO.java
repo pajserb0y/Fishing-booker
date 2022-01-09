@@ -4,9 +4,7 @@ import com.springboot.app.model.Customer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 
 public class CustomerDTO {
     private int id;
@@ -19,6 +17,7 @@ public class CustomerDTO {
     private String email;
     @NotEmpty(message = "Please fill out username")
     private String username;
+    @Size(min = 6)
     @NotEmpty(message = "Please fill out password")
     private String password;
     @NotEmpty(message = "Please fill out address")
@@ -27,6 +26,7 @@ public class CustomerDTO {
     private String city;
     @NotEmpty(message = "Please fill out country")
     private String country;
+    @Pattern(regexp = "[0-9]+", message = "Phone must contain only digits")
     @NotEmpty(message = "Please fill out phone")
     private String phone;
 
