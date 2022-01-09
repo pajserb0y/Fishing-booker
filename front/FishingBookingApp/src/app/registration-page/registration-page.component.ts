@@ -51,8 +51,8 @@ export class RegistrationPageComponent implements OnInit {
   }
 
 
-  submit(role: string): void {
-    if(role == "customer")
+  submit(): void {
+    if(this.role == "customer")
     {
       this._customerService.createCustomer(this.customer)
       .subscribe(
@@ -64,11 +64,11 @@ export class RegistrationPageComponent implements OnInit {
       this._snackBar.open('Registration request successfully submited! An activation mail has been sent to your inbox.', 'Close', {duration: 5000});
     }
     else{
-      if(role == "boatOwner")
+      if(this.role == "boatOwner")
       {}
-      else if(role == "weekendHouseOwner")
+      else if(this.role == "weekendHouseOwner")
       {}
-      else if(role == "instructor")
+      else if(this.role == "instructor")
       {}
     }
    

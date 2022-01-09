@@ -2,7 +2,10 @@ package com.springboot.app.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.springboot.app.model.BoatOwner;
 import com.springboot.app.model.Customer;
+import com.springboot.app.model.Instructor;
+import com.springboot.app.model.WeekendHouseOwner;
 import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.model.dto.UserCredentials;
 import com.springboot.app.security.tokenUtils.JwtTokenUtils;
@@ -50,9 +53,24 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Kreiraj token za tog korisnika
-        Customer customer = (Customer) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(customer.getUsername(), customer.getRole());
-        int expiresIn = tokenUtils.getExpiredIn();
+        String jwt;
+        try {
+            Customer customer = (Customer) authentication.getPrincipal();
+            jwt = tokenUtils.generateToken(customer.getUsername(), customer.getRole());
+        } catch (Exception e) {
+            try {
+                BoatOwner boatOwner = (BoatOwner) authentication.getPrincipal();
+                jwt = tokenUtils.generateToken(boatOwner.getUsername(), boatOwner.getRole());
+            } catch (Exception e1) {
+                try {
+                    Instructor instructor = (Instructor) authentication.getPrincipal();
+                    jwt = tokenUtils.generateToken(instructor.getUsername(), instructor.getRole());
+                } catch (Exception e2) {
+                    WeekendHouseOwner weekendHouseOwner = (WeekendHouseOwner) authentication.getPrincipal();
+                    jwt = tokenUtils.generateToken(weekendHouseOwner.getUsername(), weekendHouseOwner.getRole());
+                }
+            }
+        }
 
         // Vrati token kao odgovor na uspesnu autentifikaciju
         return jwt;
