@@ -4,8 +4,9 @@ import com.springboot.app.model.Instructor;
 
 public class InstructorDTO extends UserDTO {
     private String motive;
-    public InstructorDTO(int id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone) {
+    public InstructorDTO(int id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, String motive) {
         super(id, firstName, lastName, email, username, password, address, city, country, phone);
+        this.motive = motive;
     }
 
     public InstructorDTO(Instructor instructor) {

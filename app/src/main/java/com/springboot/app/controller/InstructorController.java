@@ -20,7 +20,7 @@ public class InstructorController {
     public InstructorController(InstructorService instructorService) {
         this.instructorService = instructorService;
     }
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<?> createInstructor(@RequestBody @Valid InstructorDTO instructorDTO, BindingResult result) throws Exception{
         if(result.hasErrors()){
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);

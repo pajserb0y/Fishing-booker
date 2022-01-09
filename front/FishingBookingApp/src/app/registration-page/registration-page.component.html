@@ -118,10 +118,7 @@
                   </mat-form-field>
                 </div>
                 <button mat-button matStepperPrevious>Back</button>
-
-                <button mat-raised-button color="accent" (click)="submit()" [disabled]="!(registerForm.valid && customer.password === repassword && !usernames.includes(customer.username))" 
-                        [routerLink]="['/']">Submit</button>
-
+                <button mat-raised-button color="accent" (click)="submit()" [disabled]="!(registerForm.valid && customer.password === repassword)" [routerLink]="['/']">Submit</button>
               </div>
             </mat-step>
       </mat-stepper>

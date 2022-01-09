@@ -5,6 +5,9 @@ import { Customer } from '../model/customer';
 import { CustomerService } from '../service/customer.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { Instructor } from '../model/instructor';
+import { BoatOwnerService } from '../service/boat-owner.service';
+import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
+import { InstructorService } from '../service/instructor.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -40,16 +43,15 @@ export class RegistrationPageComponent implements OnInit {
   repassword: string = '';
   usernames: Array<string> = [];
   motive: string = '';
-  role: string = '';
+  role: string = 'customer';
   nonCustomer !: Instructor;
 
 
-  constructor(public _customerService: CustomerService, private _snackBar: MatSnackBar) { }
+  constructor(public _customerService: CustomerService, public _boatOwnerService: BoatOwnerService,public _weekendHouseOwnerService: WeekendHouseOwnerService,public _instructorService: InstructorService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getAllUsernames();
   }
-
 
   submit(): void {
     if(this.role == "customer")
@@ -65,11 +67,38 @@ export class RegistrationPageComponent implements OnInit {
     }
     else{
       if(this.role == "boatOwner")
-      {}
+      {
+        this._boatOwnerService.createBoatOwner(this.nonCustomer)
+        .subscribe(
+          data => console.log('Success!', data),
+          error => console.log('Error!', error)
+        )
+    
+        console.log(this.nonCustomer);
+        this._snackBar.open('Registration request successfully submited! An admin has been notified.', 'Close', {duration: 5000});
+      }
       else if(this.role == "weekendHouseOwner")
-      {}
+      {
+        this._weekendHouseOwnerService.createWeekendHouseOwner(this.nonCustomer)
+        .subscribe(
+          data => console.log('Success!', data),
+          error => console.log('Error!', error)
+        )
+    
+        console.log(this.nonCustomer);
+        this._snackBar.open('Registration request successfully submited! An admin has been notified.', 'Close', {duration: 5000});
+      }
       else if(this.role == "instructor")
-      {}
+      {
+        this._instructorService.createInstructor(this.nonCustomer)
+        .subscribe(
+          data => console.log('Success!', data),
+          error => console.log('Error!', error)
+        )
+    
+        console.log(this.nonCustomer);
+        this._snackBar.open('Registration request successfully submited! An admin has been notified.', 'Close', {duration: 5000});
+      }
     }
    
 

@@ -24,7 +24,7 @@ public class BoatOwnerController {
     public BoatOwnerController(BoatOwnerService boatOwnerService) {
         this.boatOwnerService = boatOwnerService;
     }
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<?> createBoatOwner(@RequestBody @Valid BoatOwnerDTO boatOwnerDTO, BindingResult result) throws Exception{
         if(result.hasErrors()){
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);

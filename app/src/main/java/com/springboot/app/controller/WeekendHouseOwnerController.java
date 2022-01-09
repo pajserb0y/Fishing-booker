@@ -21,7 +21,7 @@ public class WeekendHouseOwnerController {
     public WeekendHouseOwnerController(WeekendHouseOwnerService weekendHouseOwnerService) {
         this.weekendHouseOwnerService = weekendHouseOwnerService;
     }
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<?> createWeekendHouseOwner(@RequestBody @Valid WeekendHouseOwnerDTO weekendHouseOwnerDTO, BindingResult result) throws Exception{
         if(result.hasErrors()){
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
