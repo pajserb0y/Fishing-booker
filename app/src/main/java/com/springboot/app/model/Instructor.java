@@ -22,9 +22,9 @@ public class Instructor extends SystemUser implements UserDetails {
         this.role = roles;
     }
 
-    public Instructor(InstructorDTO instructorDTO, String motive) {
+    public Instructor(InstructorDTO instructorDTO) {
         super(instructorDTO);
-        this.motive = motive;
+        this.motive = instructorDTO.getMotive();
     }
 
     public Role getRole() {
@@ -33,6 +33,14 @@ public class Instructor extends SystemUser implements UserDetails {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getMotive() {
+        return motive;
+    }
+
+    public void setMotive(String motive) {
+        this.motive = motive;
     }
 
     @Override

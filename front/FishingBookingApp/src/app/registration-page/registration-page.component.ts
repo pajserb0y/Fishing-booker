@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Customer } from '../model/customer';
 import { CustomerService } from '../service/customer.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { Instructor } from '../model/instructor';
 
 @Component({
   selector: 'app-registration-page',
@@ -26,22 +27,37 @@ export class RegistrationPageComponent implements OnInit {
   }
   errorMessage : string  = '';
   repassword: string = '';
+  motive: string = '';
+  role: string = '';
+  nonCustomer !: Instructor;
+
 
   constructor(public _customerService: CustomerService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
   }
 
-  submit(): void {
-
-    this._customerService.createCustomer(this.customer)
-    .subscribe(
-      data => console.log('Success!', data),
-      error => console.log('Error!', error)
-    )
-
-    console.log(this.customer);
-    this._snackBar.open('Registration request successfully submited! An activation mail has been sent to your inbox.', 'Close', {duration: 5000});
+  submit(role: string): void {
+    if(role == "customer")
+    {
+      this._customerService.createCustomer(this.customer)
+      .subscribe(
+        data => console.log('Success!', data),
+        error => console.log('Error!', error)
+      )
+  
+      console.log(this.customer);
+      this._snackBar.open('Registration request successfully submited! An activation mail has been sent to your inbox.', 'Close', {duration: 5000});
+    }
+    else{
+      if(role == "boatOwner")
+      {}
+      else if(role == "weekendHouseOwner")
+      {}
+      else if(role == "instructor")
+      {}
+    }
+   
   }
 
 }
