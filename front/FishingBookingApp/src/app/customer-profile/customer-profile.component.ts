@@ -42,8 +42,12 @@ export class CustomerProfileComponent implements OnInit {
   edit() {
     this._customerService.edit(this.customer)
           .subscribe(data => {
-            this.customer = data
-            console.log('Dobio: ', data)},
+            console.log('Dobio: ', data)
+            if(data == null)
+              this._snackBar.open('Incorrect filling of form! Check and send again edit request', 'Close', {duration: 5000});
+            else
+              this.customer = data
+            },
           error => this.errorMessage = <any>error); 
 
     console.log(this.customer);

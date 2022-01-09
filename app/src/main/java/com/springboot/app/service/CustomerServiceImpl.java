@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,5 +66,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Optional<Customer> findById(Integer id) {
         return customerRepository.findById(id);
+    }
+
+    @Override
+    public Collection<String> findAllUsernames() {
+        return customerRepository.findAllUsernames();
     }
 }

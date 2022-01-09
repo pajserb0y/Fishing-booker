@@ -22,7 +22,8 @@ export class CustomerService {
   private _editCustomer  = this._customerRegistration + '/edit';
   private _getCustomerByUsername  = this._customerRegistration + '/';
   private _deleteCustomer  = this._customerRegistration + '/delete';
-  private _login = this._baseUrl + 'auth/login';
+  private _login = this._baseUrl + 'auth/login';  
+  private _getAllUsernames = this._baseUrl + 'auth/getAllUsernames';
 
 
   returnedCustomer!: Customer;
@@ -67,6 +68,12 @@ export class CustomerService {
   sendDelete(deleteDto: DeleteDto):Observable<any>{
     const body = JSON.stringify(deleteDto);
     return this._http.post(this._deleteCustomer, body )
+  }
+
+  getAllUsernames(): Observable<string[]> { 
+    return this._http.get<string[]>(this._getAllUsernames)
+                          .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
+                            catchError(this.handleError)); 
   }
 
 

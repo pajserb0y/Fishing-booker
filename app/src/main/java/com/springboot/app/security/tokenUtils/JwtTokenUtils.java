@@ -1,11 +1,9 @@
 package com.springboot.app.security.tokenUtils;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.springboot.app.model.Customer;
 import com.springboot.app.model.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -237,7 +235,7 @@ public class JwtTokenUtils {
      * @return Informacija da li je token validan ili ne.
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
-        Customer user = (Customer) userDetails;
+       // Customer user = (Customer) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getIssuedAtDateFromToken(token);
 
