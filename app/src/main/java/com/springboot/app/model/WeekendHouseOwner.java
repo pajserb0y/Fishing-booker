@@ -22,9 +22,9 @@ public class WeekendHouseOwner extends SystemUser implements UserDetails {
         this.role = roles;
     }
 
-    public WeekendHouseOwner(WeekendHouseOwnerDTO weekendHouseOwnerDTO, String motive) {
+    public WeekendHouseOwner(WeekendHouseOwnerDTO weekendHouseOwnerDTO) {
         super(weekendHouseOwnerDTO);
-        this.motive = motive;
+        this.motive = weekendHouseOwnerDTO.getMotive();
     }
 
     public Role getRole() {
@@ -33,6 +33,14 @@ public class WeekendHouseOwner extends SystemUser implements UserDetails {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getMotive() {
+        return motive;
+    }
+
+    public void setMotive(String motive) {
+        this.motive = motive;
     }
 
     @Override

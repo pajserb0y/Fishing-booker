@@ -23,8 +23,16 @@ public class BoatOwner extends SystemUser implements UserDetails {
         this.role = roles;
     }
 
-    public BoatOwner(BoatOwnerDTO boatOwnerDTO, String motive) {
+    public BoatOwner(BoatOwnerDTO boatOwnerDTO) {
         super(boatOwnerDTO);
+        this.motive = boatOwnerDTO.getMotive();
+    }
+
+    public String getMotive() {
+        return motive;
+    }
+
+    public void setMotive(String motive) {
         this.motive = motive;
     }
 

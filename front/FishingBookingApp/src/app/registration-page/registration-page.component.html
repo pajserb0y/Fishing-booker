@@ -102,11 +102,26 @@
             </mat-step>
             
             <mat-step label="Submit registration request">
-              <p><b>Before submiting, please check info you filled</b></p>
+              <p><b>Before submiting, please choose as which user are you registrating and check info you filled</b></p>
               <div>
+                  <mat-radio-group [(ngModel)]="role" name="role" label-position="before" required>
+                    <mat-label>User role</mat-label>
+                    <mat-radio-button value="customer">Customer</mat-radio-button>
+                    <mat-radio-button value="boatOwner">Boat Owner</mat-radio-button>
+                    <mat-radio-button value="weekendHouseOwner">Weekend House Owner</mat-radio-button>
+                    <mat-radio-button value="instructor">Instructor</mat-radio-button>
+                  </mat-radio-group>
+                <div *ngIf=" role !== 'customer'">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Registration motive: </mat-label>
+                    <input matInput type="text" name="motive" [(ngModel)]="motive" required>
+                  </mat-form-field>
+                </div>
                 <button mat-button matStepperPrevious>Back</button>
+
                 <button mat-raised-button color="accent" (click)="submit()" [disabled]="!(registerForm.valid && customer.password === repassword && !usernames.includes(customer.username))" 
                         [routerLink]="['/']">Submit</button>
+
               </div>
             </mat-step>
       </mat-stepper>
