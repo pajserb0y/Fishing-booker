@@ -42,9 +42,20 @@ export class RegistrationPageComponent implements OnInit {
   errorMessage : string  = '';
   repassword: string = '';
   usernames: Array<string> = [];
-  motive: string = '';
   role: string = 'customer';
-  nonCustomer !: Instructor;
+  nonCustomer : Instructor = {
+    id: 0,
+    firstName: "",
+    lastName: "",
+    email: "",
+    username:  "",
+    password: "",
+    address: "",
+    city: "",
+    country: "",
+    phone: "",
+    motive: ""
+  }
 
 
   constructor(public _customerService: CustomerService, public _boatOwnerService: BoatOwnerService,public _weekendHouseOwnerService: WeekendHouseOwnerService,public _instructorService: InstructorService, private _snackBar: MatSnackBar) { }
@@ -66,42 +77,51 @@ export class RegistrationPageComponent implements OnInit {
       this._snackBar.open('Registration request successfully submited! An activation mail has been sent to your inbox.', 'Close', {duration: 5000});
     }
     else{
-      if(this.role == "boatOwner")
-      {
-        this._boatOwnerService.createBoatOwner(this.nonCustomer)
-        .subscribe(
-          data => console.log('Success!', data),
-          error => console.log('Error!', error)
-        )
-    
-        console.log(this.nonCustomer);
-        this._snackBar.open('Registration request successfully submited! An admin has been notified.', 'Close', {duration: 5000});
-      }
-      else if(this.role == "weekendHouseOwner")
-      {
-        this._weekendHouseOwnerService.createWeekendHouseOwner(this.nonCustomer)
-        .subscribe(
-          data => console.log('Success!', data),
-          error => console.log('Error!', error)
-        )
-    
-        console.log(this.nonCustomer);
-        this._snackBar.open('Registration request successfully submited! An admin has been notified.', 'Close', {duration: 5000});
-      }
-      else if(this.role == "instructor")
-      {
-        this._instructorService.createInstructor(this.nonCustomer)
-        .subscribe(
-          data => console.log('Success!', data),
-          error => console.log('Error!', error)
-        )
-    
-        console.log(this.nonCustomer);
-        this._snackBar.open('Registration request successfully submited! An admin has been notified.', 'Close', {duration: 5000});
-      }
-    }
-   
+        this.nonCustomer.id = this.customer.id;
+        this.nonCustomer.firstName= this.customer.firstName;
+        this.nonCustomer.lastName= this.customer.lastName;
+        this.nonCustomer.email= this.customer.email;
+        this.nonCustomer.username= this.customer.username;
+        this.nonCustomer.password= this.customer.password;
+        this.nonCustomer.address= this.customer.address;
+        this.nonCustomer.city= this.customer.city;
+        this.nonCustomer.country= this.customer.country;
+        this.nonCustomer.phone= this.customer.phone;
 
+        if(this.role == "boatOwner")
+        {
+          this._boatOwnerService.createBoatOwner(this.nonCustomer)
+          .subscribe(
+            data => console.log('Success!', data),
+            error => console.log('Error!', error)
+          )
+      
+          console.log(this.nonCustomer);
+          this._snackBar.open('Registration request successfully submited! An admin has been notified.', 'Close', {duration: 5000});
+        }
+        else if(this.role == "weekendHouseOwner")
+        {
+          this._weekendHouseOwnerService.createWeekendHouseOwner(this.nonCustomer)
+          .subscribe(
+            data => console.log('Success!', data),
+            error => console.log('Error!', error)
+          )
+      
+          console.log(this.nonCustomer);
+          this._snackBar.open('Registration request successfully submited! An admin has been notified.', 'Close', {duration: 5000});
+        }
+        else if(this.role == "instructor")
+        {
+          this._instructorService.createInstructor(this.nonCustomer)
+          .subscribe(
+            data => console.log('Success!', data),
+            error => console.log('Error!', error)
+          )
+      
+          console.log(this.nonCustomer);
+          this._snackBar.open('Registration request successfully submited! An admin has been notified.', 'Close', {duration: 5000});
+        }
+      }
   }
 
   getAllUsernames() {

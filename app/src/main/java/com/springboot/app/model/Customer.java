@@ -13,6 +13,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Customer extends SystemUser implements UserDetails {
@@ -21,6 +23,9 @@ public class Customer extends SystemUser implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<WeekendHouseReservation> weekendHouseReservations = new HashSet<WeekendHouseReservation>();
 
     public Customer(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String hashCode) {
         super(id, firstName, lastName, email, username, password, address, city, country, phone, isDeleted, isActivated, roles);

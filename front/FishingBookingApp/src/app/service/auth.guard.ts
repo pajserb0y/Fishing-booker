@@ -11,16 +11,22 @@ export class AuthGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router, private _snackBar: MatSnackBar) { }
 
-  canActivate(
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot): boolean | Promise<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
         var isAuthenticated = this.authService.getAuthStatus();
         var hasExpired = this.authService.hasExpired();
 
-        if (!isAuthenticated || hasExpired) {          
-          this.router.navigate(['/login']);       
+        if (!isAuthenticated || hasExpired ) {          
+          this.router.navigate(['/login']);
+          return false;
         }
-        return isAuthenticated;
+
+        if (!route.data.role.includes(localStorage.getItem('role'))) {          
+          this.router.navigate(['/']).then(_ =>
+                this._snackBar.open('You are not authorized for this funcionality', 'Close', {duration: 5000}))
+          return false;
+        }          
+
+        return true;
     }
   
 }

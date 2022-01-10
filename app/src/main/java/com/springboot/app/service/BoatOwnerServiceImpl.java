@@ -23,6 +23,7 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
     public BoatOwner saveBoatOwner(BoatOwner boatOwner) {
         List<Role> roles = roleService.findByName("ROLE_BOAT_OWNER");
         boatOwner.setRole(roles.get(0));
+        boatOwner.setActivated(true);       //admin treba da odobri aktivaciju naloga koji nisu customer
         boatOwnerRepository.save(boatOwner);
         return null;
     }

@@ -7,14 +7,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "weekend_house_owner")
 public class WeekendHouseOwner extends SystemUser implements UserDetails {
     private String motive;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(mappedBy = "weekendHouseOwner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<WeekendHouse> weekendHouse = new HashSet<>();
 
     public WeekendHouseOwner(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String motive) {
         super(id, firstName, lastName, email, username, password, address, city, country, phone, isDeleted, isActivated, roles);
@@ -25,6 +31,19 @@ public class WeekendHouseOwner extends SystemUser implements UserDetails {
     public WeekendHouseOwner(WeekendHouseOwnerDTO weekendHouseOwnerDTO) {
         super(weekendHouseOwnerDTO);
         this.motive = weekendHouseOwnerDTO.getMotive();
+    }
+
+    public WeekendHouseOwner() {
+        super();
+    }
+
+
+    public Set<WeekendHouse> getWeekendHouse() {
+        return weekendHouse;
+    }
+
+    public void setWeekendHouse(Set<WeekendHouse> weekendHouse) {
+        this.weekendHouse = weekendHouse;
     }
 
     public Role getRole() {

@@ -1,2 +1,6 @@
-insert into customer (first_name, last_name, email, password, address, city, country, phone, is_deleted, is_activated) values
-            ('Luka', 'Matic', 'luka@gmail.com', 'luka', 'Kozaracka 14', 'Pozega', 'Serbia', '064528456', false, true);
+insert into role (name) values ('ROLE_CUSTOMER');
+insert into role (name) values ('ROLE_ADMIN');
+insert into role (name) values ('ROLE_BOAT_OWNER');
+insert into role (name) values ('ROLE_INSTRUCTOR');
+insert into role (name) values ('ROLE_WEEKEND_HOUSE_OWNER');
+

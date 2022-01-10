@@ -17,6 +17,10 @@ public class BoatOwner extends SystemUser implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    public BoatOwner() {
+        super();
+    }
+
     public BoatOwner(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String motive) {
         super(id, firstName, lastName, email, username, password, address, city, country, phone, isDeleted, isActivated, roles);
         this.motive = motive;

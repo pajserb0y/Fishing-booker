@@ -1,6 +1,8 @@
 package com.springboot.app.controller;
 
+import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseOwner;
+import com.springboot.app.model.dto.WeekendHouseDTO;
 import com.springboot.app.model.dto.WeekendHouseOwnerDTO;
 import com.springboot.app.service.WeekendHouseOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +44,16 @@ public class WeekendHouseOwnerController {
     public WeekendHouseOwnerDTO editCustomer(@RequestBody WeekendHouseOwnerDTO weekendHouseOwnerDTO) {
         WeekendHouseOwner editedWeekendHouseOwner = weekendHouseOwnerService.changeWeekendHouseOwner(weekendHouseOwnerDTO);
         return new WeekendHouseOwnerDTO(editedWeekendHouseOwner);
+    }
+
+    @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
+    @PostMapping(path = "/createWeekendHouse")
+    public ResponseEntity<?> createWeekendHouse(@RequestBody @Valid WeekendHouseDTO weekendHouseDTO, BindingResult result) throws Exception{
+        if(result.hasErrors()){
+            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
+        weekendHouseOwnerService.saveWeekendHouse(new WeekendHouse(weekendHouseDTO));
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

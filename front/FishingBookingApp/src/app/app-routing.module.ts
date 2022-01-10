@@ -16,7 +16,8 @@ const routes: Routes = [
   { path: 'fishing-lessons', component: FishingLessonsComponent },
   { path: 'boats', component: BoatsComponent },
   { path: 'login', component: LoginPageComponent },
-  { path: 'customer-profile', component: CustomerProfileComponent, canActivate: [AuthGuard] },
+  { path: 'customer-profile', component: CustomerProfileComponent, canActivate: [AuthGuard], 
+                              data: { role: ['ROLE_CUSTOMER', 'ROLE_INSTRUCTOR']} },
 ];
 
 @NgModule({

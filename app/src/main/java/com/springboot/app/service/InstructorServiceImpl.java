@@ -19,8 +19,9 @@ public class InstructorServiceImpl implements InstructorService{
 
     @Override
     public Instructor saveInstructor(Instructor instructor) {
-        List<Role> roles = roleService.findByName("INSTRUCTOR");
+        List<Role> roles = roleService.findByName("ROLE_INSTRUCTOR");
         instructor.setRole(roles.get(0));
+        instructor.setActivated(true);       //admin treba da odobri aktivaciju naloga koji nisu customer
         instructorRepository.save(instructor);
         return null;
     }

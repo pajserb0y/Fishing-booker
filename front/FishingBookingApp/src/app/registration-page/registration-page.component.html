@@ -114,7 +114,7 @@
                 <div *ngIf=" role !== 'customer'">
                   <mat-form-field appearance="fill">
                     <mat-label>Registration motive: </mat-label>
-                    <input matInput type="text" name="motive" [(ngModel)]="motive" required>
+                    <input matInput type="text" name="motive" [(ngModel)]="nonCustomer.motive" required>
                   </mat-form-field>
                 </div>
                 <button mat-button matStepperPrevious>Back</button>

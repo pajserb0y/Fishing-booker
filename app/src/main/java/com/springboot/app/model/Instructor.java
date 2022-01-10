@@ -22,6 +22,10 @@ public class Instructor extends SystemUser implements UserDetails {
         this.role = roles;
     }
 
+    public Instructor() {
+        super();
+    }
+
     public Instructor(InstructorDTO instructorDTO) {
         super(instructorDTO);
         this.motive = instructorDTO.getMotive();
