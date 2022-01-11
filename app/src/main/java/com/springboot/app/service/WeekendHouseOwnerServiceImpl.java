@@ -8,6 +8,7 @@ import com.springboot.app.repository.WeekendHouseOwnerRepository;
 import com.springboot.app.repository.WeekendHouseRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 @Service
 public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
@@ -56,5 +57,10 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     @Override
     public void saveWeekendHouse(WeekendHouse weekendHouse) {
         weekendHouseRepository.save(weekendHouse);
+    }
+
+    @Override
+    public List<WeekendHouse> findAllWeekendHouses() {
+        return weekendHouseRepository.findAll();
     }
 }

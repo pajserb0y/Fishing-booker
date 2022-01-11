@@ -19,7 +19,7 @@ public class WeekendHouseOwner extends SystemUser implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "weekendHouseOwner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "weekendHouseOwner")
     private Set<WeekendHouse> weekendHouse = new HashSet<>();
 
     public WeekendHouseOwner(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String motive) {

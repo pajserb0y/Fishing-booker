@@ -1,0 +1,13 @@
+.mat-row:hover {
+    background-color: rgb(236, 234, 234);
+    cursor: pointer;
+  }
+
+.mat-header-cell:hover {
+    background-color: rgb(223, 221, 221);
+    cursor: pointer;
+  }
+
+.houseInfo {
+  /* border: solid; */
+}

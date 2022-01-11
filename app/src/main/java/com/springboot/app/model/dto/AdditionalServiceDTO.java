@@ -1,24 +1,16 @@
-package com.springboot.app.model;
+package com.springboot.app.model.dto;
 
-import com.springboot.app.model.dto.AdditionalServiceDTO;
+import com.springboot.app.model.AdditionalService;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class AdditionalService {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AdditionalServiceDTO {
     private Integer id;
     private String name;
     private Float price;
 
-    public AdditionalService() {
+    public AdditionalServiceDTO() {
     }
 
-    public AdditionalService(AdditionalServiceDTO service) {
+    public AdditionalServiceDTO(AdditionalService service) {
         this.id = service.getId();
         this.name = service.getName();
         this.price = service.getPrice();
