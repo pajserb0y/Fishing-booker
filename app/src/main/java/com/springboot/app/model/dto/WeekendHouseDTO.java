@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashSet;
 import java.util.Set;
 
 public class WeekendHouseDTO {
@@ -27,12 +28,7 @@ public class WeekendHouseDTO {
     @NotEmpty(message = "Please fill out number of beds in weekend house")
     private Integer bedNumber;
 
-    //@NotEmpty(message = "Please fill out first name")
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "freeTerms",
-            joinColumns = @JoinColumn(name = "weekend_house_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "term_id", referencedColumnName = "id"))
-    private Set<Term> freeTerms;
+    private Set<Term> freeTerms = new HashSet<>();
 
     @NotEmpty(message = "Please fill out rules")
     private String rules;

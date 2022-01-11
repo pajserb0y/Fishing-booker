@@ -23,7 +23,7 @@ export class CustomerService {
   private _getCustomerByUsername  = this._customerRegistration + '/';
   private _deleteCustomer  = this._customerRegistration + '/delete';
   private _login = this._baseUrl + 'auth/login';  
-  private _getAllUsernames = this._baseUrl + 'auth/getAllUsernames';
+  private _getAllUsernames = this._baseUrl + 'auth/getAllCustomerUsernames';
 
 
   returnedCustomer!: Customer;

@@ -15,6 +15,20 @@
       <mat-hint *ngIf="customer.lastName == ''">Required</mat-hint>
     </mat-form-field>
 
+    <div>
+      <mat-form-field hintLabel="Between 6 and 16 characters" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" name="password" id="password" minlength="6" maxlength="16" [(ngModel)]="customer.password" required>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm password</mat-label>
+        <input matInput type="password" name="repassword" [(ngModel)]="repassword" required>
+        <mat-hint *ngIf="customer.password == ''">Required</mat-hint>
+      </mat-form-field>
+    </div>
+
     <mat-form-field appearance="fill" style="margin-right: 2%;">
       <mat-label>Address</mat-label>
       <input matInput type="text" name="address" [(ngModel)]="customer.address" required>
@@ -40,11 +54,11 @@
     </mat-form-field>
             
               <div>
-                <button mat-raised-button color="accent" (click)="edit()"  >Edit</button>
+                <button mat-raised-button color="accent" [disabled]="!(registerForm.valid && customer.password === repassword)" (click)="edit()"  >Edit</button>
               </div>
      </form>
      <div style="margin-top: 10%;">
-      <h1>If you want to delete your profile write your reaons and send</h1>
+      <h1>If you want to delete your profile write your reasons and send</h1>
       <mat-form-field style="width: 600px; height: 200px;" appearance="fill">
         <textarea required matInput placeholder="Write your reasons" [(ngModel)]="deleteDto.note"  rows="15" cols="40" ></textarea>
       </mat-form-field>

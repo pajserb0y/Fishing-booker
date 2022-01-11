@@ -41,7 +41,7 @@ export class RegistrationPageComponent implements OnInit {
   }
   errorMessage : string  = '';
   repassword: string = '';
-  usernames: Array<string> = [];
+  usernames: string[] = [];
   role: string = 'customer';
   nonCustomer : Instructor = {
     id: 0,
@@ -61,7 +61,9 @@ export class RegistrationPageComponent implements OnInit {
   constructor(public _customerService: CustomerService, public _boatOwnerService: BoatOwnerService,public _weekendHouseOwnerService: WeekendHouseOwnerService,public _instructorService: InstructorService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.getAllUsernames();
+    this.getAllCustomerUsernames();
+    this.getAllBoatOwnersUsernames();
+    this.getAllWeekendHouseOwnersUsernames();
   }
 
   submit(): void {
@@ -124,10 +126,19 @@ export class RegistrationPageComponent implements OnInit {
       }
   }
 
-  getAllUsernames() {
+  getAllCustomerUsernames() {
     this._customerService.getAllUsernames()
-        .subscribe(data => this.usernames = data,
+        .subscribe(data => this.usernames.concat(data),
                     error => this.errorMessage = <any>error);
   }
-
+  getAllBoatOwnersUsernames() {
+    this._boatOwnerService.getAllUsernames()
+        .subscribe(data => this.usernames.concat(data),
+                    error => this.errorMessage = <any>error);
+  }
+  getAllWeekendHouseOwnersUsernames() {
+    this._weekendHouseOwnerService.getAllUsernames()
+        .subscribe(data => this.usernames.concat(data),
+                    error => this.errorMessage = <any>error);
+  }
 }

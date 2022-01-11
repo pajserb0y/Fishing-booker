@@ -7,7 +7,10 @@ import com.springboot.app.model.dto.BoatOwnerDTO;
 import com.springboot.app.repository.BoatOwnerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class BoatOwnerServiceImpl implements BoatOwnerService{
 
@@ -47,5 +50,24 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
 
         saveBoatOwner(boatOwner);
         return null;
+    }
+
+    @Override
+    public Collection<String> findAllUsernames() {
+        return boatOwnerRepository.findAllUsernames();
+    }
+
+    @Override
+    public Optional<BoatOwner> findById(int id) {
+        return boatOwnerRepository.findById(id);
+    }
+
+    @Override
+    public void setWantedToDelete(int id) {
+        Optional<BoatOwner> boatOwner = findById(id);
+        if(boatOwner.isPresent()) {
+            boatOwner.get().setWantDeleting(true);
+            saveBoatOwner(boatOwner.get());
+        }
     }
 }
