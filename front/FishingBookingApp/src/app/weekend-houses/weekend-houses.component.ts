@@ -93,6 +93,16 @@ export class WeekendHousesComponent implements OnInit {
       this._weekendHouseOwnerService.weekendHouse = house;
       this.router.navigateByUrl("weekend-house-profile")
     }
+    if(this.role == "ROLE_CUSTOMER")
+    {
+      this.selectedHouseInfo = house
+    }
+  }
+
+  findAvailableHousesForSelectedTerm() {
+    this._weekendHouseOwnerService.findAvailableHousesForSelectedTerm(this.range.value.start, this.range.value.end)
+          .subscribe(data =>  this.weekendHouses = data,
+               error => this.errorMessage = <any>error); 
   }
 
   reserve() {
