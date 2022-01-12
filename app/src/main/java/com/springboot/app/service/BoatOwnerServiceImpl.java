@@ -49,7 +49,7 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
         boatOwner.setMotive(boatOwnerDTO.getMotive());
 
         saveBoatOwner(boatOwner);
-        return null;
+        return boatOwner;
     }
 
     @Override

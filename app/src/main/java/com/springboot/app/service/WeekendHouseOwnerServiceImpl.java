@@ -54,8 +54,7 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
         weekendHouseOwner.setMotive(weekendHouseOwnerDTO.getMotive());
 
         saveWeekendHouseOwner(weekendHouseOwner);
-
-        return null;
+        return weekendHouseOwner;
     }
 
     @Override
@@ -76,10 +75,11 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     @Override
     public void setWantedToDelete(int id) {
         Optional<WeekendHouseOwner> weekendHouseOwner = findById(id);
-        if(weekendHouseOwner.isPresent()) {
+        if (weekendHouseOwner.isPresent()) {
             weekendHouseOwner.get().setWantDeleting(true);
             saveWeekendHouseOwner(weekendHouseOwner.get());
         }
+    }
     public List<WeekendHouse> findAllWeekendHouses() {
         return weekendHouseRepository.findAll();
     }

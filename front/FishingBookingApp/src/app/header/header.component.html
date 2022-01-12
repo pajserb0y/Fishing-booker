@@ -11,7 +11,8 @@
         <button mat-menu-item >Standard scheduling</button>
         <button mat-menu-item [routerLink]="['recommendation-scheduling']">Recommendation scheduling</button>
         </mat-menu> -->
-
+    <button *ngIf="role == 'ROLE_WEEKEND_HOUSE_OWNER' || role == 'ROLE_CUSTOMER'"
+             style="margin-left : 25px" mat-button [routerLink]="['weekend-houses']">Weekend houses</button>
     
 
 
