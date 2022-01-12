@@ -1,5 +1,6 @@
 package com.springboot.app.model;
 
+import com.springboot.app.model.dto.AdditionalServiceDTO;
 import com.springboot.app.model.dto.WeekendHouseDTO;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class WeekendHouse {
     private String name;
 
     @NotEmpty(message = "Please fill out adress")
-    private String adress;
+    private String address;
 
     @NotEmpty(message = "Please fill out description")
     private String description;
@@ -50,8 +51,9 @@ public class WeekendHouse {
             inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
     private Set<AdditionalService> additionalServices = new HashSet<>();
 
-    @OneToMany(mappedBy = "weekendHouse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<WeekendHouseReservation> weekendHouseReservations = new HashSet<WeekendHouseReservation>();
+    @OneToMany(mappedBy = "weekendHouse", fetch = FetchType.EAGER
+            , cascade = CascadeType.ALL)
+    private Set<WeekendHouseReservation> weekendHouseReservations = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "weekend_house_owner_id")
@@ -64,20 +66,24 @@ public class WeekendHouse {
     public WeekendHouse(WeekendHouseDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
-        this.adress = dto.getAdress();
+        this.address = dto.getAddress();
         this.description = dto.getDescription();
         this.imagePath = dto.getImagePath();
         this.bedNumber = dto.getBedNumber();
         this.freeTerms = dto.getFreeTerms();
         this.rules = dto.getRules();
         this.price = dto.getPrice();
-        this.additionalServices = dto.getAdditionalServices();
+
+        Set<AdditionalService> services = new HashSet<>();
+        for (AdditionalServiceDTO service : dto.getAdditionalServices())
+            services.add(new AdditionalService(service));
+        this.additionalServices = services;
     }
 
-    public WeekendHouse(Integer id, String name, String adress, String description, String imagePath, Integer bedNumber, Set<Term> freeTerms, String rules, Float price, Set<AdditionalService> additionalServices, Set<WeekendHouseReservation> weekendHouseReservations) {
+    public WeekendHouse(Integer id, String name, String address, String description, String imagePath, Integer bedNumber, Set<Term> freeTerms, String rules, Float price, Set<AdditionalService> additionalServices, Set<WeekendHouseReservation> weekendHouseReservations) {
         this.id = id;
         this.name = name;
-        this.adress = adress;
+        this.address = address;
         this.description = description;
         this.imagePath = imagePath;
         this.bedNumber = bedNumber;
@@ -112,12 +118,12 @@ public class WeekendHouse {
         this.name = name;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getDescription() {

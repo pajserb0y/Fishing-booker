@@ -1,8 +1,6 @@
 package com.springboot.app.model.dto;
 
-import com.springboot.app.model.AdditionalService;
-import com.springboot.app.model.Term;
-import org.springframework.web.multipart.MultipartFile;
+import com.springboot.app.model.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -17,7 +15,7 @@ public class WeekendHouseDTO {
     private String name;
 
     @NotEmpty(message = "Please fill out adress")
-    private String adress;
+    private String address;
 
     @NotEmpty(message = "Please fill out description")
     private String description;
@@ -37,15 +35,40 @@ public class WeekendHouseDTO {
     private Float price;
 
     //@NotEmpty(message = "Please fill out services")
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "weekend_house_services",
-            joinColumns = @JoinColumn(name = "weekend_house_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
-    private Set<AdditionalService> additionalServices;
+    private Set<AdditionalServiceDTO> additionalServices = new HashSet<>();
+
+    private WeekendHouseOwnerDTO weekendHouseOwner;
+
+    private Set<WeekendHouseReservationDTO> weekendHouseReservations = new HashSet<>();
 
 
     public WeekendHouseDTO() {
     }
+
+    public WeekendHouseDTO(WeekendHouse house) {
+        this.id = house.getId();
+
+        Set<AdditionalServiceDTO> services = new HashSet<>();
+        for (AdditionalService service : house.getAdditionalServices())
+            services.add(new AdditionalServiceDTO(service));
+        this.additionalServices = services;
+
+        this.address = house.getAddress();
+        this.bedNumber = house.getBedNumber();
+        this.description = house.getDescription();
+        this.freeTerms = house.getFreeTerms();
+        this.name = house.getName();
+        this.imagePath = house.getImagePath();
+        this.price = house.getPrice();
+        this.rules = house.getRules();
+        this.weekendHouseOwner = new WeekendHouseOwnerDTO(house.getWeekendHouseOwner());
+
+        Set<WeekendHouseReservationDTO> reservations = new HashSet<>();
+        for (WeekendHouseReservation res : house.getWeekendHouseReservations())
+            reservations.add(new WeekendHouseReservationDTO(res));
+        this.weekendHouseReservations = reservations;
+    }
+
 
     public Integer getId() {
         return id;
@@ -63,12 +86,12 @@ public class WeekendHouseDTO {
         this.name = name;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getDescription() {
@@ -120,11 +143,27 @@ public class WeekendHouseDTO {
         this.price = price;
     }
 
-    public Set<AdditionalService> getAdditionalServices() {
+    public Set<AdditionalServiceDTO> getAdditionalServices() {
         return additionalServices;
     }
 
-    public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+    public void setAdditionalServices(Set<AdditionalServiceDTO> additionalServices) {
         this.additionalServices = additionalServices;
+    }
+
+    public WeekendHouseOwnerDTO getWeekendHouseOwner() {
+        return weekendHouseOwner;
+    }
+
+    public void setWeekendHouseOwner(WeekendHouseOwnerDTO weekendHouseOwner) {
+        this.weekendHouseOwner = weekendHouseOwner;
+    }
+
+    public Set<WeekendHouseReservationDTO> getWeekendHouseReservations() {
+        return weekendHouseReservations;
+    }
+
+    public void setWeekendHouseReservations(Set<WeekendHouseReservationDTO> weekendHouseReservations) {
+        this.weekendHouseReservations = weekendHouseReservations;
     }
 }

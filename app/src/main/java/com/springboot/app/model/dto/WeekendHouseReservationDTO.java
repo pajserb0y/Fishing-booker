@@ -1,21 +1,20 @@
-package com.springboot.app.model;
+package com.springboot.app.model.dto;
 
+import com.springboot.app.model.AdditionalService;
+import com.springboot.app.model.Customer;
+import com.springboot.app.model.WeekendHouse;
+import com.springboot.app.model.WeekendHouseReservation;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "weekend_house_reservation")
-public class WeekendHouseReservation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class WeekendHouseReservationDTO {
 
+    private Integer id;
     @NotEmpty(message = "Please fill out starting date")
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date startDateTime;
@@ -33,37 +32,33 @@ public class WeekendHouseReservation {
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date endSpecialOffer;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "weekend_house_reservation_services",
-            joinColumns = @JoinColumn(name = "weekend_house_reservation_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
-    private Set<AdditionalService> services = new HashSet<>();
+    private Set<AdditionalServiceDTO> services = new HashSet<>();
 
     @NotEmpty(message = "Please fill out price")
     private Float price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private CustomerDTO customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "weekend_house_id")
-    private WeekendHouse weekendHouse;
+    private WeekendHouseDTO weekendHouse;
 
 
-
-    public WeekendHouseReservation() {
+    public WeekendHouseReservationDTO() {
     }
 
-    public WeekendHouseReservation(Integer id, Date startDateTime, Date endDateTime, Integer peopleNumber, Set<AdditionalService> services, Float price, Customer customer, WeekendHouse weekendHouse) {
-        this.id = id;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.peopleNumber = peopleNumber;
+    public WeekendHouseReservationDTO(WeekendHouseReservation res) {
+        this.id = res.getId();
+        this.startDateTime = res.getStartDateTime();
+        this.endDateTime = res.getEndDateTime();
+        this.peopleNumber = res.getPeopleNumber();
+        this.price = res.getPrice();
+
+        Set<AdditionalServiceDTO> services = new HashSet<>();
+        for (AdditionalService service : res.getServices())
+            services.add(new AdditionalServiceDTO(service));
         this.services = services;
-        this.price = price;
-        this.customer = customer;
-        this.weekendHouse = weekendHouse;
+
+        this.customer = new CustomerDTO(res.getCustomer());
+        this.weekendHouse = new WeekendHouseDTO(res.getWeekendHouse());
     }
 
     public Integer getId() {
@@ -98,11 +93,27 @@ public class WeekendHouseReservation {
         this.peopleNumber = peopleNumber;
     }
 
-    public Set<AdditionalService> getServices() {
+    public Date getStartSpecialOffer() {
+        return startSpecialOffer;
+    }
+
+    public void setStartSpecialOffer(Date startSpecialOffer) {
+        this.startSpecialOffer = startSpecialOffer;
+    }
+
+    public Date getEndSpecialOffer() {
+        return endSpecialOffer;
+    }
+
+    public void setEndSpecialOffer(Date endSpecialOffer) {
+        this.endSpecialOffer = endSpecialOffer;
+    }
+
+    public Set<AdditionalServiceDTO> getServices() {
         return services;
     }
 
-    public void setServices(Set<AdditionalService> services) {
+    public void setServices(Set<AdditionalServiceDTO> services) {
         this.services = services;
     }
 
@@ -114,19 +125,19 @@ public class WeekendHouseReservation {
         this.price = price;
     }
 
-    public Customer getCustomer() {
+    public CustomerDTO getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerDTO customer) {
         this.customer = customer;
     }
 
-    public WeekendHouse getWeekendHouse() {
+    public WeekendHouseDTO getWeekendHouse() {
         return weekendHouse;
     }
 
-    public void setWeekendHouse(WeekendHouse weekendHouse) {
+    public void setWeekendHouse(WeekendHouseDTO weekendHouse) {
         this.weekendHouse = weekendHouse;
     }
 }

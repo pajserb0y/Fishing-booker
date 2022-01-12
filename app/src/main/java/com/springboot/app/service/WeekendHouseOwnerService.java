@@ -6,6 +6,8 @@ import com.springboot.app.model.dto.WeekendHouseOwnerDTO;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.HashSet;
+import java.util.List;
 
 public interface WeekendHouseOwnerService {
     WeekendHouseOwner saveWeekendHouseOwner(WeekendHouseOwner weekendHouseOwner);
@@ -19,4 +21,5 @@ public interface WeekendHouseOwnerService {
     Optional<WeekendHouseOwner> findById(int id);
 
     void setWantedToDelete(int id);
+    List<WeekendHouse> findAllWeekendHouses();
 }

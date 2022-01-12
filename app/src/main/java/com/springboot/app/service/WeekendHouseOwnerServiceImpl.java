@@ -10,6 +10,7 @@ import com.springboot.app.repository.WeekendHouseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,5 +80,7 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
             weekendHouseOwner.get().setWantDeleting(true);
             saveWeekendHouseOwner(weekendHouseOwner.get());
         }
+    public List<WeekendHouse> findAllWeekendHouses() {
+        return weekendHouseRepository.findAll();
     }
 }

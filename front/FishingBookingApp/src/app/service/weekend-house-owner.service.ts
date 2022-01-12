@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Credentials } from '../model/credentials';
-import { Observable, throwError } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { WeekendHouse } from '../model/weekend-house';
 import { WeekendHouseOwner } from '../model/weekend-house-owner';
+
+/* import { do } from "rxjs/operators"; */
+import { of } from 'rxjs';
+import 'rxjs/add/operator/catch';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +21,8 @@ export class WeekendHouseOwnerService {
   private _getWeekendHouseOwnerByUsername  = this._weekendHouseOwnerRegistration + '/';
   private _getAllUsernames = this._baseUrl + 'auth/getAllWeekendHouseOwnerUsernames';
   private _editWeekendHouseOwner  = this._weekendHouseOwnerRegistration + '/edit';
+  private _allWeekendHouses  = this._weekendHouseOwnerRegistration + '/allWeekendHouses';
+
 
   constructor(private _http: HttpClient) { }
 
@@ -41,6 +48,14 @@ export class WeekendHouseOwnerService {
                           .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
                             catchError(this.handleError)); 
   }
+  getAllWeekendHouses(): Observable<WeekendHouse[]> {
+    return this._http.get<WeekendHouse[]>(this._allWeekendHouses)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
+
+
+
 
   private handleError(err : HttpErrorResponse) {
     console.log(err.message);

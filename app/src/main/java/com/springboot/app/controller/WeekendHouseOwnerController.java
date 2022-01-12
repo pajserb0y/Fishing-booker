@@ -15,6 +15,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/weekendhouseowners")
@@ -35,6 +38,7 @@ public class WeekendHouseOwnerController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
     @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
     @GetMapping(path = "/{username}")
     public WeekendHouseOwnerDTO getWeekendHouseOwnerByUsername(@PathVariable String username) {
@@ -69,5 +73,14 @@ public class WeekendHouseOwnerController {
         emailService.sendNotificationForDeletingToAdmin(dto.note, dto.id);
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
+    @GetMapping(path = "/allWeekendHouses")
+    public Set<WeekendHouseDTO> getAllWeekendHouses() {
+        List<WeekendHouse> weekendHouses = weekendHouseOwnerService.findAllWeekendHouses();
+        Set<WeekendHouseDTO> weekendHouseDTOs = new HashSet<>();
+        for (WeekendHouse house : weekendHouses)
+            weekendHouseDTOs.add(new WeekendHouseDTO(house));
+
+        return weekendHouseDTOs;
     }
 }
