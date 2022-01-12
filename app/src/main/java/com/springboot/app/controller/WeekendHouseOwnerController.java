@@ -66,13 +66,14 @@ public class WeekendHouseOwnerController {
     @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
     @PostMapping(path = "/delete")
     public ResponseEntity<?> proccessWeekendHouseOwnerDeleting(@RequestBody DeleteDTO dto) {
-        if(!weekendHouseOwnerService.findById(dto.id).isPresent())
+        if (!weekendHouseOwnerService.findById(dto.id).isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         weekendHouseOwnerService.setWantedToDelete(dto.id);
         emailService.sendNotificationForDeletingToAdmin(dto.note, dto.id);
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 
     @GetMapping(path = "/allWeekendHouses")
     public Set<WeekendHouseDTO> getAllWeekendHouses() {
