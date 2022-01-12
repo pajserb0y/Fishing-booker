@@ -48,10 +48,10 @@ public class WeekendHouseDTO {
     public WeekendHouseDTO(WeekendHouse house) {
         this.id = house.getId();
 
-        Set<AdditionalServiceDTO> services = new HashSet<>();
-        for (AdditionalService service : house.getAdditionalServices())
-            services.add(new AdditionalServiceDTO(service));
-        this.additionalServices = services;
+//        Set<AdditionalServiceDTO> services = new HashSet<>();
+//        for (AdditionalService service : house.getAdditionalServices())
+//            services.add(new AdditionalServiceDTO(service));
+//        this.additionalServices = services;
 
         this.address = house.getAddress();
         this.bedNumber = house.getBedNumber();
@@ -63,10 +63,10 @@ public class WeekendHouseDTO {
         this.rules = house.getRules();
         this.weekendHouseOwner = new WeekendHouseOwnerDTO(house.getWeekendHouseOwner());
 
-        Set<WeekendHouseReservationDTO> reservations = new HashSet<>();
-        for (WeekendHouseReservation res : house.getWeekendHouseReservations())
-            reservations.add(new WeekendHouseReservationDTO(res));
-        this.weekendHouseReservations = reservations;
+//        Set<WeekendHouseReservationDTO> reservations = new HashSet<>();
+//        for (WeekendHouseReservation res : house.getWeekendHouseReservations())
+//            reservations.add(new WeekendHouseReservationDTO(res));
+//        this.weekendHouseReservations = reservations;
     }
 
 

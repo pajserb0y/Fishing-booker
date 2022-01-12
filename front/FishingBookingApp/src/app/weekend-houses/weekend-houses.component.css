@@ -8,6 +8,11 @@
     cursor: pointer;
   }
 
-.houseInfo {
-  /* border: solid; */
+.reserve {
+    margin-top: -20%;
+}
+
+.infoDiv{
+  margin-bottom: 8%;
+  position: sticky;
 }

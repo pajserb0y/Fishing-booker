@@ -2,6 +2,7 @@ package com.springboot.app.controller;
 
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseOwner;
+import com.springboot.app.model.dto.DateTimeRangeDTO;
 import com.springboot.app.model.dto.WeekendHouseDTO;
 import com.springboot.app.model.dto.WeekendHouseOwnerDTO;
 import com.springboot.app.service.WeekendHouseOwnerService;
@@ -66,6 +67,16 @@ public class WeekendHouseOwnerController {
         List<WeekendHouse> weekendHouses = weekendHouseOwnerService.findAllWeekendHouses();
         Set<WeekendHouseDTO> weekendHouseDTOs = new HashSet<>();
         for (WeekendHouse house : weekendHouses)
+            weekendHouseDTOs.add(new WeekendHouseDTO(house));
+
+        return weekendHouseDTOs;
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/findAvailableForDateRange")
+    public Set<WeekendHouseDTO> findAvailableHousesForDateRange(@RequestBody DateTimeRangeDTO dateRange) {
+        Set<WeekendHouseDTO> weekendHouseDTOs = new HashSet<>();
+        for (WeekendHouse house : weekendHouseOwnerService.findAvailableHousesForDateRange(dateRange))
             weekendHouseDTOs.add(new WeekendHouseDTO(house));
 
         return weekendHouseDTOs;

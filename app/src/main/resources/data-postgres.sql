@@ -1,3 +1,4 @@
+SET datestyle = dmy;
 insert into role (name) values ('ROLE_CUSTOMER');
 insert into role (name) values ('ROLE_ADMIN');
 insert into role (name) values ('ROLE_BOAT_OWNER');
@@ -19,6 +20,6 @@ insert into weekend_house (address, bed_number, description, image_path, name, p
     values ('Partizanska 44', 15, 'Izuzetno lepa vikendica', '123edas123', 'Hell house', 12135, 'Be bad', 1);
 
 
-insert into weekend_house_reservation (start_date_time, end_date_time, start_special_offer, end_special_offer, people_number, price, customer_id, weekend_house_id)
-    values ("23.02.2022 14:00:00", "26.02.2022 14:00:00", null, null, 4, 23000, 1, 1);
+insert into weekend_house_reservation(end_date_time, end_special_offer, people_number, price, start_date_time, start_special_offer, customer_id, weekend_house_id)
+    values ('27.02.2022 14:00:00', null, 4, 23000, '23.02.2022 14:00:00', '21.02.2022 14:00:00', 1, 1);
 

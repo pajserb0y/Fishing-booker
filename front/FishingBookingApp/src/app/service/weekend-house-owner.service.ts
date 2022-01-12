@@ -7,16 +7,17 @@ import { map, catchError, tap } from 'rxjs/operators';
 /* import { do } from "rxjs/operators"; */
 import { of } from 'rxjs';
 import 'rxjs/add/operator/catch';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeekendHouseOwnerService {
 
- // private _baseUrl = 'http://localhost:8080';  
-  private _weekendHouseOwnerRegistration =/* this._baseUrl +*/ '/api/weekendhouseowners';
+  private _weekendHouseOwnerRegistration = '/api/weekendhouseowners';
   private _submitRegistration  = this._weekendHouseOwnerRegistration + '/create';
   private _allWeekendHouses  = this._weekendHouseOwnerRegistration + '/allWeekendHouses';
+  private _findAvailableWeekendHouses  = this._weekendHouseOwnerRegistration + '/findAvailableForDateRange';
 
 
   constructor(private _http: HttpClient) { }
@@ -33,7 +34,13 @@ export class WeekendHouseOwnerService {
                       catchError(this.handleError)); 
   }
 
-
+  findAvailableHousesForSelectedTerm(start: Date, end: Date) : Observable<any> {
+    start = new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours(), start.getMinutes()));
+    end = new Date(Date.UTC(end.getFullYear(), end.getMonth(), end.getDate(), end.getHours(), end.getMinutes()));
+    const body=JSON.stringify({start, end});
+    console.log(body)
+    return this._http.post(this._findAvailableWeekendHouses, body)
+  }
 
 
   private handleError(err : HttpErrorResponse) {
