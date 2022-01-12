@@ -3,8 +3,10 @@ package com.springboot.app.controller;
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseOwner;
 import com.springboot.app.model.dto.DateTimeRangeDTO;
+import com.springboot.app.model.dto.DeleteDTO;
 import com.springboot.app.model.dto.WeekendHouseDTO;
 import com.springboot.app.model.dto.WeekendHouseOwnerDTO;
+import com.springboot.app.service.EmailService;
 import com.springboot.app.service.WeekendHouseOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +24,11 @@ import java.util.Set;
 @RequestMapping("/api/weekendhouseowners")
 public class WeekendHouseOwnerController {
     private final WeekendHouseOwnerService weekendHouseOwnerService;
-
+    private final EmailService emailService;
     @Autowired
-    public WeekendHouseOwnerController(WeekendHouseOwnerService weekendHouseOwnerService) {
+    public WeekendHouseOwnerController(WeekendHouseOwnerService weekendHouseOwnerService, EmailService emailService) {
         this.weekendHouseOwnerService = weekendHouseOwnerService;
+        this.emailService = emailService;
     }
     @PostMapping(path = "/create")
     public ResponseEntity<?> createWeekendHouseOwner(@RequestBody @Valid WeekendHouseOwnerDTO weekendHouseOwnerDTO, BindingResult result) throws Exception{
@@ -46,7 +49,7 @@ public class WeekendHouseOwnerController {
 
     @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
     @PostMapping(path = "/edit")
-    public WeekendHouseOwnerDTO editCustomer(@RequestBody WeekendHouseOwnerDTO weekendHouseOwnerDTO) {
+    public WeekendHouseOwnerDTO editWeekendHouseOwner(@RequestBody WeekendHouseOwnerDTO weekendHouseOwnerDTO) {
         WeekendHouseOwner editedWeekendHouseOwner = weekendHouseOwnerService.changeWeekendHouseOwner(weekendHouseOwnerDTO);
         return new WeekendHouseOwnerDTO(editedWeekendHouseOwner);
     }
@@ -61,6 +64,16 @@ public class WeekendHouseOwnerController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
+    @PostMapping(path = "/delete")
+    public ResponseEntity<?> proccessWeekendHouseOwnerDeleting(@RequestBody DeleteDTO dto) {
+        if(!weekendHouseOwnerService.findById(dto.id).isPresent())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        weekendHouseOwnerService.setWantedToDelete(dto.id);
+        emailService.sendNotificationForDeletingToAdmin(dto.note, dto.id);
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
     @GetMapping(path = "/allWeekendHouses")
     public Set<WeekendHouseDTO> getAllWeekendHouses() {

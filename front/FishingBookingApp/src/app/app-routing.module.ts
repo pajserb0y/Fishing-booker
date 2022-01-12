@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'boats', component: BoatsComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'customer-profile', component: CustomerProfileComponent, canActivate: [AuthGuard], 
-                              data: { role: ['ROLE_CUSTOMER', 'ROLE_INSTRUCTOR']} },
+                              data: { role: ['ROLE_CUSTOMER', 'ROLE_INSTRUCTOR','ROLE_WEEKEND_HOUSE_OWNER','ROLE_BOAT_OWNER','ROLE_ADMIN']} },
 ];
 
 @NgModule({

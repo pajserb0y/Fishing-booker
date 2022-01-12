@@ -1,5 +1,6 @@
 package com.springboot.app.service;
 
+import com.springboot.app.model.Customer;
 import com.springboot.app.model.Role;
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseOwner;
@@ -13,9 +14,11 @@ import com.springboot.app.repository.WeekendHouseReservationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
@@ -69,6 +72,22 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     }
 
     @Override
+    public Collection<String> findAllUsernames() {
+        return weekendHouseOwnerRepository.findAllUsernames();
+    }
+
+    @Override
+    public Optional<WeekendHouseOwner> findById(int id) {
+        return weekendHouseOwnerRepository.findById(id);
+    }
+
+    @Override
+    public void setWantedToDelete(int id) {
+        Optional<WeekendHouseOwner> weekendHouseOwner = findById(id);
+        if(weekendHouseOwner.isPresent()) {
+            weekendHouseOwner.get().setWantDeleting(true);
+            saveWeekendHouseOwner(weekendHouseOwner.get());
+        }
     public List<WeekendHouse> findAllWeekendHouses() {
         return weekendHouseRepository.findAll();
     }

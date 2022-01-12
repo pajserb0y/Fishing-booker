@@ -26,7 +26,7 @@ public class WeekendHouseDTO {
     @NotEmpty(message = "Please fill out number of beds in weekend house")
     private Integer bedNumber;
 
-    private Set<Term> freeTerms;
+    private Set<Term> freeTerms = new HashSet<>();
 
     @NotEmpty(message = "Please fill out rules")
     private String rules;

@@ -9,8 +9,10 @@ import com.springboot.app.model.WeekendHouseOwner;
 import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.model.dto.UserCredentials;
 import com.springboot.app.security.tokenUtils.JwtTokenUtils;
+import com.springboot.app.service.BoatOwnerService;
 import com.springboot.app.service.CustomerService;
 import com.springboot.app.service.EmailService;
+import com.springboot.app.service.WeekendHouseOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,12 +34,16 @@ public class AuthenticationController {
     private final JwtTokenUtils tokenUtils;
     private final AuthenticationManager authenticationManager;
     private final CustomerService customerService;
+    private final WeekendHouseOwnerService weekendHouseOwnerService;
+    private final BoatOwnerService boatOwnerService;
 
     @Autowired
-    public AuthenticationController(CustomerService customerService, AuthenticationManager authenticationManager, JwtTokenUtils tokenUtils) {
+    public AuthenticationController(CustomerService customerService,WeekendHouseOwnerService weekendHouseOwnerService,BoatOwnerService boatOwnerService, AuthenticationManager authenticationManager, JwtTokenUtils tokenUtils) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
         this.customerService = customerService;
+        this.weekendHouseOwnerService = weekendHouseOwnerService;
+        this.boatOwnerService = boatOwnerService;
     }
 
     // Prvi endpoint koji pogadja korisnik kada se loguje.
@@ -76,12 +82,26 @@ public class AuthenticationController {
         return jwt;
     }
 
-    @GetMapping(path = "/getAllUsernames")
+    @GetMapping(path = "/getAllCustomerUsernames")
     public Set<String> getCustomerByUsername() {
         Set<String> usernameList = new HashSet<String>();
         usernameList.addAll(customerService.findAllUsernames());
 
         return usernameList;
     }
+    @GetMapping(path = "/getAllWeekendHouseOwnerUsernames")
+    public Set<String> getAllWeekendHouseOwnerUsernames() {
+        Set<String> usernameList = new HashSet<String>();
+        usernameList.addAll(weekendHouseOwnerService.findAllUsernames());
 
+        return usernameList;
+    }
+
+    @GetMapping(path = "/getAllBoatOwnerUsernames")
+    public Set<String> getAllBoatOwnerUsernames() {
+        Set<String> usernameList = new HashSet<String>();
+        usernameList.addAll(boatOwnerService.findAllUsernames());
+
+        return usernameList;
+    }
 }
