@@ -86,7 +86,13 @@ export class WeekendHousesComponent implements OnInit {
   }
 
   showInfo(house: WeekendHouse) {
+    this.selectedHouseInfo = house
+  }
 
+  findAvailableHousesForSelectedTerm() {
+    this._weekendHouseOwnerService.findAvailableHousesForSelectedTerm(this.range.value.start, this.range.value.end)
+          .subscribe(data =>  this.weekendHouses = data,
+               error => this.errorMessage = <any>error); 
   }
 
   reserve() {

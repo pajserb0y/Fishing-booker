@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Null;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,9 +29,11 @@ public class WeekendHouseReservation {
     private Integer peopleNumber;
 
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @Null
     private Date startSpecialOffer = new Date();
 
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @Null
     private Date endSpecialOffer;
 
     @ManyToMany(fetch = FetchType.EAGER)
