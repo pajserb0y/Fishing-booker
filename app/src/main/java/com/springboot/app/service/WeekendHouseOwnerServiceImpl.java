@@ -54,8 +54,7 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
         weekendHouseOwner.setMotive(weekendHouseOwnerDTO.getMotive());
 
         saveWeekendHouseOwner(weekendHouseOwner);
-
-        return null;
+        return weekendHouseOwner;
     }
 
     @Override
@@ -81,7 +80,6 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
             saveWeekendHouseOwner(weekendHouseOwner.get());
         }
     }
-
     public List<WeekendHouse> findAllWeekendHouses() {
         return weekendHouseRepository.findAll();
     }

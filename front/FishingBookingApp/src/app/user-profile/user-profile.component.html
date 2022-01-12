@@ -15,13 +15,13 @@
       <mat-hint *ngIf="customer.lastName == ''">Required</mat-hint>
     </mat-form-field>
 
-    <div>
+    <div *ng-if= "role != ROLE_CUSTOMER">
       <mat-form-field hintLabel="Between 6 and 16 characters" appearance="fill">
         <mat-label>Password</mat-label>
         <input matInput type="password" name="password" id="password" minlength="6" maxlength="16" [(ngModel)]="customer.password" required>
       </mat-form-field>
     </div>
-    <div>
+    <div  *ng-if= "role != ROLE_CUSTOMER">
       <mat-form-field appearance="fill">
         <mat-label>Confirm password</mat-label>
         <input matInput type="password" name="repassword" [(ngModel)]="repassword" required>

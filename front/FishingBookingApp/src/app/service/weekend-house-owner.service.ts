@@ -22,7 +22,7 @@ export class WeekendHouseOwnerService {
   private _getAllUsernames = this._baseUrl + 'auth/getAllWeekendHouseOwnerUsernames';
   private _editWeekendHouseOwner  = this._weekendHouseOwnerRegistration + '/edit';
   private _allWeekendHouses  = this._weekendHouseOwnerRegistration + '/allWeekendHouses';
-
+  weekendHouse !: WeekendHouse;
 
   constructor(private _http: HttpClient) { }
 

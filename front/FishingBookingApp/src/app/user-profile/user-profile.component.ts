@@ -9,11 +9,11 @@ import { CustomerService } from '../service/customer.service';
 import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
 
 @Component({
-  selector: 'app-customer-profile',
-  templateUrl: './customer-profile.component.html',
-  styleUrls: ['./customer-profile.component.css']
+  selector: 'app-user-profile',
+  templateUrl: './user-profile.component.html',
+  styleUrls: ['./user-profile.component.css']
 })
-export class CustomerProfileComponent implements OnInit {
+export class UserProfileComponent implements OnInit {
 
   customer: Customer = {
     id: 0,
@@ -27,7 +27,7 @@ export class CustomerProfileComponent implements OnInit {
     country: "",
     phone: ""
   };
-  repassword: string = '';
+  repassword: string = "";
   nonCustomer!: Instructor;
   oldCustomer!: Customer;
   errorMessage : string  = '';
@@ -67,7 +67,7 @@ export class CustomerProfileComponent implements OnInit {
     }
     else if(this.role == 'ROLE_BOAT_OWNER')
     {
-      this.customerToNonCustomer();
+      //this.customerToNonCustomer();
       this._boatOwnerService.edit(this.nonCustomer)
           .subscribe(data => {
             console.log('Dobio: ', data)
@@ -86,7 +86,7 @@ export class CustomerProfileComponent implements OnInit {
     }
     else if(this.role == 'ROLE_WEEKEND_HOUSE_OWNER')
     {
-      this.customerToNonCustomer();
+      //this.customerToNonCustomer();
       this._weekendHouseService.edit(this.nonCustomer)
           .subscribe(data => {
             console.log('Dobio: ', data)
@@ -117,6 +117,7 @@ export class CustomerProfileComponent implements OnInit {
       this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
       .subscribe(data => {
                   this.customer = data
+                  this.repassword = this.customer.password;
                   this.oldCustomer = data
                   this.deleteDto.id = this.customer.id
                   console.log('Dobio: ', data)},
@@ -132,6 +133,7 @@ export class CustomerProfileComponent implements OnInit {
       .subscribe(data => {
                   this.nonCustomer = data
                   this.nonCustomerToCustomer()//porebaci nonCustomer-a u customera zbog lakseg prikaza
+                  this.repassword = this.customer.password;
                   this.oldCustomer = data
                   this.deleteDto.id = this.customer.id
                   console.log('Dobio: ', data)},
@@ -143,6 +145,7 @@ export class CustomerProfileComponent implements OnInit {
       .subscribe(data => {
                   this.nonCustomer = data
                   this.nonCustomerToCustomer()//porebaci nonCustomer-a u customera zbog lakseg prikaza
+                  this.repassword = this.customer.password;
                   this.oldCustomer = data
                   this.deleteDto.id = this.customer.id
                   console.log('Dobio: ', data)},
@@ -178,7 +181,7 @@ export class CustomerProfileComponent implements OnInit {
     this.customer.phone= this.nonCustomer.phone;
   }
 
-customerToNonCustomer()
+/*customerToNonCustomer()
 {
   this.nonCustomer.id = this.customer.id;
   this.nonCustomer.firstName= this.customer.firstName;
@@ -191,6 +194,6 @@ customerToNonCustomer()
   this.nonCustomer.country= this.customer.country;
   this.nonCustomer.phone= this.customer.phone;
   this.nonCustomer.motive = "";
-}
+}*/
 }
 

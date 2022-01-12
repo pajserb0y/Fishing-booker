@@ -44,10 +44,11 @@ import { BoatsComponent } from './boats/boats.component';
 import { WeekendHousesComponent } from './weekend-houses/weekend-houses.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { FishingLessonsComponent } from './fishing-lessons/fishing-lessons.component';
-import { CustomerProfileComponent } from './customer-profile/customer-profile.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { InterceptorService } from './service/interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { WeekendHouseProfileComponent } from './weekend-house-profile/weekend-house-profile.component';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -87,7 +88,8 @@ const MaterialComponents = [
     WeekendHousesComponent,
     LoginPageComponent,
     FishingLessonsComponent,
-    CustomerProfileComponent
+    UserProfileComponent,
+    WeekendHouseProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -100,7 +102,7 @@ const MaterialComponents = [
     ReactiveFormsModule
     
   ],
-  providers: [CustomerService,
+  providers: [CustomerService,WeekendHouseProfileComponent,
                 { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
                 { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],
   bootstrap: [AppComponent]

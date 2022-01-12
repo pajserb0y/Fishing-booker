@@ -5,6 +5,7 @@ import { WeekendHouse } from '../model/weekend-house';
 import { WeekendHouseOwner } from '../model/weekend-house-owner';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
 import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
+import { WeekendHouseProfileComponent } from '../weekend-house-profile/weekend-house-profile.component';
 
 @Component({
   selector: 'app-weekend-houses',
@@ -71,6 +72,7 @@ export class WeekendHousesComponent implements OnInit {
     },
     weekendHouse: this.selectedHouseInfo
   }
+  role : string|null = localStorage.getItem('role');
 
   constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService, private router: Router) { }
 
@@ -86,7 +88,11 @@ export class WeekendHousesComponent implements OnInit {
   }
 
   showInfo(house: WeekendHouse) {
-
+    if(this.role == "ROLE_WEEKEND_HOUSE_OWNER")
+    {
+      this._weekendHouseOwnerService.weekendHouse = house;
+      this.router.navigateByUrl("weekend-house-profile")
+    }
   }
 
   reserve() {
