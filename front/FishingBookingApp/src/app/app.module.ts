@@ -49,6 +49,7 @@ import { InterceptorService } from './service/interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { WeekendHouseProfileComponent } from './weekend-house-profile/weekend-house-profile.component';
+import { CommonModule } from '@angular/common';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -99,7 +100,8 @@ const MaterialComponents = [
     HttpClientModule,
     FormsModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
     
   ],
   providers: [CustomerService,WeekendHouseProfileComponent,

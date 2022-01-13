@@ -1,7 +1,9 @@
 package com.springboot.app.model;
 
 import com.springboot.app.model.dto.AdditionalServiceDTO;
+import com.springboot.app.model.dto.TermDto;
 import com.springboot.app.model.dto.WeekendHouseDTO;
+import com.springboot.app.model.dto.WeekendHouseReservationDTO;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -25,17 +27,14 @@ public class WeekendHouse {
     private String description;
 
     //@NotEmpty(message = "Please fill out first name")
-    private String imagePath;
+    private String imagePath; //ovo bi trebala biti lista??
 
 
     @NotEmpty(message = "Please fill out number of beds in weekend house")
     private Integer bedNumber;
 
     //@NotEmpty(message = "Please fill out first name")
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "freeTerms",
-            joinColumns = @JoinColumn(name = "weekend_house_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "term_id", referencedColumnName = "id"))
+    @OneToMany(mappedBy = "weekendHouse")
     private Set<Term> freeTerms = new HashSet<>();
 
     @NotEmpty(message = "Please fill out rules")
@@ -70,7 +69,11 @@ public class WeekendHouse {
         this.description = dto.getDescription();
         this.imagePath = dto.getImagePath();
         this.bedNumber = dto.getBedNumber();
-        this.freeTerms = dto.getFreeTerms();
+
+        Set<Term> terms = new HashSet<>();
+        for (TermDto termDto : dto.getFreeTerms())
+            terms.add(new Term(termDto));
+        this.freeTerms = terms;
         this.rules = dto.getRules();
         this.price = dto.getPrice();
 
@@ -78,6 +81,12 @@ public class WeekendHouse {
         for (AdditionalServiceDTO service : dto.getAdditionalServices())
             services.add(new AdditionalService(service));
         this.additionalServices = services;
+
+        this.weekendHouseOwner = new WeekendHouseOwner(dto.getWeekendHouseOwner());
+        Set<WeekendHouseReservation> reservations = new HashSet<>();
+        for (WeekendHouseReservationDTO res : dto.getWeekendHouseReservations())
+            reservations.add(new WeekendHouseReservation(res));
+        this.weekendHouseReservations = reservations;
     }
 
     public WeekendHouse(Integer id, String name, String address, String description, String imagePath, Integer bedNumber, Set<Term> freeTerms, String rules, Float price, Set<AdditionalService> additionalServices, Set<WeekendHouseReservation> weekendHouseReservations) {

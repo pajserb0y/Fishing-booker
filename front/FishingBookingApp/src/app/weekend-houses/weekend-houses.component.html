@@ -55,7 +55,7 @@
 
 
           <!-- REZERVISANJE -->
-  <mat-grid-tile colspan="1"  style="border: solid">
+  <mat-grid-tile *ngIf="role == 'ROLE_CUSTOMER'"  colspan="1"  style="border: solid">
   <div class="reserve">
     <h1>Reserve now</h1>
     <form name="rform" #registerForm="ngForm">       
@@ -101,7 +101,7 @@
 
 
           <!-- HOUSE INFO -->
-  <mat-grid-tile  style="border: solid;" colspan="2">
+  <mat-grid-tile *ngIf="role == 'ROLE_CUSTOMER'" style="border: solid;" colspan="2">
     <div style="margin-top: -35%; margin-right: -20%; font-size: larger; position: static;">
       <h2>House informations</h2>
       <div class="infoDiv"><label><b>Name:</b>   {{selectedHouseInfo.name}}</label></div>
@@ -113,7 +113,8 @@
   </div>
   </mat-grid-tile>
 
-  <mat-grid-tile  style="border: solid;" colspan="2">
+          <!-- HOUSE OWNER INFO -->
+  <mat-grid-tile *ngIf="role == 'ROLE_CUSTOMER'" style="border: solid;" colspan="2">
     <div style="margin-top: -35%; margin-left: -50%; font-size: larger;">
       <h2>House owner informations</h2>
       <div class="infoDiv"><label><b>First name:</b>   {{selectedHouseInfo.weekendHouseOwner.firstName}}</label></div>

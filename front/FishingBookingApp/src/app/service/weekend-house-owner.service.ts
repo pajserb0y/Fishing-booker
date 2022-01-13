@@ -10,6 +10,7 @@ import { WeekendHouseOwner } from '../model/weekend-house-owner';
 import { of } from 'rxjs';
 import 'rxjs/add/operator/catch';
 import { FormGroup } from '@angular/forms';
+import { Term } from '../model/term';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,12 @@ export class WeekendHouseOwnerService {
   private _getWeekendHouseOwnerByUsername  = this._weekendHouseOwnerRegistration + '/';
   private _getAllUsernames =  '/api/uth/getAllWeekendHouseOwnerUsernames';
   private _editWeekendHouseOwner  = this._weekendHouseOwnerRegistration + '/edit';
+  private _editWeekendHouse =  this._weekendHouseOwnerRegistration + '/editWeekendHouse';
   private _allWeekendHouses  = this._weekendHouseOwnerRegistration + '/allWeekendHouses';
+  private _allWeekendHousesforOwner = this._weekendHouseOwnerRegistration + '/allWeekendHousesForOwner/';
   private _findAvailableWeekendHouses  = this._weekendHouseOwnerRegistration + '/findAvailableForDateRange';
+  private _addFreeTerm = this._weekendHouseOwnerRegistration + '/_addFreeTerm/';
+  private _getAllFreeTermsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllFreeTermsForWeekendHouse/';
 
 
 
@@ -38,6 +43,12 @@ export class WeekendHouseOwnerService {
   edit(weekendHouseOwner : WeekendHouseOwner):Observable<any>{
     const body = JSON.stringify(weekendHouseOwner);
     return this._http.post(this._editWeekendHouseOwner, body)
+  }
+
+  editWeekendHouse(weekendHouse : WeekendHouse):Observable<any>
+  {
+    const body = JSON.stringify(weekendHouse);
+    return this._http.post(this._editWeekendHouse, body)
   }
   
   getWeekendHouseOwnerByUsername(username: string): Observable<WeekendHouseOwner> {
@@ -57,6 +68,13 @@ export class WeekendHouseOwnerService {
                       catchError(this.handleError)); 
   }
 
+  getAllWeekendHousesForOwner(username : String|null): Observable<WeekendHouse[]>
+  {
+    return this._http.get<WeekendHouse[]>(this._allWeekendHousesforOwner + username)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
+
   findAvailableHousesForSelectedTerm(start: Date, end: Date) : Observable<any> {
     start = new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours(), start.getMinutes()));
     end = new Date(Date.UTC(end.getFullYear(), end.getMonth(), end.getDate(), end.getHours(), end.getMinutes()));
@@ -65,6 +83,18 @@ export class WeekendHouseOwnerService {
     return this._http.post(this._findAvailableWeekendHouses, body)
   }
 
+  addFreeTerm(newFreeTerm :Term): Observable<any>
+  {
+    const body = JSON.stringify(newFreeTerm);
+    return this._http.post(this._addFreeTerm, body)
+  }
+
+  getAllFreeTermsForWeekendHouse(weekendHouse : WeekendHouse) :Observable<Term[]>
+  {
+    return this._http.get<Term[]>(this._getAllFreeTermsForWeekendHouse + weekendHouse.id)
+                          .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
+                            catchError(this.handleError)); 
+  }
 
   private handleError(err : HttpErrorResponse) {
     console.log(err.message);

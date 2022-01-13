@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WeekendHouse } from '../model/weekend-house';
-import { WeekendHouseOwner } from '../model/weekend-house-owner';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
 import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
-import { WeekendHouseProfileComponent } from '../weekend-house-profile/weekend-house-profile.component';
 
 @Component({
   selector: 'app-weekend-houses',
@@ -73,11 +71,15 @@ export class WeekendHousesComponent implements OnInit {
     weekendHouse: this.selectedHouseInfo
   }
   role : string|null = localStorage.getItem('role');
+  username: string|null = localStorage.getItem('username');
 
   constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getAllWeekendHouses();
+    if(this.role == 'ROLE_CUSTOMER')
+        this.getAllWeekendHouses();
+    else if(this.role == 'ROLE_WEEKEND_HOUSE_OWNER')
+        this.getAllWeekendHousesForOwner(this.username)
   }
 
 
@@ -85,6 +87,12 @@ export class WeekendHousesComponent implements OnInit {
     this._weekendHouseOwnerService.getAllWeekendHouses()
         .subscribe(data =>  this.weekendHouses = data,
                    error => this.errorMessage = <any>error);   
+  }
+  getAllWeekendHousesForOwner(username :String|null)
+  {
+    this._weekendHouseOwnerService.getAllWeekendHousesForOwner(username)
+        .subscribe(data =>  this.weekendHouses = data,
+                   error => this.errorMessage = <any>error); 
   }
 
   showInfo(house: WeekendHouse) {

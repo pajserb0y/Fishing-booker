@@ -1,5 +1,7 @@
 package com.springboot.app.model;
 
+import com.springboot.app.model.dto.AdditionalServiceDTO;
+import com.springboot.app.model.dto.WeekendHouseReservationDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -67,6 +69,37 @@ public class WeekendHouseReservation {
         this.price = price;
         this.customer = customer;
         this.weekendHouse = weekendHouse;
+    }
+
+    public WeekendHouseReservation(WeekendHouseReservationDTO res) {
+        this.id = res.getId();
+        this.startDateTime = res.getStartDateTime();
+        this.endDateTime = res.getEndDateTime();
+        this.peopleNumber = res.getPeopleNumber();
+        for (AdditionalServiceDTO service : res.getServices())
+            services.add(new AdditionalService(service));
+        this.startSpecialOffer = res.getStartSpecialOffer();
+        this.endSpecialOffer = res.getEndSpecialOffer();
+        this.services = services;
+        this.price = res.getPrice();
+        this.customer =  new Customer(res.getCustomer());
+        this.weekendHouse = new WeekendHouse(res.getWeekendHouse());
+    }
+
+    public Date getStartSpecialOffer() {
+        return startSpecialOffer;
+    }
+
+    public void setStartSpecialOffer(Date startSpecialOffer) {
+        this.startSpecialOffer = startSpecialOffer;
+    }
+
+    public Date getEndSpecialOffer() {
+        return endSpecialOffer;
+    }
+
+    public void setEndSpecialOffer(Date endSpecialOffer) {
+        this.endSpecialOffer = endSpecialOffer;
     }
 
     public Integer getId() {

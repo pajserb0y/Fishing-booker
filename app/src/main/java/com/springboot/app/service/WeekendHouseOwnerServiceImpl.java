@@ -1,13 +1,8 @@
 package com.springboot.app.service;
 
-import com.springboot.app.model.Customer;
-import com.springboot.app.model.Role;
-import com.springboot.app.model.WeekendHouse;
-import com.springboot.app.model.WeekendHouseOwner;
-import com.springboot.app.model.WeekendHouseReservation;
-import com.springboot.app.model.dto.DateTimeRangeDTO;
-import com.springboot.app.model.dto.WeekendHouseDTO;
-import com.springboot.app.model.dto.WeekendHouseOwnerDTO;
+import com.springboot.app.model.*;
+import com.springboot.app.model.dto.*;
+import com.springboot.app.repository.TermRepository;
 import com.springboot.app.repository.WeekendHouseOwnerRepository;
 import com.springboot.app.repository.WeekendHouseRepository;
 import com.springboot.app.repository.WeekendHouseReservationRepository;
@@ -26,13 +21,15 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     private final WeekendHouseRepository weekendHouseRepository;
     private final WeekendHouseReservationRepository weekendHouseReservationRepository;
     private final RoleService roleService;
+    private final TermRepository termRepository;
 
     public WeekendHouseOwnerServiceImpl(WeekendHouseOwnerRepository weekendHouseOwnerRepository, WeekendHouseRepository weekendHouseRepository,
-                                        RoleService roleService, WeekendHouseReservationRepository weekendHouseReservationRepository) {
+                                        RoleService roleService, WeekendHouseReservationRepository weekendHouseReservationRepository,TermRepository termRepository) {
         this.weekendHouseOwnerRepository = weekendHouseOwnerRepository;
         this.roleService = roleService;
         this.weekendHouseRepository = weekendHouseRepository;
         this.weekendHouseReservationRepository = weekendHouseReservationRepository;
+        this.termRepository = termRepository;
     }
 
     @Override
@@ -100,5 +97,43 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
         List<Integer> weekendHouseIds = weekendHouseReservationRepository.findAllForDateRange(start, end);
         List<WeekendHouse> available = weekendHouseRepository.findAvailable(weekendHouseIds);
         return available;
+    }
+
+    @Override
+    public List<WeekendHouse> findallWeekendHousesForOwner(WeekendHouseOwner weekendHouseOwner) {
+        return weekendHouseRepository.findByWeekendHouseOwner(weekendHouseOwner);
+    }
+
+    @Override
+    public WeekendHouse changeWeekendHouse(WeekendHouseDTO weekendHouseDTO) {
+        Optional<WeekendHouse> weekendHouse = weekendHouseRepository.findById(weekendHouseDTO.getId());
+
+        weekendHouse.get().setName(weekendHouseDTO.getName());
+        weekendHouse.get().setAddress(weekendHouseDTO.getAddress());
+        weekendHouse.get().setDescription(weekendHouseDTO.getDescription());
+        weekendHouse.get().setBedNumber(weekendHouseDTO.getBedNumber());
+        Set<Term> terms = new HashSet<>();
+        for (TermDto termDto : weekendHouseDTO.getFreeTerms())
+            terms.add(new Term(termDto));
+        weekendHouse.get().setFreeTerms(terms);
+        weekendHouse.get().setRules(weekendHouseDTO.getRules());
+        weekendHouse.get().setPrice(weekendHouseDTO.getPrice());
+        Set<WeekendHouseReservation> reservations = new HashSet<>();
+        for (WeekendHouseReservationDTO res : weekendHouseDTO.getWeekendHouseReservations())
+            reservations.add(new WeekendHouseReservation(res));
+        weekendHouse.get().setWeekendHouseReservations(reservations);
+        Set<AdditionalService> services = new HashSet<>();
+        for (AdditionalServiceDTO service : weekendHouseDTO.getAdditionalServices())
+            services.add(new AdditionalService(service));
+        weekendHouse.get().setAdditionalServices(services);
+        weekendHouse.get().setWeekendHouseOwner(new WeekendHouseOwner(weekendHouseDTO.getWeekendHouseOwner()));
+        saveWeekendHouse(weekendHouse.get());
+
+        return weekendHouse.get();
+    }
+
+    @Override
+    public List<Term> findAllFreeTermsForWeekendHouse(String id) {
+        return termRepository.findAllByWeekendHouseId(id);
     }
 }
