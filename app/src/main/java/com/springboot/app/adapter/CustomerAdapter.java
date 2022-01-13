@@ -8,17 +8,17 @@ public class CustomerAdapter {
     public static Customer DtoToCustomerWithoutHashingPassword(CustomerDTO customerDto ) {
         Customer customer = new Customer();
 
-//        customer.setId(customerDto.getId());
-//        customer.setFirstName(customerDto.getId());
-//        customer.setLastName(customerDto.getId());
-//        customer.setEmail(customerDto.getId());
-//        customer.setUsername(customerDto.getId());
-//        customer.setPassword(customerDto.getId());
-//        customer.setAddress(customerDto.getId());
-//        customer.setCity(customerDto.getId());
-//        customer.setCountry(customerDto.getId());
-//        customer.setPhone(customerDto.getId());
-//        customer.setHashCode(customerDto.getId());
+        customer.setId(customerDto.getId());
+        customer.setFirstName(customerDto.getFirstName());
+        customer.setLastName(customerDto.getLastName());
+        customer.setEmail(customerDto.getEmail());
+        customer.setUsername(customerDto.getUsername());
+        customer.setPassword(customerDto.getPassword());
+        customer.setAddress(customerDto.getAddress());
+        customer.setCity(customerDto.getCity());
+        customer.setCountry(customerDto.getCountry());
+        customer.setPhone(customerDto.getPhone());
+        customer.setHashCode(customerDto.getAddress());
 
         return customer;
     }

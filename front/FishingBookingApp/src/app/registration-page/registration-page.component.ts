@@ -58,7 +58,8 @@ export class RegistrationPageComponent implements OnInit {
   }
 
 
-  constructor(public _customerService: CustomerService, public _boatOwnerService: BoatOwnerService,public _weekendHouseOwnerService: WeekendHouseOwnerService,public _instructorService: InstructorService, private _snackBar: MatSnackBar) { }
+  constructor(public _customerService: CustomerService, public _boatOwnerService: BoatOwnerService,public _weekendHouseOwnerService: WeekendHouseOwnerService,
+              public _instructorService: InstructorService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getAllCustomerUsernames();

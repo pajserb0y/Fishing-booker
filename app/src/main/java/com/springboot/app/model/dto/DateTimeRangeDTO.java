@@ -4,25 +4,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateTimeRangeDTO {
-    private String start;
-    private String end;
+    private Date start;
+    private Date end;
 
     public DateTimeRangeDTO() {
     }
 
-    public String getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public String getEnd() {
+    public Date getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(Date end) {
         this.end = end;
     }
 

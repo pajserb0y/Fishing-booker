@@ -6,13 +6,20 @@
              mat-button [routerLink]="['boats']">Boats</button>
     <button *ngIf="role != 'ROLE_ADMIN' && role != 'ROLE_BOAT_OWNER' && role != 'ROLE_WEEKEND_HOUSE_OWNER' && role != 'ROLE_INSTRUCTOR'"
              mat-button [routerLink]="['fishing-lessons']">Fishing lessons</button>
-    <!-- <button mat-button [matMenuTriggerFor]="menu">Schedule appointment</button>
+
+    <button *ngIf="role == 'ROLE_CUSTOMER'" mat-button [matMenuTriggerFor]="menu">Reservations history</button>
         <mat-menu #menu="matMenu">
-        <button mat-menu-item >Standard scheduling</button>
-        <button mat-menu-item [routerLink]="['recommendation-scheduling']">Recommendation scheduling</button>
-        </mat-menu> -->
-    <button *ngIf="role == 'ROLE_WEEKEND_HOUSE_OWNER' || role == 'ROLE_CUSTOMER'"
-             style="margin-left : 25px" mat-button [routerLink]="['weekend-houses']">Weekend houses</button>
+        <button mat-menu-item [routerLink]="['customer-past-weekend-house-reservations']">Weekend houses</button>
+        <button mat-menu-item >Boats</button>
+        <button mat-menu-item >Fishing lessons</button>
+        </mat-menu>
+
+    <button *ngIf="role == 'ROLE_CUSTOMER'" mat-button [matMenuTriggerFor]="menu1">My future reservations</button>
+        <mat-menu #menu1="matMenu">
+        <button mat-menu-item [routerLink]="['customer-future-weekend-house-reservations']">Weekend houses</button>
+        <button mat-menu-item >Boats</button>
+        <button mat-menu-item >Fishing lessons</button>
+        </mat-menu>
     
 
 
@@ -20,7 +27,7 @@
 
     <span class="example-spacer" ></span>
     <button *ngIf="role == 'ROLE_CUSTOMER' || role == 'ROLE_ADMIN' || role == 'ROLE_BOAT_OWNER' || role == 'ROLE_WEEKEND_HOUSE_OWNER' || 
-                    role == 'ROLE_INSTRUCTOR'" mat-icon-button [routerLink]="['customer-profile']">
+                    role == 'ROLE_INSTRUCTOR'" mat-icon-button [routerLink]="['user-profile']">
         <mat-icon >account_circle</mat-icon>
     </button>
     <button *ngIf="role != 'ROLE_CUSTOMER' && role != 'ROLE_ADMIN' && role != 'ROLE_BOAT_OWNER' && role != 'ROLE_WEEKEND_HOUSE_OWNER' && 

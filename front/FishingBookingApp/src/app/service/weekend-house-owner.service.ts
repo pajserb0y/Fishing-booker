@@ -10,6 +10,7 @@ import { WeekendHouseOwner } from '../model/weekend-house-owner';
 import { of } from 'rxjs';
 import 'rxjs/add/operator/catch';
 import { FormGroup } from '@angular/forms';
+import { WeekendHouseReservation } from '../model/weekend-house-reservation';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +18,15 @@ import { FormGroup } from '@angular/forms';
 export class WeekendHouseOwnerService {
 
   private _weekendHouseOwnerRegistration = '/api/weekendhouseowners';
+  private _weekendHouseRegistrationController = '/api/weekendHouseReservations';
   private _submitRegistration  = this._weekendHouseOwnerRegistration + '/create';
   private _getWeekendHouseOwnerByUsername  = this._weekendHouseOwnerRegistration + '/';
-  private _getAllUsernames =  '/api/uth/getAllWeekendHouseOwnerUsernames';
+  private _getAllUsernames =  '/api/auth/getAllWeekendHouseOwnerUsernames';
   private _editWeekendHouseOwner  = this._weekendHouseOwnerRegistration + '/edit';
   private _allWeekendHouses  = this._weekendHouseOwnerRegistration + '/allWeekendHouses';
   private _findAvailableWeekendHouses  = this._weekendHouseOwnerRegistration + '/findAvailableForDateRange';
+  private _makeReservation = this._weekendHouseRegistrationController + '/reserve';
+  private _getFutureReservationsForCustomerUsername = this._weekendHouseRegistrationController + '/getFutureForCustomerUsername/';
 
 
 
@@ -51,6 +55,7 @@ export class WeekendHouseOwnerService {
                           .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
                             catchError(this.handleError)); 
   }
+
   getAllWeekendHouses(): Observable<WeekendHouse[]> {
     return this._http.get<WeekendHouse[]>(this._allWeekendHouses)
                       .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
@@ -63,6 +68,18 @@ export class WeekendHouseOwnerService {
     const body=JSON.stringify({start, end});
     console.log(body)
     return this._http.post(this._findAvailableWeekendHouses, body)
+  }
+
+  reserve(houseReservation: WeekendHouseReservation) : Observable<any>  {
+    const body=JSON.stringify(houseReservation);
+    console.log(body)
+    return this._http.post(this._makeReservation, body)
+  }
+
+  getFutureReservationsForCustomerUsername(username : string) : Observable<WeekendHouseReservation[]>  {
+    return this._http.get<WeekendHouseReservation[]>(this._getFutureReservationsForCustomerUsername + username)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
   }
 
 

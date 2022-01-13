@@ -13,12 +13,7 @@ import com.springboot.app.repository.WeekendHouseRepository;
 import com.springboot.app.repository.WeekendHouseReservationRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Set;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
@@ -88,17 +83,17 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
             saveWeekendHouseOwner(weekendHouseOwner.get());
         }
     }
+
     public List<WeekendHouse> findAllWeekendHouses() {
         return weekendHouseRepository.findAll();
     }
 
     @Override
     public List<WeekendHouse> findAvailableHousesForDateRange(DateTimeRangeDTO dateRange) {
-        Date start = DateTimeRangeDTO.ConvertFromStringToDate(dateRange.getStart());
-        Date end = DateTimeRangeDTO.ConvertFromStringToDate(dateRange.getEnd());
-
-        List<Integer> weekendHouseIds = weekendHouseReservationRepository.findAllForDateRange(start, end);
-        List<WeekendHouse> available = weekendHouseRepository.findAvailable(weekendHouseIds);
-        return available;
+        List<Integer> weekendHouseIds = weekendHouseReservationRepository.findAllForDateRange(dateRange.getStart(), dateRange.getEnd());
+        if (weekendHouseIds.isEmpty())
+            return findAllWeekendHouses();
+        else
+            return weekendHouseRepository.findAllByIdNotIn(weekendHouseIds);
     }
 }

@@ -74,10 +74,10 @@ public class WeekendHouse {
         this.rules = dto.getRules();
         this.price = dto.getPrice();
 
-        Set<AdditionalService> services = new HashSet<>();
-        for (AdditionalServiceDTO service : dto.getAdditionalServices())
-            services.add(new AdditionalService(service));
-        this.additionalServices = services;
+//        Set<AdditionalService> services = new HashSet<>();
+//        for (AdditionalServiceDTO service : dto.getAdditionalServices())
+//            services.add(new AdditionalService(service));
+//        this.additionalServices = services;
     }
 
     public WeekendHouse(Integer id, String name, String address, String description, String imagePath, Integer bedNumber, Set<Term> freeTerms, String rules, Float price, Set<AdditionalService> additionalServices, Set<WeekendHouseReservation> weekendHouseReservations) {

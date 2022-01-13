@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,15 +16,13 @@ import java.util.Set;
 public class WeekendHouseReservationDTO {
 
     private Integer id;
-    @NotEmpty(message = "Please fill out starting date")
+
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date startDateTime;
 
-    @NotEmpty(message = "Please fill out duration of stay")
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date endDateTime;
 
-    @NotEmpty(message = "Please fill out number of people")
     private Integer peopleNumber;
 
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
@@ -34,7 +33,6 @@ public class WeekendHouseReservationDTO {
 
     private Set<AdditionalServiceDTO> services = new HashSet<>();
 
-    @NotEmpty(message = "Please fill out price")
     private Float price;
 
     private CustomerDTO customer;

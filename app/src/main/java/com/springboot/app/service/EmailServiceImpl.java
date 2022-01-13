@@ -1,6 +1,7 @@
 package com.springboot.app.service;
 
 import com.springboot.app.model.Customer;
+import com.springboot.app.model.WeekendHouseReservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -48,6 +49,18 @@ public class EmailServiceImpl implements EmailService {
         mail.setText("User with id: '" + id.toString() + "' has submited a request for deleting." +
                 "\nHere is their note:" +
                 "\n'" + note + "'");
+
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendNotificationForWeekendHouseReservation(WeekendHouseReservation reservation) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo("health.care.clinic.psw+admin@gmail.com");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Successfully reservation");
+        mail.setText("You have successfully reserved weekend house '" + reservation.getWeekendHouse().getName() +
+                "' for period from " + reservation.getStartDateTime() + " to " + reservation.getEndDateTime());
 
         javaMailSender.send(mail);
     }

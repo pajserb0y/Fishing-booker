@@ -1,11 +1,16 @@
 package com.springboot.app.model;
 
+import com.springboot.app.adapter.CustomerAdapter;
+import com.springboot.app.model.dto.AdditionalServiceDTO;
+import com.springboot.app.model.dto.WeekendHouseReservationDTO;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Positive;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,23 +22,20 @@ public class WeekendHouseReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty(message = "Please fill out starting date")
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date startDateTime;
 
-    @NotEmpty(message = "Please fill out duration of stay")
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date endDateTime;
 
-    @NotEmpty(message = "Please fill out number of people")
     private Integer peopleNumber;
 
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-    @Null
+    @Nullable
     private Date startSpecialOffer = new Date();
 
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-    @Null
+    @Nullable
     private Date endSpecialOffer;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -42,14 +44,13 @@ public class WeekendHouseReservation {
             inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
     private Set<AdditionalService> services = new HashSet<>();
 
-    @NotEmpty(message = "Please fill out price")
     private Float price;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "weekend_house_id")
     private WeekendHouse weekendHouse;
 
@@ -67,6 +68,22 @@ public class WeekendHouseReservation {
         this.price = price;
         this.customer = customer;
         this.weekendHouse = weekendHouse;
+    }
+
+    public WeekendHouseReservation(WeekendHouseReservationDTO reservationDto) {
+        this.id = reservationDto.getId();
+        this.startDateTime = reservationDto.getStartDateTime();
+        this.endDateTime = reservationDto.getEndDateTime();
+        this.peopleNumber = reservationDto.getPeopleNumber();
+
+        Set<AdditionalService> services = new HashSet<>();
+        for (AdditionalServiceDTO service : reservationDto.getServices())
+            services.add(new AdditionalService(service));
+
+        this.services = services;
+        this.price = reservationDto.getPrice();
+        this.customer = Customer.DtoToCustomerWithoutHashingPassword(reservationDto.getCustomer());
+        this.weekendHouse = new WeekendHouse(reservationDto.getWeekendHouse());
     }
 
     public Integer getId() {

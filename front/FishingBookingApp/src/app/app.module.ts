@@ -30,6 +30,8 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatCarouselModule } from 'ng-mat-carousel';
+import {MatSortModule} from '@angular/material/sort';
+import {Sort} from '@angular/material/sort';
 
 
 import { HeaderComponent } from './header/header.component';
@@ -49,6 +51,8 @@ import { InterceptorService } from './service/interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { WeekendHouseProfileComponent } from './weekend-house-profile/weekend-house-profile.component';
+import { CustomerPastWeekendHouseReservationsComponent } from './customer-past-weekend-house-reservations/customer-past-weekend-house-reservations.component';
+import { CustomerFutureWeekendHouseReservationsComponent } from './customer-future-weekend-house-reservations/customer-future-weekend-house-reservations.component';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -74,7 +78,8 @@ const MaterialComponents = [
   MatTabsModule,
   MatMenuModule,
   MatTableModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatSortModule
 ];
 
 @NgModule({
@@ -89,7 +94,9 @@ const MaterialComponents = [
     LoginPageComponent,
     FishingLessonsComponent,
     UserProfileComponent,
-    WeekendHouseProfileComponent
+    WeekendHouseProfileComponent,
+    CustomerPastWeekendHouseReservationsComponent,
+    CustomerFutureWeekendHouseReservationsComponent
   ],
   imports: [
     BrowserModule,
