@@ -3,6 +3,7 @@ package com.springboot.app.service;
 import com.springboot.app.model.Term;
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseOwner;
+import com.springboot.app.model.WeekendHouseReservation;
 import com.springboot.app.model.dto.DateTimeRangeDTO;
 import com.springboot.app.model.dto.WeekendHouseDTO;
 import com.springboot.app.model.dto.WeekendHouseOwnerDTO;
@@ -31,5 +32,9 @@ public interface WeekendHouseOwnerService {
 
     WeekendHouse changeWeekendHouse(WeekendHouseDTO weekendHouseDTO);
 
-    List<Term> findAllFreeTermsForWeekendHouse(String id);
+    List<Term> findAllFreeTermsForWeekendHouse(WeekendHouse weekendHouse);
+
+    List<WeekendHouseReservation> findAllReservationsForWeekendHouse(WeekendHouse weekendHouse);
+
+    WeekendHouse findWeekendHouseById(Integer id);
 }

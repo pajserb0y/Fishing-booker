@@ -118,12 +118,12 @@ export class WeekendHousesComponent implements OnInit {
   }
 
   showInfo(house: WeekendHouse) {
-    if(this.role == "ROLE_WEEKEND_HOUSE_OWNER")
+    if(this.role == 'ROLE_WEEKEND_HOUSE_OWNER')
     {
       this._weekendHouseOwnerService.weekendHouse = house;
       this.router.navigateByUrl("weekend-house-profile")
     }
-    if(this.role != "ROLE_WEEKEND_HOUSE_OWNER")
+    if(this.role != 'ROLE_WEEKEND_HOUSE_OWNER')
     {
       this.selectedHouseInfo = house
       this.houseReservation.price = this.selectedHouseInfo.price

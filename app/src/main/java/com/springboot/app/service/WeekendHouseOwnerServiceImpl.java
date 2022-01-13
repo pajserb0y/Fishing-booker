@@ -128,7 +128,17 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     }
 
     @Override
-    public List<Term> findAllFreeTermsForWeekendHouse(String id) {
-        return termRepository.findAllByWeekendHouseId(id);
+    public List<Term> findAllFreeTermsForWeekendHouse(WeekendHouse weekendHouse) {
+        return termRepository.findByWeekendHouse(weekendHouse);
+    }
+
+    @Override
+    public List<WeekendHouseReservation> findAllReservationsForWeekendHouse(WeekendHouse weekendHouse) {
+        return weekendHouseReservationRepository.findByWeekendHouse(weekendHouse);
+    }
+
+    @Override
+    public WeekendHouse findWeekendHouseById(Integer id) {
+        return weekendHouseRepository.findById(id).get();
     }
 }

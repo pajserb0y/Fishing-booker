@@ -22,7 +22,8 @@ const routes: Routes = [
   { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard], 
                               data: { role: ['ROLE_CUSTOMER', 'ROLE_INSTRUCTOR','ROLE_WEEKEND_HOUSE_OWNER','ROLE_BOAT_OWNER','ROLE_ADMIN']} },
   { path: 'customer-future-weekend-house-reservations', component: CustomerFutureWeekendHouseReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
-  { path: 'customer-past-weekend-house-reservations', component: CustomerPastWeekendHouseReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} }
+  { path: 'customer-past-weekend-house-reservations', component: CustomerPastWeekendHouseReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
+  {path: 'weekend-house-profile', component: WeekendHouseProfileComponent, canActivate:[AuthGuard], data:{role : 'ROLE_WEEKEND_HOUSE_OWNER'}}
 ];
 
 @NgModule({

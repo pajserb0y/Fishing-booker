@@ -18,6 +18,7 @@ import { WeekendHouseReservationWithDateAsString } from '../model/weekend-house-
   providedIn: 'root'
 })
 export class WeekendHouseOwnerService {
+ 
 
   private _weekendHouseOwnerRegistration = '/api/weekendhouseowners';
   private _weekendHouseRegistrationController = '/api/weekendHouseReservations';
@@ -33,7 +34,7 @@ export class WeekendHouseOwnerService {
   private _getFutureReservationsForCustomerUsername = this._weekendHouseRegistrationController + '/getFutureForCustomerUsername/';
   private _addFreeTerm = this._weekendHouseOwnerRegistration + '/_addFreeTerm/';
   private _getAllFreeTermsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllFreeTermsForWeekendHouse/';
-
+  private _getAllReservationsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllReservationsForWeekendHouse/';
 
 
   weekendHouse !: WeekendHouse;
@@ -110,6 +111,12 @@ export class WeekendHouseOwnerService {
   getAllFreeTermsForWeekendHouse(weekendHouse : WeekendHouse) :Observable<Term[]>
   {
     return this._http.get<Term[]>(this._getAllFreeTermsForWeekendHouse + weekendHouse.id)
+                          .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
+                            catchError(this.handleError)); 
+  }
+
+  getAllReservationsForWeekendHouse(weekendHouse: WeekendHouse) :Observable<WeekendHouseReservation[]> {
+    return this._http.get<WeekendHouseReservation[]>(this._getAllReservationsForWeekendHouse + weekendHouse.id)
                           .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
                             catchError(this.handleError)); 
   }

@@ -48,7 +48,30 @@ export class WeekendHouseProfileComponent implements OnInit {
   }
   errorMessage : string  = '';
   selectedServices : AdditionalService [] = [];
-  weekendHouseReservation !: WeekendHouseReservation;
+  allReservationsForWeekendHouse : WeekendHouseReservation[] = [];
+  weekendHouseReservation  : WeekendHouseReservation = {
+    id: 0,
+    startDateTime: new Date,
+    endDateTime: new Date,
+    peopleNumber: 0,
+    startSpecialOffer: new Date,
+    endSpecialOffer: null,
+    services: [],
+    price: 0,
+    customer: {
+      id: 0,
+      firstName: "",
+      lastName: "",
+      email: "",
+      username:  "",
+      password: "",
+      address: "",
+      city: "",
+      country: "",
+      phone: ""
+    },
+    weekendHouse: this.weekendHouse
+  }
 
   minDate = new Date();
   range = new FormGroup({
@@ -71,6 +94,7 @@ export class WeekendHouseProfileComponent implements OnInit {
   ngOnInit(): void {
       this.weekendHouse = this._weekendHouseownerService.weekendHouse;
       this.getAllFreeTerms();
+      this.getAllReservationsForWeekendHouse();
   }
 
   
@@ -113,6 +137,10 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
   {
 
   }
+
+  checkAvailability(){
+    
+  }
   addFreeTerm()
   {
     if(this.newFreeTerm.startDateTime < this.newFreeTerm.endDateTime)
@@ -127,6 +155,13 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
   {
        this._weekendHouseownerService.getAllFreeTermsForWeekendHouse(this.weekendHouse)
        .subscribe(data =>  this.allFreeTerms = data,
+                  error => this.errorMessage = <any>error); 
+  }
+
+  getAllReservationsForWeekendHouse()
+  {
+    this._weekendHouseownerService.getAllReservationsForWeekendHouse(this.weekendHouse)
+       .subscribe(data =>  this.allReservationsForWeekendHouse = data,
                   error => this.errorMessage = <any>error); 
   }
 }

@@ -1,11 +1,11 @@
-<mat-grid-list  rowHeight="1000px" cols="4" rowHeight="1:1">
+<mat-grid-list  rowHeight="500px" cols="4" >
   <!--TABELA REZERVACIJA-->
 
   <mat-grid-tile colspan="3" style="border: solid">
    
     <div style="margin-right: 55%; margin-top: -20%;">
       <h2>Weekend house reservations: </h2>  
-      <table mat-table [dataSource]="weekendHouse.weekendHouseReservations" class="mat_table_reservation" style="width: 240%;">
+      <table mat-table [dataSource]="allReservationsForWeekendHouse" class="mat_table_reservation" style="width: 240%;">
         <ng-container matColumnDef="startDateTime">
             <mat-header-cell *matHeaderCellDef> Start Date and Time </mat-header-cell>
                 <mat-cell *matCellDef="let element" >
@@ -44,17 +44,14 @@
 
   <!-- CUSTOMER INFO -->
   <mat-grid-tile style="border: solid;" colspan="1">
-    <h1>Customer information:</h1>
-    <div style="margin-top: -35%; margin-right: -20%; font-size: larger; position: static;">
-      <!--
-      <div class = customer_info>
+    <div style="margin-top: -35%; margin-right: -20%; font-size: larger;">
           <h2>Customer informations</h2>
           <div class="infoDiv"><label><b>First name:</b>   {{weekendHouseReservation.customer.firstName}}</label></div>
           <div class="infoDiv"><label><b>Last name:</b>   {{weekendHouseReservation.customer.lastName}}</label></div>
           <div class="infoDiv"><label><b>Email:</b>   {{weekendHouseReservation.customer.email}}</label></div>
           <div class="infoDiv"><label><b>Country:</b>   {{weekendHouseReservation.customer.country}}</label></div>
           <div class="infoDiv"><label><b>Username:</b>   {{weekendHouseReservation.customer.username}}</label></div>
-    </div> -->
+
   </div>
   </mat-grid-tile>
 
@@ -64,12 +61,17 @@
       <div class="reserve">
         <h1>Reserve now</h1>
         <form name="reserveform" #reserveForm="ngForm"> 
-
+          <mat-form-field appearance="fill">
+            <mat-label>Customer's name</mat-label>
+            <input matInput type="text" name="name"  [(ngModel)]="weekendHouseReservation.customer.firstName +' '+ weekendHouseReservation.customer.lastName" required disabled>
+            <mat-icon matSuffix></mat-icon>
+          </mat-form-field>
+          
           <mat-form-field appearance="fill">
               <mat-label>Select date</mat-label>
               <mat-date-range-input [min]="minDate" [formGroup]="range" [rangePicker]="picker">
                 <input matStartDate formControlName="start" placeholder="Start date">
-                <input matEndDate formControlName="end" placeholder="End date" (dateChange)="reserveWeekendHouse()">
+                <input matEndDate formControlName="end" placeholder="End date" (dateChange)="checkAvailability()">
               </mat-date-range-input>
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
@@ -77,7 +79,6 @@
               <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
               <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
           </mat-form-field>
-          <!--
           <mat-form-field appearance="fill">
             <mat-label>Number of guests</mat-label>
             <input matInput type="number" name="peopleNumber" [(ngModel)]="weekendHouseReservation.peopleNumber" required>
@@ -98,7 +99,7 @@
           <p style="margin-top: 70px;"><b>Before reserving, please check info you filled</b></p>
           <div>
             <button mat-raised-button color="accent" (click)="reserveWeekendHouse()" [disabled]="weekendHouse.id === 0 || range.value.start === null || range.value.end === null">Reserve</button>
-          </div> -->
+          </div> 
     
         </form>
       </div>
