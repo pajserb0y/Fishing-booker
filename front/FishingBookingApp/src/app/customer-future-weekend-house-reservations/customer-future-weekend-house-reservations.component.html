@@ -12,14 +12,14 @@
     <ng-container matColumnDef="startDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header='startDate' > Start date </mat-header-cell>
             <mat-cell *matCellDef="let element" >
-              <ng-container >{{startDate}}</ng-container>
+              <ng-container >{{element.startDateTime}}</ng-container>
                 </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="endDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header='endDate'> End date </mat-header-cell>
             <mat-cell *matCellDef="let element" >
-              <ng-container >{{endDate}}</ng-container>
+              <ng-container >{{element.endDateTime}}</ng-container>
                 </mat-cell>
       </ng-container>
 

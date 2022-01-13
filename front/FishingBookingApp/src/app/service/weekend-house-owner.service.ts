@@ -12,6 +12,7 @@ import 'rxjs/add/operator/catch';
 import { FormGroup } from '@angular/forms';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
 import { Term } from '../model/term';
+import { WeekendHouseReservationWithDateAsString } from '../model/weekend-house-reservation-with-date-as-string';
 
 @Injectable({
   providedIn: 'root'
@@ -94,8 +95,8 @@ export class WeekendHouseOwnerService {
     return this._http.post(this._makeReservation, body)
   }
 
-  getFutureReservationsForCustomerUsername(username : string) : Observable<WeekendHouseReservation[]>  {
-    return this._http.get<WeekendHouseReservation[]>(this._getFutureReservationsForCustomerUsername + username)
+  getFutureReservationsForCustomerUsername(username : string) : Observable<WeekendHouseReservationWithDateAsString[]>  {
+    return this._http.get<WeekendHouseReservationWithDateAsString[]>(this._getFutureReservationsForCustomerUsername + username)
                       .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
                       catchError(this.handleError)); 
   }

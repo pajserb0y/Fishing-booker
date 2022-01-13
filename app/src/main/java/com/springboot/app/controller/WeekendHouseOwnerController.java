@@ -92,6 +92,7 @@ public class WeekendHouseOwnerController {
 
         return weekendHouseDTOs;
     }
+
     @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
     @GetMapping(path = "/allWeekendHousesForOwner/{username}")
     public Set<WeekendHouseDTO> allWeekendHousesForOwner(@PathVariable String username) {

@@ -83,10 +83,11 @@ public class WeekendHouse {
         this.additionalServices = services;
 
         this.weekendHouseOwner = new WeekendHouseOwner(dto.getWeekendHouseOwner());
-        Set<WeekendHouseReservation> reservations = new HashSet<>();
-        for (WeekendHouseReservationDTO res : dto.getWeekendHouseReservations())
-            reservations.add(new WeekendHouseReservation(res));
-        this.weekendHouseReservations = reservations;
+
+//        Set<WeekendHouseReservation> reservations = new HashSet<>();
+//        for (WeekendHouseReservationDTO res : dto.getWeekendHouseReservations())
+//            reservations.add(new WeekendHouseReservation(res));
+//        this.weekendHouseReservations = reservations;
     }
 
     public WeekendHouse(Integer id, String name, String address, String description, String imagePath, Integer bedNumber, Set<Term> freeTerms, String rules, Float price, Set<AdditionalService> additionalServices, Set<WeekendHouseReservation> weekendHouseReservations) {

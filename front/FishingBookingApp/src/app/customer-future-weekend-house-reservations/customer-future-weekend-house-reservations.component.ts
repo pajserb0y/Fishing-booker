@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
+import { WeekendHouseReservationWithDateAsString } from '../model/weekend-house-reservation-with-date-as-string';
 import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
 
 @Component({
@@ -11,11 +12,9 @@ import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service
 })
 export class CustomerFutureWeekendHouseReservationsComponent implements OnInit {
 
-  houseReservations : WeekendHouseReservation[] = []
+  houseReservations : WeekendHouseReservationWithDateAsString[] = []
   displayedColumns: string[] = ['houseName', 'startDate', 'endDate'];
   errorMessage : string  = '';
-  startDate : string|null = '';
-  endDate : string|null = '';
   pipe = new DatePipe('en-US'); // Use your own locale
 
   constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService) { }
@@ -30,8 +29,8 @@ export class CustomerFutureWeekendHouseReservationsComponent implements OnInit {
         .subscribe(data =>  {
                     this.houseReservations = data                    
                     for (let res of this.houseReservations) {
-                      this.startDate = this.pipe.transform(new Date(res.startDateTime), 'medium')
-                      this.endDate = this.pipe.transform(new Date(res.endDateTime), 'medium')
+                      res.startDateTime = this.pipe.transform(new Date(res.startDateTime), 'medium') || ''
+                      res.endDateTime = this.pipe.transform(new Date(res.endDateTime), 'medium') || ''
                     }
                     },
                    error => this.errorMessage = <any>error);   
@@ -39,6 +38,11 @@ export class CustomerFutureWeekendHouseReservationsComponent implements OnInit {
 
   sortData(sort: Sort) {
     const data = this.houseReservations.slice();
+    /* let reservations = data
+    for (let res of reservations) {
+      res.startDateTime = new Date(res.startDateTime)
+      d.startDateTime
+    } */
     if (!sort.active || sort.direction === '') {
       this.houseReservations = data;
       return;
@@ -50,9 +54,9 @@ export class CustomerFutureWeekendHouseReservationsComponent implements OnInit {
         case 'houseName':
           return compare(a.weekendHouse.name, b.weekendHouse.name, isAsc);
         case 'startDate':
-          return compare(a.startDateTime, b.startDateTime, isAsc);
+          return compare(new Date(a.startDateTime), new Date(b.startDateTime), isAsc);
         case 'endDate':
-          return compare(a.endDateTime, b.endDateTime, isAsc);
+          return compare(new Date(a.endDateTime), new Date(b.endDateTime), isAsc);
         default:
           return 0;
       }

@@ -54,19 +54,22 @@ public class WeekendHouseDTO {
         this.address = house.getAddress();
         this.bedNumber = house.getBedNumber();
         this.description = house.getDescription();
-        Set<TermDto> terms = new HashSet<>();
-        for (Term term : house.getFreeTerms())
-            terms.add(new TermDto(term));
-        this.freeTerms = terms;
+
+//        Set<TermDto> terms = new HashSet<>();
+//        for (Term term : house.getFreeTerms())
+//            terms.add(new TermDto(term));
+//        this.freeTerms = terms;
+
         this.name = house.getName();
         this.imagePath = house.getImagePath();
         this.price = house.getPrice();
         this.rules = house.getRules();
         this.weekendHouseOwner = new WeekendHouseOwnerDTO(house.getWeekendHouseOwner());
-        Set<WeekendHouseReservationDTO> reservations = new HashSet<>();
-        for (WeekendHouseReservation res : house.getWeekendHouseReservations())
-            reservations.add(new WeekendHouseReservationDTO(res));
-        this.weekendHouseReservations = reservations;
+
+//        Set<WeekendHouseReservationDTO> reservations = new HashSet<>();
+//        for (WeekendHouseReservation res : house.getWeekendHouseReservations())
+//            reservations.add(new WeekendHouseReservationDTO(res));
+//        this.weekendHouseReservations = reservations;
     }
 
 

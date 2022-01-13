@@ -23,7 +23,7 @@ public class Term {
         this.id = dto.getId();
         this.startDateTime = dto.getStartDateTime();
         this.endDateTime = dto.getEndDateTime();
-        this.weekendHouse = dto.getWeekendHouse();
+        this.weekendHouse = new WeekendHouse(dto.getWeekendHouse());
     }
     public Term(Integer id, Date startDateTime, Date endDateTime, WeekendHouse weekendHouse) {
         this.id = id;

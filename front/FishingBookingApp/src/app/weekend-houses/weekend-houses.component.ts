@@ -87,10 +87,10 @@ export class WeekendHousesComponent implements OnInit {
     if(this.role == 'ROLE_CUSTOMER')
     {
       this.getCustomer();
-      this.getAllWeekendHouses();
     }    
     else if(this.role == 'ROLE_WEEKEND_HOUSE_OWNER')
         this.getAllWeekendHousesForOwner(this.username)
+    this.getAllWeekendHouses();
   }
 
 

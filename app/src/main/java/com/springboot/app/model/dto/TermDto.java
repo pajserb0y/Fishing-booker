@@ -10,14 +10,14 @@ public class TermDto {
     private Integer id;
     private Date startDateTime;
     private Date endDateTime;
-    private WeekendHouse weekendHouse;
+    private WeekendHouseDTO weekendHouse;
 
     public TermDto()
     {
 
     }
 
-    public TermDto(Integer id, Date startDateTime, Date endDateTime, WeekendHouse weekendHouse) {
+    public TermDto(Integer id, Date startDateTime, Date endDateTime, WeekendHouseDTO weekendHouse) {
         this.id = id;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -28,18 +28,18 @@ public class TermDto {
         this.id = freeTerm.getId();
         this.startDateTime = freeTerm.getStartDateTime();
         this.endDateTime = freeTerm.getEndDateTime();
-        this.weekendHouse = freeTerm.getWeekendHouse();
+        this.weekendHouse = new WeekendHouseDTO(freeTerm.getWeekendHouse());
     }
 
     public Integer getId() {
         return id;
     }
 
-    public WeekendHouse getWeekendHouse() {
+    public WeekendHouseDTO getWeekendHouse() {
         return weekendHouse;
     }
 
-    public void setWeekendHouse(WeekendHouse weekendHouse) {
+    public void setWeekendHouse(WeekendHouseDTO weekendHouse) {
         this.weekendHouse = weekendHouse;
     }
 
