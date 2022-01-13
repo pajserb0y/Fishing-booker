@@ -5,10 +5,10 @@ import { WeekendHouse } from "./weekend-house";
 export interface WeekendHouseReservation {
     id: number ;
     startDateTime: Date ;
-    endDateTime: Date ;
+    endDateTime: Date;
     peopleNumber: number ;
     startSpecialOffer: Date ;
-    endSpecialOffer: Date ;
+    endSpecialOffer: Date | null;
     services: AdditionalService[];
     price: number;
     customer: Customer;

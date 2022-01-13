@@ -59,7 +59,7 @@ export class WeekendHousesComponent implements OnInit {
     endDateTime: new Date,
     peopleNumber: 0,
     startSpecialOffer: new Date,
-    endSpecialOffer: new Date,
+    endSpecialOffer: null,
     services: [],
     price: 0,
     customer: {
@@ -142,6 +142,7 @@ export class WeekendHousesComponent implements OnInit {
     this.houseReservation.weekendHouse = this.selectedHouseInfo
     this.houseReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
     this.houseReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
+    this.houseReservation.endSpecialOffer = null
     this.houseReservation.price = this.selectedHouseInfo.price
     for (let service of this.houseReservation.services) {
       this.houseReservation.price += service.price
