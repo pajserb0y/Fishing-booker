@@ -26,7 +26,7 @@ public class WeekendHouseDTO {
     @NotEmpty(message = "Please fill out number of beds in weekend house")
     private Integer bedNumber;
 
-    private Set<Term> freeTerms = new HashSet<>();
+    private Set<TermDto> freeTerms = new HashSet<>();
 
     @NotEmpty(message = "Please fill out rules")
     private String rules;
@@ -47,26 +47,26 @@ public class WeekendHouseDTO {
 
     public WeekendHouseDTO(WeekendHouse house) {
         this.id = house.getId();
-
-//        Set<AdditionalServiceDTO> services = new HashSet<>();
-//        for (AdditionalService service : house.getAdditionalServices())
-//            services.add(new AdditionalServiceDTO(service));
-//        this.additionalServices = services;
-
+        Set<AdditionalServiceDTO> services = new HashSet<>();
+        for (AdditionalService service : house.getAdditionalServices())
+           services.add(new AdditionalServiceDTO(service));
+        this.additionalServices = services;
         this.address = house.getAddress();
         this.bedNumber = house.getBedNumber();
         this.description = house.getDescription();
-        this.freeTerms = house.getFreeTerms();
+        Set<TermDto> terms = new HashSet<>();
+        for (Term term : house.getFreeTerms())
+            terms.add(new TermDto(term));
+        this.freeTerms = terms;
         this.name = house.getName();
         this.imagePath = house.getImagePath();
         this.price = house.getPrice();
         this.rules = house.getRules();
         this.weekendHouseOwner = new WeekendHouseOwnerDTO(house.getWeekendHouseOwner());
-
-//        Set<WeekendHouseReservationDTO> reservations = new HashSet<>();
-//        for (WeekendHouseReservation res : house.getWeekendHouseReservations())
-//            reservations.add(new WeekendHouseReservationDTO(res));
-//        this.weekendHouseReservations = reservations;
+        Set<WeekendHouseReservationDTO> reservations = new HashSet<>();
+        for (WeekendHouseReservation res : house.getWeekendHouseReservations())
+            reservations.add(new WeekendHouseReservationDTO(res));
+        this.weekendHouseReservations = reservations;
     }
 
 
@@ -119,11 +119,11 @@ public class WeekendHouseDTO {
         this.bedNumber = bedNumber;
     }
 
-    public Set<Term> getFreeTerms() {
+    public Set<TermDto> getFreeTerms() {
         return freeTerms;
     }
 
-    public void setFreeTerms(Set<Term> freeTerms) {
+    public void setFreeTerms(Set<TermDto> freeTerms) {
         this.freeTerms = freeTerms;
     }
 

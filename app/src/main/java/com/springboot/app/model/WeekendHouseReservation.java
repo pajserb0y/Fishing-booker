@@ -70,20 +70,36 @@ public class WeekendHouseReservation {
         this.weekendHouse = weekendHouse;
     }
 
-    public WeekendHouseReservation(WeekendHouseReservationDTO reservationDto) {
-        this.id = reservationDto.getId();
-        this.startDateTime = reservationDto.getStartDateTime();
-        this.endDateTime = reservationDto.getEndDateTime();
-        this.peopleNumber = reservationDto.getPeopleNumber();
-
+    public WeekendHouseReservation(WeekendHouseReservationDTO res) {
+        this.id = res.getId();
+        this.startDateTime = res.getStartDateTime();
+        this.endDateTime = res.getEndDateTime();
+        this.peopleNumber = res.getPeopleNumber();
         Set<AdditionalService> services = new HashSet<>();
-        for (AdditionalServiceDTO service : reservationDto.getServices())
+        for (AdditionalServiceDTO service : res.getServices())
             services.add(new AdditionalService(service));
-
+        this.startSpecialOffer = res.getStartSpecialOffer();
+        this.endSpecialOffer = res.getEndSpecialOffer();
         this.services = services;
-        this.price = reservationDto.getPrice();
-        this.customer = Customer.DtoToCustomerWithoutHashingPassword(reservationDto.getCustomer());
-        this.weekendHouse = new WeekendHouse(reservationDto.getWeekendHouse());
+        this.price = res.getPrice();
+        this.customer =  new Customer(res.getCustomer());
+        this.weekendHouse = new WeekendHouse(res.getWeekendHouse());
+    }
+
+    public Date getStartSpecialOffer() {
+        return startSpecialOffer;
+    }
+
+    public void setStartSpecialOffer(Date startSpecialOffer) {
+        this.startSpecialOffer = startSpecialOffer;
+    }
+
+    public Date getEndSpecialOffer() {
+        return endSpecialOffer;
+    }
+
+    public void setEndSpecialOffer(Date endSpecialOffer) {
+        this.endSpecialOffer = endSpecialOffer;
     }
 
     public Integer getId() {

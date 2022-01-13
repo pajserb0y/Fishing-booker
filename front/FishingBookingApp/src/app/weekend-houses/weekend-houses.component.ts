@@ -5,7 +5,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { WeekendHouse } from '../model/weekend-house';
-import { WeekendHouseOwner } from '../model/weekend-house-owner';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
 import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
 import { WeekendHouseProfileComponent } from '../weekend-house-profile/weekend-house-profile.component';
@@ -81,11 +80,17 @@ export class WeekendHousesComponent implements OnInit {
   searchField: string = '';
 
   constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService, private router: Router, private _snackBar: MatSnackBar, public _customerService: CustomerService) { }
+  username: string|null = localStorage.getItem('username');
 
 
   ngOnInit(): void {
-    this.getAllWeekendHouses();
-    this.getCustomer();
+    if(this.role == 'ROLE_CUSTOMER')
+    {
+      this.getCustomer();
+      this.getAllWeekendHouses();
+    }    
+    else if(this.role == 'ROLE_WEEKEND_HOUSE_OWNER')
+        this.getAllWeekendHousesForOwner(this.username)
   }
 
 
@@ -96,6 +101,12 @@ export class WeekendHousesComponent implements OnInit {
                     //this.dataSource = new MatTableDataSource(this.weekendHouses);
                     },
                    error => this.errorMessage = <any>error);   
+  }
+  getAllWeekendHousesForOwner(username :String|null)
+  {
+    this._weekendHouseOwnerService.getAllWeekendHousesForOwner(username)
+        .subscribe(data =>  this.weekendHouses = data,
+                   error => this.errorMessage = <any>error); 
   }
 
   getCustomer() {

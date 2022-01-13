@@ -37,7 +37,7 @@ export class UserProfileComponent implements OnInit {
   };
   role: string|null = localStorage.getItem('role');
 
-  constructor(public _customerService: CustomerService,private _boatOwnerService: BoatOwnerService,private _weekendHouseService: WeekendHouseOwnerService, private _snackBar: MatSnackBar) { }
+  constructor(public _customerService: CustomerService,private _boatOwnerService: BoatOwnerService,private _weekendHouseOwnerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getUserByUsername();
@@ -87,7 +87,7 @@ export class UserProfileComponent implements OnInit {
     else if(this.role == 'ROLE_WEEKEND_HOUSE_OWNER')
     {
       //this.customerToNonCustomer();
-      this._weekendHouseService.edit(this.nonCustomer)
+      this._weekendHouseOwnerService.edit(this.nonCustomer)
           .subscribe(data => {
             console.log('Dobio: ', data)
             if(data == null)
@@ -141,7 +141,7 @@ export class UserProfileComponent implements OnInit {
     }
     else if(this.role == 'ROLE_WEEKEND_HOUSE_OWNER')
     {
-      this._weekendHouseService.getWeekendHouseOwnerByUsername(localStorage.getItem('username') || '')
+      this._weekendHouseOwnerService.getWeekendHouseOwnerByUsername(localStorage.getItem('username') || '')
       .subscribe(data => {
                   this.nonCustomer = data
                   this.nonCustomerToCustomer()//porebaci nonCustomer-a u customera zbog lakseg prikaza

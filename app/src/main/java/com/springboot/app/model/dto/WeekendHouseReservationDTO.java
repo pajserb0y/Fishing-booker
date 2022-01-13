@@ -55,6 +55,8 @@ public class WeekendHouseReservationDTO {
             services.add(new AdditionalServiceDTO(service));
         this.services = services;
 
+        this.startSpecialOffer = res.getStartSpecialOffer();
+        this.endSpecialOffer =res.getEndSpecialOffer();
         this.customer = new CustomerDTO(res.getCustomer());
         this.weekendHouse = new WeekendHouseDTO(res.getWeekendHouse());
     }

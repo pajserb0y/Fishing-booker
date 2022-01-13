@@ -53,6 +53,7 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { WeekendHouseProfileComponent } from './weekend-house-profile/weekend-house-profile.component';
 import { CustomerPastWeekendHouseReservationsComponent } from './customer-past-weekend-house-reservations/customer-past-weekend-house-reservations.component';
 import { CustomerFutureWeekendHouseReservationsComponent } from './customer-future-weekend-house-reservations/customer-future-weekend-house-reservations.component';
+import { CommonModule } from '@angular/common';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -106,7 +107,8 @@ const MaterialComponents = [
     HttpClientModule,
     FormsModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
     
   ],
   providers: [CustomerService,WeekendHouseProfileComponent,

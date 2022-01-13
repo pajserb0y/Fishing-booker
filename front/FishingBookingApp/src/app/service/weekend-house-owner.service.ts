@@ -11,6 +11,7 @@ import { of } from 'rxjs';
 import 'rxjs/add/operator/catch';
 import { FormGroup } from '@angular/forms';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
+import { Term } from '../model/term';
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +24,14 @@ export class WeekendHouseOwnerService {
   private _getWeekendHouseOwnerByUsername  = this._weekendHouseOwnerRegistration + '/';
   private _getAllUsernames =  '/api/auth/getAllWeekendHouseOwnerUsernames';
   private _editWeekendHouseOwner  = this._weekendHouseOwnerRegistration + '/edit';
+  private _editWeekendHouse =  this._weekendHouseOwnerRegistration + '/editWeekendHouse';
   private _allWeekendHouses  = this._weekendHouseOwnerRegistration + '/allWeekendHouses';
+  private _allWeekendHousesforOwner = this._weekendHouseOwnerRegistration + '/allWeekendHousesForOwner/';
   private _findAvailableWeekendHouses  = this._weekendHouseOwnerRegistration + '/findAvailableForDateRange';
   private _makeReservation = this._weekendHouseRegistrationController + '/reserve';
   private _getFutureReservationsForCustomerUsername = this._weekendHouseRegistrationController + '/getFutureForCustomerUsername/';
+  private _addFreeTerm = this._weekendHouseOwnerRegistration + '/_addFreeTerm/';
+  private _getAllFreeTermsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllFreeTermsForWeekendHouse/';
 
 
 
@@ -43,6 +48,12 @@ export class WeekendHouseOwnerService {
     const body = JSON.stringify(weekendHouseOwner);
     return this._http.post(this._editWeekendHouseOwner, body)
   }
+
+  editWeekendHouse(weekendHouse : WeekendHouse):Observable<any>
+  {
+    const body = JSON.stringify(weekendHouse);
+    return this._http.post(this._editWeekendHouse, body)
+  }
   
   getWeekendHouseOwnerByUsername(username: string): Observable<WeekendHouseOwner> {
     return this._http.get<WeekendHouseOwner>(this._getWeekendHouseOwnerByUsername + username)
@@ -58,6 +69,13 @@ export class WeekendHouseOwnerService {
 
   getAllWeekendHouses(): Observable<WeekendHouse[]> {
     return this._http.get<WeekendHouse[]>(this._allWeekendHouses)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
+
+  getAllWeekendHousesForOwner(username : String|null): Observable<WeekendHouse[]>
+  {
+    return this._http.get<WeekendHouse[]>(this._allWeekendHousesforOwner + username)
                       .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
                       catchError(this.handleError)); 
   }
@@ -82,6 +100,18 @@ export class WeekendHouseOwnerService {
                       catchError(this.handleError)); 
   }
 
+  addFreeTerm(newFreeTerm :Term): Observable<any>
+  {
+    const body = JSON.stringify(newFreeTerm);
+    return this._http.post(this._addFreeTerm, body)
+  }
+
+  getAllFreeTermsForWeekendHouse(weekendHouse : WeekendHouse) :Observable<Term[]>
+  {
+    return this._http.get<Term[]>(this._getAllFreeTermsForWeekendHouse + weekendHouse.id)
+                          .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
+                            catchError(this.handleError)); 
+  }
 
   private handleError(err : HttpErrorResponse) {
     console.log(err.message);
