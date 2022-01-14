@@ -43,8 +43,8 @@ export class CustomerFutureWeekendHouseReservationsComponent implements OnInit {
         .subscribe(data => {},
                    error => this.errorMessage = <any>error);
     
-    this.getFutureReservationsForCustomerUsername();
-    /* reservation.cancelled = true; */
+    /* this.getFutureReservationsForCustomerUsername(); */
+    reservation.cancelled = true;
     this._snackBar.open('Successfully cancelled', 'Close', {duration: 3000});
   }
 

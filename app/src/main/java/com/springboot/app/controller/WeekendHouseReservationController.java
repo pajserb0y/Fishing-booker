@@ -1,12 +1,10 @@
 package com.springboot.app.controller;
 
 import com.springboot.app.model.WeekendHouse;
+import com.springboot.app.model.WeekendHouseComplaint;
 import com.springboot.app.model.WeekendHouseFeedback;
 import com.springboot.app.model.WeekendHouseReservation;
-import com.springboot.app.model.dto.DateTimeRangeDTO;
-import com.springboot.app.model.dto.WeekendHouseDTO;
-import com.springboot.app.model.dto.WeekendHouseFeedbackDTO;
-import com.springboot.app.model.dto.WeekendHouseReservationDTO;
+import com.springboot.app.model.dto.*;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.WeekendHouseOwnerService;
 import com.springboot.app.service.WeekendHouseReservationService;
@@ -77,6 +75,14 @@ public class WeekendHouseReservationController {
     public ResponseEntity<?> sendFeedback(@RequestBody WeekendHouseFeedbackDTO weekendHouseFeedbackDTO) {
         Optional<WeekendHouseReservation> res = weekendHouseReservationService.findById(weekendHouseFeedbackDTO.getWeekendHouseReservationId());
         weekendHouseReservationService.sendFeedback(new WeekendHouseFeedback(weekendHouseFeedbackDTO, res.get()));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/sendComplaint")
+    public ResponseEntity<?> sendComplaint(@RequestBody WeekendHouseComplaintDTO complaintDTO) {
+        Optional<WeekendHouseReservation> res = weekendHouseReservationService.findById(complaintDTO.getWeekendHouseReservationId());
+        weekendHouseReservationService.sendComplaint(new WeekendHouseComplaint(complaintDTO, res.get()));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -10,6 +10,7 @@ import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service
 import { WeekendHouseProfileComponent } from '../weekend-house-profile/weekend-house-profile.component';
 import {MatSort, Sort} from '@angular/material/sort';
 import { CustomerService } from '../service/customer.service';
+import { WeekendHouseWithAvgGrade } from '../model/weekend-house-with-avg-grade';
 
 @Component({
   selector: 'app-weekend-houses',
@@ -23,8 +24,8 @@ export class WeekendHousesComponent implements OnInit {
     start: new FormControl(),
     end: new FormControl(),
   });
-  weekendHouses: WeekendHouse[] = []
-  displayedColumns: string[] = ['name', 'address', 'description', 'bedNumber', 'owner', 'price'];
+  weekendHouses: WeekendHouseWithAvgGrade[] = []
+  displayedColumns: string[] = ['name', 'address', 'description', 'bedNumber', 'owner', 'price', 'grade'];
   errorMessage : string  = '';
   selectedHouseInfo: WeekendHouse = {
     id: 0,
@@ -72,7 +73,8 @@ export class WeekendHousesComponent implements OnInit {
       address: "",
       city: "",
       country: "",
-      phone: ""
+      phone: "",
+      penals: 0
     },
     weekendHouse: this.selectedHouseInfo,
     cancelled: false
@@ -90,10 +92,12 @@ export class WeekendHousesComponent implements OnInit {
     if(this.role == 'ROLE_CUSTOMER')
     {
       this.getCustomer();
+      this.getAllWeekendHouses();
     }    
     else if(this.role == 'ROLE_WEEKEND_HOUSE_OWNER')
-        this.getAllWeekendHousesForOwner(this.username)
-    this.getAllWeekendHouses();
+        this.getAllWeekendHousesForOwner(this.username)   
+    else
+      this.getAllWeekendHouses();
   }
 
 
@@ -122,7 +126,7 @@ export class WeekendHousesComponent implements OnInit {
   getCustomer() {
     this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
               .subscribe(data => {
-                this.houseReservation.customer = data
+                this.houseReservation.customer = data.customer
                 console.log('Dobio: ', data)},
               error => this.errorMessage = <any>error);  
   }
@@ -138,7 +142,8 @@ export class WeekendHousesComponent implements OnInit {
       this.selectedHouseInfo = house
       this.houseReservation.price = this.selectedHouseInfo.price
       this.houseReservation.peopleNumber = 1
-      this.getAllFreeTerms();
+      if(this.role == 'ROLE_CUSTOMER')
+        this.getAllFreeTerms();
     }    
     this.show = true;
   }
@@ -151,21 +156,25 @@ export class WeekendHousesComponent implements OnInit {
   }
 
   reserve() {
-    this.houseReservation.weekendHouse = this.selectedHouseInfo
-    this.houseReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
-    this.houseReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
-    this.houseReservation.endSpecialOffer = null
-    this.houseReservation.price = this.selectedHouseInfo.price
-    for (let service of this.houseReservation.services) {
-      this.houseReservation.price += service.price
-    }
-    this._weekendHouseOwnerService.reserve(this.houseReservation)
-          .subscribe(data =>  this.weekendHouses = data,
-               error => this.errorMessage = <any>error); 
+    if (this.houseReservation.customer.penals > 2)
+        this._snackBar.open('You can not make any reservations because you are banned for the end of the month!', 'Close', {duration: 5000});
+    else {
+        this.houseReservation.weekendHouse = this.selectedHouseInfo
+        this.houseReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
+        this.houseReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
+        this.houseReservation.endSpecialOffer = null
+        this.houseReservation.price = this.selectedHouseInfo.price
+        for (let service of this.houseReservation.services) {
+          this.houseReservation.price += service.price
+        }
+        this._weekendHouseOwnerService.reserve(this.houseReservation)
+              .subscribe(data =>  this.weekendHouses = data,
+                  error => this.errorMessage = <any>error); 
 
-    this.router.navigateByUrl('/').then(() => {
-            this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
-            });               
+        this.router.navigateByUrl('/').then(() => {
+                this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+                });   
+    }            
   }
 
   calculateTotalPrice(ob: any) {
@@ -192,17 +201,19 @@ export class WeekendHousesComponent implements OnInit {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'name':
-          return compare(a.name, b.name, isAsc);
+          return compare(a.weekendHouse.name, b.weekendHouse.name, isAsc);
         case 'address':
-          return compare(a.address, b.address, isAsc);
+          return compare(a.weekendHouse.address, b.weekendHouse.address, isAsc);
         case 'description':
-          return compare(a.description, b.description, isAsc);
+          return compare(a.weekendHouse.description, b.weekendHouse.description, isAsc);
         case 'bedNumber':
-          return compare(a.bedNumber, b.bedNumber, isAsc);
+          return compare(a.weekendHouse.bedNumber, b.weekendHouse.bedNumber, isAsc);
         case 'owner':
-          return compare(a.weekendHouseOwner.firstName, b.weekendHouseOwner.firstName, isAsc);
+          return compare(a.weekendHouse.weekendHouseOwner.firstName, b.weekendHouse.weekendHouseOwner.firstName, isAsc);
         case 'price':
-          return compare(a.price, b.price, isAsc);
+          return compare(a.weekendHouse.price, b.weekendHouse.price, isAsc);
+        case 'grade':
+          return compare(a.avgGrade, b.avgGrade, isAsc);
         default:
           return 0;
       }
@@ -218,9 +229,9 @@ export class WeekendHousesComponent implements OnInit {
     var hideList = [];
 
     for (i = 0; i < tr.length; i++) {
-      let allText = this.weekendHouses[i].name.toString() + ' ' + this.weekendHouses[i].address.toString() + ' ' + this.weekendHouses[i].description.toString() + ' ' + 
-                      this.weekendHouses[i].bedNumber.toString() + ' ' + this.weekendHouses[i].price.toString() + ' ' + this.weekendHouses[i].weekendHouseOwner.firstName.toString() + ' ' +
-                      this.weekendHouses[i].weekendHouseOwner.lastName.toString()
+      let allText = this.weekendHouses[i].weekendHouse.name.toString() + ' ' + this.weekendHouses[i].weekendHouse.address.toString() + ' ' + this.weekendHouses[i].weekendHouse.description.toString() + ' ' + 
+                      this.weekendHouses[i].weekendHouse.bedNumber.toString() + ' ' + this.weekendHouses[i].weekendHouse.price.toString() + ' ' + this.weekendHouses[i].weekendHouse.weekendHouseOwner.firstName.toString() + ' ' +
+                      this.weekendHouses[i].weekendHouse.weekendHouseOwner.lastName.toString() + ' ' + this.weekendHouses[i].avgGrade.toString()
       if (!(allText.toUpperCase().indexOf(this.searchField.toUpperCase()) > -1)) 
                 hideList.push(i);
     }    

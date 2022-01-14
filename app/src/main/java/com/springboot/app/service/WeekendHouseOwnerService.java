@@ -37,4 +37,6 @@ public interface WeekendHouseOwnerService {
     List<WeekendHouseReservation> findAllReservationsForWeekendHouse(WeekendHouse weekendHouse);
 
     WeekendHouse findWeekendHouseById(Integer id);
+
+    Integer findAvgGradeForHouseId(Integer id);
 }

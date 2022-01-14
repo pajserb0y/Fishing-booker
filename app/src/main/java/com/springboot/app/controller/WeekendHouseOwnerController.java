@@ -85,35 +85,47 @@ public class WeekendHouseOwnerController {
     }
 
     @GetMapping(path = "/allWeekendHouses")
-    public Set<WeekendHouseDTO> getAllWeekendHouses() {
+    public Set<WeekendHouseWithAvgGradeDTO> getAllWeekendHouses() {
         List<WeekendHouse> weekendHouses = weekendHouseOwnerService.findAllWeekendHouses();
-        Set<WeekendHouseDTO> weekendHouseDTOs = new HashSet<>();
-        for (WeekendHouse house : weekendHouses)
-            weekendHouseDTOs.add(new WeekendHouseDTO(house));
+        Set<WeekendHouseWithAvgGradeDTO> weekendHouseWithAvgGradeDTOs = new HashSet<>();
+        for (WeekendHouse house : weekendHouses) {
+            WeekendHouseWithAvgGradeDTO dto = new WeekendHouseWithAvgGradeDTO();
+            dto.setWeekendHouse(new WeekendHouseDTO(house));
+            dto.setAvgGrade(weekendHouseOwnerService.findAvgGradeForHouseId(house.getId()));
+            weekendHouseWithAvgGradeDTOs.add(dto);
+        }
 
-        return weekendHouseDTOs;
+        return weekendHouseWithAvgGradeDTOs;
     }
 
     @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
     @GetMapping(path = "/allWeekendHousesForOwner/{username}")
-    public Set<WeekendHouseDTO> allWeekendHousesForOwner(@PathVariable String username) {
+    public Set<WeekendHouseWithAvgGradeDTO> allWeekendHousesForOwner(@PathVariable String username) {
         WeekendHouseOwner weekendHouseOwner = weekendHouseOwnerService.findByUsername(username);
         List<WeekendHouse> weekendHouses = weekendHouseOwnerService.findallWeekendHousesForOwner(weekendHouseOwner);
-        Set<WeekendHouseDTO> weekendHouseDTOs = new HashSet<>();
-        for (WeekendHouse house : weekendHouses)
-            weekendHouseDTOs.add(new WeekendHouseDTO(house));
+        Set<WeekendHouseWithAvgGradeDTO> weekendHouseWithAvgGradeDTOs = new HashSet<>();
+        for (WeekendHouse house : weekendHouses) {
+            WeekendHouseWithAvgGradeDTO dto = new WeekendHouseWithAvgGradeDTO();
+            dto.setWeekendHouse(new WeekendHouseDTO(house));
+            dto.setAvgGrade(weekendHouseOwnerService.findAvgGradeForHouseId(house.getId()));
+            weekendHouseWithAvgGradeDTOs.add(dto);
+        }
 
-        return weekendHouseDTOs;
+        return weekendHouseWithAvgGradeDTOs;
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping(path = "/findAvailableForDateRange")
-    public Set<WeekendHouseDTO> findAvailableHousesForDateRange(@RequestBody DateTimeRangeDTO dateRange) {
-        Set<WeekendHouseDTO> weekendHouseDTOs = new HashSet<>();
-        for (WeekendHouse house : weekendHouseOwnerService.findAvailableHousesForDateRange(dateRange))
-            weekendHouseDTOs.add(new WeekendHouseDTO(house));
+    public Set<WeekendHouseWithAvgGradeDTO> findAvailableHousesForDateRange(@RequestBody DateTimeRangeDTO dateRange) {
+        Set<WeekendHouseWithAvgGradeDTO> weekendHouseWithAvgGradeDTOs = new HashSet<>();
+        for (WeekendHouse house : weekendHouseOwnerService.findAvailableHousesForDateRange(dateRange)) {
+            WeekendHouseWithAvgGradeDTO dto = new WeekendHouseWithAvgGradeDTO();
+            dto.setWeekendHouse(new WeekendHouseDTO(house));
+            dto.setAvgGrade(weekendHouseOwnerService.findAvgGradeForHouseId(house.getId()));
+            weekendHouseWithAvgGradeDTOs.add(dto);
+        }
 
-        return weekendHouseDTOs;
+        return weekendHouseWithAvgGradeDTOs;
     }
 
     @PreAuthorize("hasAnyRole('WEEKEND_HOUSE_OWNER', 'CUSTOMER')")
@@ -124,6 +136,7 @@ public class WeekendHouseOwnerController {
         Set<TermDto> termDtos = new HashSet<>();
         for (Term term : terms)
             termDtos.add(new TermDto(term));
+
         return termDtos;
     }
 

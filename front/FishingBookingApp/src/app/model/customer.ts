@@ -9,4 +9,5 @@ export interface Customer {
     city: string ;
     country: string ;
     phone: string ;
+    penals: number;
   }

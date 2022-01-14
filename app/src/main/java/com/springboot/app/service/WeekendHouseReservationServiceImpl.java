@@ -1,9 +1,6 @@
 package com.springboot.app.service;
 
-import com.springboot.app.model.Customer;
-import com.springboot.app.model.WeekendHouse;
-import com.springboot.app.model.WeekendHouseFeedback;
-import com.springboot.app.model.WeekendHouseReservation;
+import com.springboot.app.model.*;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +13,16 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     private final WeekendHouseRepository weekendHouseRepository;
     private final CustomerRepository customerRepository;
     private final WeekendHouseFeedbackRepository weekendHouseFeedbackRepository;
+    private final WeekendHouseComplaintRepository weekendHouseComplaintRepository;
 
     public WeekendHouseReservationServiceImpl(WeekendHouseReservationRepository weekendHouseReservationRepository, CustomerRepository customerRepository,
-                                              WeekendHouseRepository weekendHouseRepository, WeekendHouseFeedbackRepository weekendHouseFeedbackRepository) {
+                                              WeekendHouseRepository weekendHouseRepository, WeekendHouseFeedbackRepository weekendHouseFeedbackRepository,
+                                              WeekendHouseComplaintRepository weekendHouseComplaintRepository) {
         this.weekendHouseReservationRepository = weekendHouseReservationRepository;
         this.weekendHouseRepository = weekendHouseRepository;
         this.customerRepository = customerRepository;
         this.weekendHouseFeedbackRepository = weekendHouseFeedbackRepository;
+        this.weekendHouseComplaintRepository = weekendHouseComplaintRepository;
     }
 
 
@@ -65,5 +65,10 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     @Override
     public Optional<WeekendHouseReservation> findById(Integer weekendHouseReservationId) {
         return weekendHouseReservationRepository.findById(weekendHouseReservationId);
+    }
+
+    @Override
+    public void sendComplaint(WeekendHouseComplaint weekendHouseComplaint) {
+        weekendHouseComplaintRepository.save(weekendHouseComplaint);
     }
 }

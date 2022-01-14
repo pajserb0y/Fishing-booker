@@ -14,6 +14,8 @@ import { WeekendHouseReservation } from '../model/weekend-house-reservation';
 import { Term } from '../model/term';
 import { WeekendHouseReservationWithDateAsString } from '../model/weekend-house-reservation-with-date-as-string';
 import { HouseFeedback } from '../model/house-feedback';
+import { WeekendHouseWithAvgGrade } from '../model/weekend-house-with-avg-grade';
+import { ComplaintWeekendHouse } from '../model/complaint-weekend-house';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +37,8 @@ export class WeekendHouseOwnerService {
   private _getPastReservationsForCustomerUsername = this._weekendHouseRegistrationController + '/getPastForCustomerUsername/';
   private _cancelReservation = this._weekendHouseRegistrationController + '/cancel/';
   private _sendFeedback = this._weekendHouseRegistrationController + '/sendFeedback';
-  private _addFreeTerm = this._weekendHouseOwnerRegistration + '/_addFreeTerm/';
+  private _sendComplaint = this._weekendHouseRegistrationController + '/sendComplaint';
+  private _addFreeTerm = this._weekendHouseOwnerRegistration + '/_addFreeTerm/';      //greska?
   private _getAllFreeTermsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllFreeTermsForWeekendHouse/';
   private _getAllReservationsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllReservationsForWeekendHouse/';
 
@@ -53,6 +56,12 @@ export class WeekendHouseOwnerService {
     const body=JSON.stringify(feedback);
     console.log(body)
     return this._http.post(this._sendFeedback, body)
+  } 
+
+  sendComplaint(complaint: ComplaintWeekendHouse) : Observable<any> {
+    const body=JSON.stringify(complaint);
+    console.log(body)
+    return this._http.post(this._sendComplaint, body)
   } 
 
   edit(weekendHouseOwner : WeekendHouseOwner):Observable<any>{
@@ -78,14 +87,14 @@ export class WeekendHouseOwnerService {
                             catchError(this.handleError)); 
   }
 
-  getAllWeekendHouses(): Observable<WeekendHouse[]> {
-    return this._http.get<WeekendHouse[]>(this._allWeekendHouses)
+  getAllWeekendHouses(): Observable<WeekendHouseWithAvgGrade[]> {
+    return this._http.get<WeekendHouseWithAvgGrade[]>(this._allWeekendHouses)
                       .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
                       catchError(this.handleError)); 
   }
 
-  getAllWeekendHousesForOwner(username : String|null): Observable<WeekendHouse[]> {
-    return this._http.get<WeekendHouse[]>(this._allWeekendHousesforOwner + username)
+  getAllWeekendHousesForOwner(username : String|null): Observable<WeekendHouseWithAvgGrade[]> {
+    return this._http.get<WeekendHouseWithAvgGrade[]>(this._allWeekendHousesforOwner + username)
                       .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
                       catchError(this.handleError)); 
   }
@@ -120,14 +129,12 @@ export class WeekendHouseOwnerService {
                       catchError(this.handleError)); 
   }
 
-  addFreeTerm(newFreeTerm :Term): Observable<any>
-  {
+  addFreeTerm(newFreeTerm :Term): Observable<any> {
     const body = JSON.stringify(newFreeTerm);
     return this._http.post(this._addFreeTerm, body)
   }
 
-  getAllFreeTermsForWeekendHouse(weekendHouse : WeekendHouse) :Observable<Term[]>
-  {
+  getAllFreeTermsForWeekendHouse(weekendHouse : WeekendHouse) :Observable<Term[]> {
     return this._http.get<Term[]>(this._getAllFreeTermsForWeekendHouse + weekendHouse.id)
                           .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
                             catchError(this.handleError)); 

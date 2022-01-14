@@ -15,43 +15,51 @@
         <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header='name' > Name </mat-header-cell>
                 <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.name}}</ng-container>
+                  <ng-container >{{element.weekendHouse.name}}</ng-container>
                     </mat-cell>
           </ng-container>
     
           <ng-container matColumnDef="address">
             <mat-header-cell *matHeaderCellDef mat-sort-header='address'> Address </mat-header-cell>
                 <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.address}}</ng-container>
+                  <ng-container >{{element.weekendHouse.address}}</ng-container>
                     </mat-cell>
           </ng-container>
     
           <ng-container matColumnDef="description">
             <mat-header-cell *matHeaderCellDef mat-sort-header='description'> Description </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.weekendHouse.description}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="bedNumber">
             <mat-header-cell *matHeaderCellDef mat-sort-header='bedNumber'> Bed number </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.bedNumber}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.weekendHouse.bedNumber}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="owner">
             <mat-header-cell *matHeaderCellDef mat-sort-header='owner'> Owner </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.weekendHouseOwner.firstName}} {{element.weekendHouseOwner.lastName}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.weekendHouse.weekendHouseOwner.firstName}} {{element.weekendHouse.weekendHouseOwner.lastName}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="price">
             <mat-header-cell *matHeaderCellDef mat-sort-header='price'> Price </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.weekendHouse.price}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="grade">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='grade'> Grade </mat-header-cell>
+            <mat-cell *matCellDef="let element" >  
+              <ng-container *ngIf="element.avgGrade != null"> {{element.avgGrade}} </ng-container>
+              <ng-container *ngIf="element.avgGrade == null"> <i>none</i> </ng-container>
+            </mat-cell>
           </ng-container>
           
     
           <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showInfo(row)" [class.selected]="row.selected"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showInfo(row.weekendHouse)" [class.selected]="row.selected"></mat-row>
       </table>
     </div>
-    <div style="margin-top: 2%;"><a [routerLink]="['../special-offers']">Check out all special offers</a></div>
+    <div *ngIf="role === 'ROLE_CUSTOMER'" style="margin-top: 2%;"><a [routerLink]="['../special-offers']">Check out all special offers</a></div>
     </div>
     </mat-grid-tile>
 

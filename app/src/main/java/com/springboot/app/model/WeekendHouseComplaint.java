@@ -1,39 +1,31 @@
 package com.springboot.app.model;
 
-import com.springboot.app.model.dto.WeekendHouseFeedbackDTO;
+import com.springboot.app.model.dto.WeekendHouseComplaintDTO;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name = "weekend_house_feedbacks")
-public class WeekendHouseFeedback {
+@Table(name = "weekend_house_complaints")
+public class WeekendHouseComplaint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer gradeHouse;
     private String noteHouse;
-    private Integer gradeOwner;
     private String noteOwner;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "weekend_house_reservation_id")
     private WeekendHouseReservation weekendHouseReservation;
 
-    private boolean isApproved;
 
-
-    public WeekendHouseFeedback() {
+    public WeekendHouseComplaint() {
     }
 
-    public WeekendHouseFeedback(WeekendHouseFeedbackDTO dto, WeekendHouseReservation weekendHouseReservation) {
+    public WeekendHouseComplaint(WeekendHouseComplaintDTO dto, WeekendHouseReservation weekendHouseReservation) {
         this.id = dto.getId();
-        this.gradeHouse = dto.getGradeHouse();
         this.noteHouse = dto.getNoteHouse();
-        this.gradeOwner = dto.getGradeOwner();
         this.noteOwner = dto.getNoteOwner();
         this.weekendHouseReservation = weekendHouseReservation;
-        this.isApproved = false;
     }
 
     public Integer getId() {
@@ -44,28 +36,12 @@ public class WeekendHouseFeedback {
         this.id = id;
     }
 
-    public Integer getGradeHouse() {
-        return gradeHouse;
-    }
-
-    public void setGradeHouse(Integer gradeHouse) {
-        this.gradeHouse = gradeHouse;
-    }
-
     public String getNoteHouse() {
         return noteHouse;
     }
 
     public void setNoteHouse(String noteHouse) {
         this.noteHouse = noteHouse;
-    }
-
-    public Integer getGradeOwner() {
-        return gradeOwner;
-    }
-
-    public void setGradeOwner(Integer gradeOwner) {
-        this.gradeOwner = gradeOwner;
     }
 
     public String getNoteOwner() {
@@ -82,13 +58,5 @@ public class WeekendHouseFeedback {
 
     public void setWeekendHouseReservation(WeekendHouseReservation weekendHouseReservation) {
         this.weekendHouseReservation = weekendHouseReservation;
-    }
-
-    public boolean isApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(boolean approved) {
-        isApproved = approved;
     }
 }

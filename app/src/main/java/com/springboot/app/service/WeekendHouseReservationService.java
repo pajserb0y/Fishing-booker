@@ -1,5 +1,6 @@
 package com.springboot.app.service;
 
+import com.springboot.app.model.WeekendHouseComplaint;
 import com.springboot.app.model.WeekendHouseFeedback;
 import com.springboot.app.model.WeekendHouseReservation;
 
@@ -19,4 +20,6 @@ public interface WeekendHouseReservationService {
     void sendFeedback(WeekendHouseFeedback weekendHouseFeedback);
 
     Optional<WeekendHouseReservation> findById(Integer weekendHouseReservationId);
+
+    void sendComplaint(WeekendHouseComplaint weekendHouseComplaint);
 }

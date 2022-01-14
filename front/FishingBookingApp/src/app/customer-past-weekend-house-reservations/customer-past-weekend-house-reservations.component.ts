@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
+import { ComplaintWeekendHouse } from '../model/complaint-weekend-house';
 import { HouseFeedback } from '../model/house-feedback';
 import { WeekendHouse } from '../model/weekend-house';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
@@ -30,6 +31,12 @@ export class CustomerPastWeekendHouseReservationsComponent implements OnInit {
     weekendHouseReservationId : 0
   }
   show : boolean = false
+  complaint : ComplaintWeekendHouse = {
+    id: 0,
+    noteHouse: '',
+    noteOwner: '',
+    weekendHouseReservationId: 0
+  }
 
 
   constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar, private router: Router) { }
@@ -51,12 +58,15 @@ export class CustomerPastWeekendHouseReservationsComponent implements OnInit {
                    error => this.errorMessage = <any>error);   
   }
 
-  showFeedbackInfo(res: WeekendHouseReservationWithDateAsString) {
+  showFeedbackAndComplaintInfo(res: WeekendHouseReservationWithDateAsString) {
     this.feedback.weekendHouseReservationId = res.id
     this.feedback.gradeHouse = 5
     this.feedback.noteHouse = ''
     this.feedback.gradeOwner = 5
     this.feedback.noteOwner = ''
+    this.complaint.weekendHouseReservationId = res.id
+    this.complaint.noteHouse = ''
+    this.complaint.noteOwner = ''
     this.show = true
   }
 
@@ -68,6 +78,16 @@ export class CustomerPastWeekendHouseReservationsComponent implements OnInit {
       this.router.navigateByUrl('/').then(() => {
         this._snackBar.open('Your feedback has been sent successfully!', 'Close', {duration: 5000});
       })      
+  }
+
+  sendComplaint() {
+    this._weekendHouseOwnerService.sendComplaint(this.complaint)
+            .subscribe(data =>  {},
+                 error => this.errorMessage = <any>error); 
+      this.show = false;
+      this.router.navigateByUrl('/').then(() => {
+        this._snackBar.open('Your complaint has been sent successfully!', 'Close', {duration: 5000});
+      })
   }
 
   sortData(sort: Sort) {

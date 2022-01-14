@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { subscribeTo } from 'rxjs/internal-compatibility';
 import { Customer } from '../model/customer';
+import { CustomerLoyalty } from '../model/customer-loyalty';
 import { DeleteDto } from '../model/deleteDto';
 import { Instructor } from '../model/instructor';
 import { BoatOwnerService } from '../service/boat-owner.service';
@@ -15,17 +16,22 @@ import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service
 })
 export class UserProfileComponent implements OnInit {
 
-  customer: Customer = {
-    id: 0,
-    firstName: "",
-    lastName: "",
-    email: "",
-    username:  "",
-    password: "",
-    address: "",
-    city: "",
-    country: "",
-    phone: ""
+  customer: CustomerLoyalty = {
+    customer : {
+      id: 0,
+      firstName: "",
+      lastName: "",
+      email: "",
+      username:  "",
+      password: "",
+      address: "",
+      city: "",
+      country: "",
+      phone: "",
+      penals: 0
+    },
+    points: 0,
+    category: ""
   };
   repassword: string = "";
   nonCustomer!: Instructor;
@@ -48,13 +54,13 @@ export class UserProfileComponent implements OnInit {
   edit() {
     if(this.role == 'ROLE_CUSTOMER') 
     {
-      this._customerService.edit(this.customer)
+      this._customerService.edit(this.customer.customer)
           .subscribe(data => {
             console.log('Dobio: ', data)
             if(data == null)
               this._snackBar.open('Incorrect filling of form! Check and send again edit request', 'Close', {duration: 5000});
             else
-              this.customer = data
+              this.customer.customer = data
             },
           error => this.errorMessage = <any>error); 
 
@@ -117,9 +123,9 @@ export class UserProfileComponent implements OnInit {
       this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
       .subscribe(data => {
                   this.customer = data
-                  this.repassword = this.customer.password;
-                  this.oldCustomer = data
-                  this.deleteDto.id = this.customer.id
+                  this.repassword = this.customer.customer.password;
+                  this.oldCustomer = data.customer
+                  this.deleteDto.id = this.customer.customer.id
                   console.log('Dobio: ', data)},
                 error => this.errorMessage = <any>error);  
     }
@@ -133,9 +139,9 @@ export class UserProfileComponent implements OnInit {
       .subscribe(data => {
                   this.nonCustomer = data
                   this.nonCustomerToCustomer()//porebaci nonCustomer-a u customera zbog lakseg prikaza
-                  this.repassword = this.customer.password;
-                  this.oldCustomer = data
-                  this.deleteDto.id = this.customer.id
+                  this.repassword = this.customer.customer.password;
+                  //this.oldCustomer = data
+                  this.deleteDto.id = this.customer.customer.id
                   console.log('Dobio: ', data)},
                 error => this.errorMessage = <any>error);   
     }
@@ -145,9 +151,9 @@ export class UserProfileComponent implements OnInit {
       .subscribe(data => {
                   this.nonCustomer = data
                   this.nonCustomerToCustomer()//porebaci nonCustomer-a u customera zbog lakseg prikaza
-                  this.repassword = this.customer.password;
-                  this.oldCustomer = data
-                  this.deleteDto.id = this.customer.id
+                  this.repassword = this.customer.customer.password;
+                  //this.oldCustomer = data
+                  this.deleteDto.id = this.customer.customer.id
                   console.log('Dobio: ', data)},
                 error => this.errorMessage = <any>error);
     }
@@ -169,16 +175,16 @@ export class UserProfileComponent implements OnInit {
 
   nonCustomerToCustomer()
   {
-    this.customer.id = this.nonCustomer.id;
-    this.customer.firstName= this.nonCustomer.firstName;
-    this.customer.lastName= this.nonCustomer.lastName;
-    this.customer.email= this.nonCustomer.email;
-    this.customer.username= this.nonCustomer.username;
-    this.customer.password= this.nonCustomer.password;
-    this.customer.address= this.nonCustomer.address;
-    this.customer.city= this.nonCustomer.city;
-    this.customer.country= this.nonCustomer.country;
-    this.customer.phone= this.nonCustomer.phone;
+    this.customer.customer.id = this.nonCustomer.id;
+    this.customer.customer.firstName= this.nonCustomer.firstName;
+    this.customer.customer.lastName= this.nonCustomer.lastName;
+    this.customer.customer.email= this.nonCustomer.email;
+    this.customer.customer.username= this.nonCustomer.username;
+    this.customer.customer.password= this.nonCustomer.password;
+    this.customer.customer.address= this.nonCustomer.address;
+    this.customer.customer.city= this.nonCustomer.city;
+    this.customer.customer.country= this.nonCustomer.country;
+    this.customer.customer.phone= this.nonCustomer.phone;
   }
 
 /*customerToNonCustomer()

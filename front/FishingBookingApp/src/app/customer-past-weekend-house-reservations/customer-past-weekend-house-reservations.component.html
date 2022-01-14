@@ -33,7 +33,7 @@
 
     
           <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showFeedbackInfo(row)" [class.selected]="row.selected"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showFeedbackAndComplaintInfo(row)" [class.selected]="row.selected"></mat-row>
       </table>
     </div>
     </div>
@@ -53,7 +53,7 @@
         </mat-form-field></div>
 
         <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
-          <textarea required matInput placeholder="Write your note" [(ngModel)]="feedback.noteHouse"  rows="15" cols="40" ></textarea>
+          <textarea required matInput placeholder="Write your note about house" [(ngModel)]="feedback.noteHouse"  rows="15" cols="40" ></textarea>
         </mat-form-field></div>
 
         <div style="margin-top: 5%;">
@@ -73,9 +73,35 @@
         </mat-form-field></div>
 
         <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
-          <textarea required matInput placeholder="Write your note" [(ngModel)]="feedback.noteOwner"  rows="15" cols="40" ></textarea>
+          <textarea required matInput placeholder="Write your note about owner" [(ngModel)]="feedback.noteOwner"  rows="15" cols="40" ></textarea>
         </mat-form-field></div>
       
+  </div>
+  </mat-grid-tile>
+</div>
+
+
+ <!--  COMPLAINT -->
+ <div  *ngIf="show">
+  <mat-grid-tile >
+    <div  style="margin-right: -10%;">
+      <h2>House complaint</h2>            
+        <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
+          <textarea required matInput placeholder="Write your complaint about house" [(ngModel)]="complaint.noteHouse"  rows="15" cols="40" ></textarea>
+        </mat-form-field></div>
+
+        <div style="margin-top: 5%;">
+          <button mat-raised-button color="accent" (click)="sendComplaint()" [disabled]="complaint.noteHouse === '' && complaint.noteOwner === ''">Send</button>
+        </div>  
+  </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile >
+    <div  style="margin-top: -9%; margin-left: -10%;">
+      <h2>House owner complaint</h2>      
+        <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
+          <textarea required matInput placeholder="Write your complaint about owner" [(ngModel)]="complaint.noteOwner"  rows="15" cols="40" ></textarea>
+        </mat-form-field></div>    
   </div>
   </mat-grid-tile>
 </div>

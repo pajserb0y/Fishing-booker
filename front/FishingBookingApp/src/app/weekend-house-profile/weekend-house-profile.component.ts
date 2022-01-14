@@ -68,7 +68,8 @@ export class WeekendHouseProfileComponent implements OnInit {
       address: "",
       city: "",
       country: "",
-      phone: ""
+      phone: "",
+      penals: 0
     },
     weekendHouse: this.weekendHouse,
     cancelled: false
