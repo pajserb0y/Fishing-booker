@@ -1,6 +1,5 @@
 package com.springboot.app.model;
 
-import com.springboot.app.adapter.CustomerAdapter;
 import com.springboot.app.model.dto.AdditionalServiceDTO;
 import com.springboot.app.model.dto.WeekendHouseReservationDTO;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -54,12 +53,16 @@ public class WeekendHouseReservation {
     @JoinColumn(name = "weekend_house_id")
     private WeekendHouse weekendHouse;
 
+    private boolean isCancelled = false;
+
+
+
 
 
     public WeekendHouseReservation() {
     }
 
-    public WeekendHouseReservation(Integer id, Date startDateTime, Date endDateTime, Integer peopleNumber, Set<AdditionalService> services, Float price, Customer customer, WeekendHouse weekendHouse) {
+    public WeekendHouseReservation(Integer id, Date startDateTime, Date endDateTime, Integer peopleNumber, Set<AdditionalService> services, Float price, Customer customer, WeekendHouse weekendHouse, boolean isCancelled) {
         this.id = id;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -68,6 +71,7 @@ public class WeekendHouseReservation {
         this.price = price;
         this.customer = customer;
         this.weekendHouse = weekendHouse;
+        this.isCancelled = isCancelled;
     }
 
     public WeekendHouseReservation(WeekendHouseReservationDTO res) {
@@ -84,6 +88,7 @@ public class WeekendHouseReservation {
         this.price = res.getPrice();
         this.customer =  new Customer(res.getCustomer());
         this.weekendHouse = new WeekendHouse(res.getWeekendHouse());
+        this.isCancelled = res.isCancelled();
     }
 
     public Date getStartSpecialOffer() {
@@ -164,5 +169,13 @@ public class WeekendHouseReservation {
 
     public void setWeekendHouse(WeekendHouse weekendHouse) {
         this.weekendHouse = weekendHouse;
+    }
+
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        isCancelled = cancelled;
     }
 }

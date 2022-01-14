@@ -116,7 +116,7 @@ public class WeekendHouseOwnerController {
         return weekendHouseDTOs;
     }
 
-    @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
+    @PreAuthorize("hasAnyRole('WEEKEND_HOUSE_OWNER', 'CUSTOMER')")
     @GetMapping(path = "/getAllFreeTermsForWeekendHouse/{id}")
     public Set<TermDto> getAllFreeTermsForWeekendHouse(@PathVariable Integer id) {
         WeekendHouse weekendHouse = weekendHouseOwnerService.findWeekendHouseById(id);

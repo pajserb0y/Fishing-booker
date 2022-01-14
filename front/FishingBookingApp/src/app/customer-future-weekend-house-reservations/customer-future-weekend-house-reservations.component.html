@@ -23,6 +23,14 @@
                 </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="cancel">
+        <mat-header-cell *matHeaderCellDef>Cancel </mat-header-cell>
+        <mat-cell *matCellDef="let element"> 
+          <button mat-button *ngIf="!element.cancelled " (click)="cancelReservation(element)" [disabled]="!checkIsItMinThreeDaysBefore(element)">Cancel</button>
+          <ng-container *ngIf="element.cancelled " ><i>cancelled</i></ng-container>
+        </mat-cell>
+      </ng-container>
+
 
       <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected]="row.selected"></mat-row>

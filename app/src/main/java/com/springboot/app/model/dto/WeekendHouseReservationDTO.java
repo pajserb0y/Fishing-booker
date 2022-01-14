@@ -39,6 +39,8 @@ public class WeekendHouseReservationDTO {
 
     private WeekendHouseDTO weekendHouse;
 
+    private boolean isCancelled;
+
 
     public WeekendHouseReservationDTO() {
     }
@@ -56,9 +58,10 @@ public class WeekendHouseReservationDTO {
         this.services = services;
 
         this.startSpecialOffer = res.getStartSpecialOffer();
-        this.endSpecialOffer =res.getEndSpecialOffer();
+        this.endSpecialOffer = res.getEndSpecialOffer();
         this.customer = new CustomerDTO(res.getCustomer());
         this.weekendHouse = new WeekendHouseDTO(res.getWeekendHouse());
+        this.isCancelled = res.isCancelled();
     }
 
     public Integer getId() {
@@ -139,5 +142,13 @@ public class WeekendHouseReservationDTO {
 
     public void setWeekendHouse(WeekendHouseDTO weekendHouse) {
         this.weekendHouse = weekendHouse;
+    }
+
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        isCancelled = cancelled;
     }
 }

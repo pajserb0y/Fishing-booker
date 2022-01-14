@@ -34,8 +34,7 @@ public class WeekendHouse {
     private Integer bedNumber;
 
     //@NotEmpty(message = "Please fill out first name")
-    @OneToMany(mappedBy = "weekendHouse", fetch = FetchType.EAGER
-            , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "weekendHouse", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Term> freeTerms = new HashSet<>();
 
     @NotEmpty(message = "Please fill out rules")

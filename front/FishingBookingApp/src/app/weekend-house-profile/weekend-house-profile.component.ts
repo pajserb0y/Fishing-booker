@@ -63,14 +63,15 @@ export class WeekendHouseProfileComponent implements OnInit {
       firstName: "",
       lastName: "",
       email: "",
-      username:  "",
+      username: "",
       password: "",
       address: "",
       city: "",
       country: "",
       phone: ""
     },
-    weekendHouse: this.weekendHouse
+    weekendHouse: this.weekendHouse,
+    cancelled: false
   }
 
   minDate = new Date();

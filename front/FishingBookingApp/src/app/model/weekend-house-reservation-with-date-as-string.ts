@@ -13,4 +13,5 @@ export interface WeekendHouseReservationWithDateAsString {
     price: number;
     customer: Customer;
     weekendHouse: WeekendHouse;
+    cancelled: boolean;
   }

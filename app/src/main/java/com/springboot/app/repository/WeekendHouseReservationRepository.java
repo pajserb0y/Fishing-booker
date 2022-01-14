@@ -11,11 +11,17 @@ import java.util.List;
 
 public interface WeekendHouseReservationRepository extends JpaRepository<WeekendHouseReservation,Integer> {
 
-    @Query("SELECT r.weekendHouse.id FROM WeekendHouseReservation r WHERE (cast(:start as timestamp) BETWEEN r.startDateTime AND r.endDateTime) " +
-            "OR (cast(:end as timestamp) BETWEEN r.startDateTime AND r.endDateTime)")
+    @Query("SELECT r.weekendHouse.id FROM WeekendHouseReservation r WHERE r.isCancelled IS false AND (cast(:start as timestamp) BETWEEN r.startDateTime AND r.endDateTime) " +
+                        "OR (cast(:end as timestamp) BETWEEN r.startDateTime AND r.endDateTime) " +
+            "OR (r.startDateTime BETWEEN cast(:start as timestamp) AND cast(:end as timestamp)) " +
+                        "OR (r.endDateTime BETWEEN cast(:start as timestamp) AND cast(:end as timestamp))")
     List<Integer> findAllForDateRange(@Param("start") Date start, @Param("end") Date end);
 
-    List<WeekendHouseReservation> findAllByCustomerUsername(String username);
-    //@Query("SELECT r FROM WeekendHouseReservation r WHERE r.weekendHouse.id == id")
-    List<WeekendHouseReservation> findByWeekendHouse( WeekendHouse weekendHouse);
+    @Query("SELECT a FROM WeekendHouseReservation a WHERE a.customer.username = :username AND a.startDateTime > cast(NOW() as timestamp)")
+    List<WeekendHouseReservation> findAllFutureReservationsByCustomerUsername(@Param("username") String username);
+
+    @Query("SELECT a FROM WeekendHouseReservation a WHERE a.customer.username = :username AND a.startDateTime <= cast(NOW() as timestamp)")
+    List<WeekendHouseReservation> findAllPastReservationsByCustomerUsername(@Param("username") String username);
+
+    List<WeekendHouseReservation> findByWeekendHouse(WeekendHouse weekendHouse);
 }

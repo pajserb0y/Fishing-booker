@@ -1,6 +1,5 @@
 package com.springboot.app.controller;
 
-import com.springboot.app.adapter.CustomerAdapter;
 import com.springboot.app.model.Customer;
 import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.model.dto.DeleteDTO;

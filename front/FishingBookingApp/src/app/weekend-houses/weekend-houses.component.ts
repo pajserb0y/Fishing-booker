@@ -67,17 +67,20 @@ export class WeekendHousesComponent implements OnInit {
       firstName: "",
       lastName: "",
       email: "",
-      username:  "",
+      username: "",
       password: "",
       address: "",
       city: "",
       country: "",
       phone: ""
     },
-    weekendHouse: this.selectedHouseInfo
+    weekendHouse: this.selectedHouseInfo,
+    cancelled: false
   }
   role : string|null = localStorage.getItem('role');
   searchField: string = '';
+  show: boolean = false;
+  
 
   constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService, private router: Router, private _snackBar: MatSnackBar, public _customerService: CustomerService) { }
   username: string|null = localStorage.getItem('username');
@@ -102,11 +105,18 @@ export class WeekendHousesComponent implements OnInit {
                     },
                    error => this.errorMessage = <any>error);   
   }
+
   getAllWeekendHousesForOwner(username :String|null)
   {
     this._weekendHouseOwnerService.getAllWeekendHousesForOwner(username)
         .subscribe(data =>  this.weekendHouses = data,
                    error => this.errorMessage = <any>error); 
+  }
+
+  getAllFreeTerms() {
+       this._weekendHouseOwnerService.getAllFreeTermsForWeekendHouse(this.selectedHouseInfo)
+       .subscribe(data =>  this.selectedHouseInfo.freeTerms = data,
+                  error => this.errorMessage = <any>error); 
   }
 
   getCustomer() {
@@ -128,14 +138,16 @@ export class WeekendHousesComponent implements OnInit {
       this.selectedHouseInfo = house
       this.houseReservation.price = this.selectedHouseInfo.price
       this.houseReservation.peopleNumber = 1
+      this.getAllFreeTerms();
     }    
+    this.show = true;
   }
 
   findAvailableHousesForSelectedTerm() {
     this._weekendHouseOwnerService.findAvailableHousesForSelectedTerm(this.range.value.start, this.range.value.end)
           .subscribe(data =>  this.weekendHouses = data,
                error => this.errorMessage = <any>error); 
-    this.selectedHouseInfo.id = 0;
+    this.show = false;
   }
 
   reserve() {
@@ -154,6 +166,15 @@ export class WeekendHousesComponent implements OnInit {
     this.router.navigateByUrl('/').then(() => {
             this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
             });               
+  }
+
+  calculateTotalPrice(ob: any) {
+    let selectedService = ob.source.value;
+    console.log(selectedService);
+    if (ob.source._selected)
+      this.houseReservation.price += selectedService.price
+    else
+      this.houseReservation.price -= selectedService.price
   }
 
   getDateFromDatePickerRange(start: Date) {

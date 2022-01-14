@@ -88,6 +88,7 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     @Override
     public List<WeekendHouse> findAvailableHousesForDateRange(DateTimeRangeDTO dateRange) {
         List<Integer> weekendHouseIds = weekendHouseReservationRepository.findAllForDateRange(dateRange.getStart(), dateRange.getEnd());
+        weekendHouseIds.addAll(termRepository.findAllHouseIdsThatWorkForPeriod(dateRange.getStart(), dateRange.getEnd()));
         if (weekendHouseIds.isEmpty())
             return findAllWeekendHouses();
         else

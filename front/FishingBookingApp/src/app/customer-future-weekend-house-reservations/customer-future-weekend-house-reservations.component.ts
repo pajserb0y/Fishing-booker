@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
+import { elementAt } from 'rxjs-compat/operator/elementAt';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
 import { WeekendHouseReservationWithDateAsString } from '../model/weekend-house-reservation-with-date-as-string';
 import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
@@ -13,11 +15,11 @@ import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service
 export class CustomerFutureWeekendHouseReservationsComponent implements OnInit {
 
   houseReservations : WeekendHouseReservationWithDateAsString[] = []
-  displayedColumns: string[] = ['houseName', 'startDate', 'endDate'];
+  displayedColumns: string[] = ['houseName', 'startDate', 'endDate', 'cancel'];
   errorMessage : string  = '';
   pipe = new DatePipe('en-US'); // Use your own locale
 
-  constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService) { }
+  constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getFutureReservationsForCustomerUsername();
@@ -36,13 +38,27 @@ export class CustomerFutureWeekendHouseReservationsComponent implements OnInit {
                    error => this.errorMessage = <any>error);   
   }
 
+  cancelReservation(reservation : WeekendHouseReservationWithDateAsString) {
+    this._weekendHouseOwnerService.cancelReservation(reservation.id)
+        .subscribe(data => {},
+                   error => this.errorMessage = <any>error);
+    
+    this.getFutureReservationsForCustomerUsername();
+    /* reservation.cancelled = true; */
+    this._snackBar.open('Successfully cancelled', 'Close', {duration: 3000});
+  }
+
+  checkIsItMinThreeDaysBefore(reservation : WeekendHouseReservationWithDateAsString) {
+    var start = new Date(reservation.startDateTime)
+    var today = new Date();
+    var todayPlusThree = new Date(today.setDate(today.getDate() + 3))
+    if (start > todayPlusThree)
+      return true
+    return false
+  }
+
   sortData(sort: Sort) {
     const data = this.houseReservations.slice();
-    /* let reservations = data
-    for (let res of reservations) {
-      res.startDateTime = new Date(res.startDateTime)
-      d.startDateTime
-    } */
     if (!sort.active || sort.direction === '') {
       this.houseReservations = data;
       return;
