@@ -28,6 +28,9 @@ public class Customer extends SystemUser implements UserDetails {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<WeekendHouseReservation> weekendHouseReservations = new HashSet<WeekendHouseReservation>();
 
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<BoatReservation> boatReservations = new HashSet<>();
+
     public Customer(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String hashCode, Integer penals) {
         super(id, firstName, lastName, email, username, password, address, city, country, phone, isDeleted, isActivated, roles);
         this.hashCode = hashCode;
@@ -124,6 +127,14 @@ public class Customer extends SystemUser implements UserDetails {
 
     public void setWeekendHouseReservations(Set<WeekendHouseReservation> weekendHouseReservations) {
         this.weekendHouseReservations = weekendHouseReservations;
+    }
+
+    public Set<BoatReservation> getBoatReservations() {
+        return boatReservations;
+    }
+
+    public void setBoatReservations(Set<BoatReservation> boatReservations) {
+        this.boatReservations = boatReservations;
     }
 
     public static Customer DtoToCustomerWithoutHashingPassword(CustomerDTO customerDto ) {

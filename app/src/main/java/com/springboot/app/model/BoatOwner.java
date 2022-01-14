@@ -20,7 +20,7 @@ public class BoatOwner extends SystemUser implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "boatOwner")
-    private Set<WeekendHouse> weekendHouse = new HashSet<>();
+    private Set<Boat> boats = new HashSet<>();
 
     public BoatOwner() {
         super();
@@ -76,5 +76,13 @@ public class BoatOwner extends SystemUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.isActivated;
+    }
+
+    public Set<Boat> getBoats() {
+        return boats;
+    }
+
+    public void setBoats(Set<Boat> boats) {
+        this.boats = boats;
     }
 }

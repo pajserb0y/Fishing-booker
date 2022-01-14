@@ -50,8 +50,7 @@ public class WeekendHouse {
             inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
     private Set<AdditionalService> additionalServices = new HashSet<>();
 
-    @OneToMany(mappedBy = "weekendHouse", fetch = FetchType.EAGER
-            , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "weekendHouse", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<WeekendHouseReservation> weekendHouseReservations = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
