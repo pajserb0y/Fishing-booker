@@ -83,3 +83,10 @@ INSERT INTO term(end_date_time, start_date_time, weekend_house_id) VALUES ('18.0
 INSERT INTO term(end_date_time, start_date_time, weekend_house_id) VALUES ('04.02.2022 14:00:00', '20.01.2022 14:00:00', 1);
 INSERT INTO term(end_date_time, start_date_time, weekend_house_id) VALUES ('18.02.2022 14:00:00', '10.02.2022 14:00:00', 2);
 INSERT INTO term(end_date_time, start_date_time, weekend_house_id) VALUES ('04.02.2022 14:00:00', '30.01.2022 14:00:00', 3);
+
+INSERT INTO weekend_house_feedbacks(grade_house, grade_owner, is_approved, note_house, note_owner, weekend_house_reservation_id)
+            VALUES (6, 7, true, 'I have expected better..', 'Okey', 1);
+INSERT INTO weekend_house_feedbacks(grade_house, grade_owner, is_approved, note_house, note_owner, weekend_house_reservation_id)
+            VALUES (9, 7, true, 'Nice', 'Okey', 1);
+INSERT INTO weekend_house_feedbacks(grade_house, grade_owner, is_approved, note_house, note_owner, weekend_house_reservation_id)
+            VALUES (6, 7, true, 'Not bad', 'Hmm', 4);

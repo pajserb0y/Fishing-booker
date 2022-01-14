@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface WeekendHouseFeedbackRepository extends JpaRepository<WeekendHouseFeedback, Integer> {
 
-    @Query(value = "SELECT avg(f.gradeHouse) FROM WeekendHouseFeedback f WHERE f.weekendHouseReservation.weekendHouse.id = :id")
+    @Query(value = "SELECT avg(f.gradeHouse) FROM WeekendHouseFeedback f WHERE f.weekendHouseReservation.weekendHouse.id = :id AND f.isApproved = true")
     Integer findAverageGradeHouseByWeekendHouseId(@Param("id") Integer id);
 }

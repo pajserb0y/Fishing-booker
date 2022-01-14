@@ -56,7 +56,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     public void sendNotificationForWeekendHouseReservation(WeekendHouseReservation reservation) {
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo("health.care.clinic.psw+admin@gmail.com");
+        mail.setTo(reservation.getCustomer().getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Successfully reservation");
         mail.setText("You have successfully reserved weekend house '" + reservation.getWeekendHouse().getName() +

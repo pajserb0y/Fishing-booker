@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -16,6 +18,9 @@ public class BoatOwner extends SystemUser implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(mappedBy = "boatOwner")
+    private Set<WeekendHouse> weekendHouse = new HashSet<>();
 
     public BoatOwner() {
         super();
