@@ -15,11 +15,14 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/instructors")
 public class InstructorController {
+
     private final InstructorService instructorService;
+
     @Autowired
     public InstructorController(InstructorService instructorService) {
         this.instructorService = instructorService;
     }
+
     @PostMapping(path = "/create")
     public ResponseEntity<?> createInstructor(@RequestBody @Valid InstructorDTO instructorDTO, BindingResult result) throws Exception{
         if(result.hasErrors()){
@@ -29,6 +32,7 @@ public class InstructorController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @GetMapping(path = "/{username}")
     public InstructorDTO getInstructorByUsername(@PathVariable String username) {
