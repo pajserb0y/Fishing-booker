@@ -1,9 +1,6 @@
 package com.springboot.app.service;
 
-import com.springboot.app.model.FishingLesson;
-import com.springboot.app.model.FishingLessonReservation;
-import com.springboot.app.model.Instructor;
-import com.springboot.app.model.Role;
+import com.springboot.app.model.*;
 import com.springboot.app.model.dto.DateTimeRangeDTO;
 import com.springboot.app.model.dto.FishingLessonDTO;
 import com.springboot.app.model.dto.InstructorDTO;
@@ -90,6 +87,27 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public List<FishingLessonReservation> findAllReservationsForInstructor(Integer instructorId, boolean futureOnly) {
+        return null;
+    }
+
+    @Override
+    public Integer findAvgGradeForFishingLessonId(Integer id) {
+//        return fishingLessonFeedbackRepository.findAverageGradeBoatByBoatId(id);
+        return 0;
+    }
+
+    @Override
+    public FishingLesson findFishingLessonById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public List<TermFishingLesson> findFreeTermsForFishingLesson(FishingLesson fishingLesson) {
+        return null;
+    }
+
+    @Override
+    public List<FishingLessonReservation> findAllReservationsForFishingLesson(Integer fishingLessonId) {
         return null;
     }
 }

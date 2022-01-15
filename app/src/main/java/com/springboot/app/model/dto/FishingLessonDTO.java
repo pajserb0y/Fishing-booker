@@ -1,5 +1,8 @@
 package com.springboot.app.model.dto;
 
+import com.springboot.app.model.AdditionalService;
+import com.springboot.app.model.FishingLesson;
+
 import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,7 +12,7 @@ public class FishingLessonDTO {
     private Integer id;
 
     @NotEmpty(message = "Please fill out title")
-    private String title;
+    private String name;
 
     @NotEmpty(message = "Please fill out address")
     private String address;
@@ -17,18 +20,17 @@ public class FishingLessonDTO {
     @NotEmpty(message = "Please fill out description")
     private String description;
 
-    @NotEmpty(message = "Please fill out instructors biography")
-    private String instructorBiography;
+    private String imagePaths;
 
     @NotEmpty(message = "Please fill out max number of people")
     private Integer maxNumberOfPeople;
 
-    private Set<TermDto> freeTerms = new HashSet<>();
+    private Set<TermFishingLessonDTO> freeTerms = new HashSet<>();
 
     @NotEmpty(message = "Please fill out rules")
     private String rules;
 
-    private Set<String> fishingEquipment = new HashSet<>();
+    private String fishingEquipment;
 
     @NotEmpty(message = "Please fill out price")
     private Float price;
@@ -42,16 +44,17 @@ public class FishingLessonDTO {
 
     private Set<FishingLessonReservationDTO> fishingLessonReservations;
 
+    private double avgGrade;
+
     public FishingLessonDTO() {
 
     }
 
-    public FishingLessonDTO(Integer id, String title, String address, String description, String instructorBiography, Integer maxNumberOfPeople, Set<TermDto> freeTerms, String rules, Set<String> fishingEquipment, Float price, Set<AdditionalServiceDTO> additionalServices, String cancelConditions, InstructorDTO instructor, Set<FishingLessonReservationDTO> fishingLessonReservations) {
+    public FishingLessonDTO(Integer id, String name, String address, String description, Integer maxNumberOfPeople, Set<TermFishingLessonDTO> freeTerms, String rules, String fishingEquipment, Float price, Set<AdditionalServiceDTO> additionalServices, String cancelConditions, InstructorDTO instructor, Set<FishingLessonReservationDTO> fishingLessonReservations) {
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.address = address;
         this.description = description;
-        this.instructorBiography = instructorBiography;
         this.maxNumberOfPeople = maxNumberOfPeople;
         this.freeTerms = freeTerms;
         this.rules = rules;
@@ -63,6 +66,28 @@ public class FishingLessonDTO {
         this.fishingLessonReservations = fishingLessonReservations;
     }
 
+    public FishingLessonDTO(FishingLesson fishingLesson) {
+        this.id = fishingLesson.getId();
+        Set<AdditionalServiceDTO> services = new HashSet<>();
+        for (AdditionalService service : fishingLesson.getAdditionalServices())
+            services.add(new AdditionalServiceDTO(service));
+        this.additionalServices = services;
+        this.address = fishingLesson.getAddress();
+        this.description = fishingLesson.getDescription();
+        this.rules = fishingLesson.getRules();
+        this.maxNumberOfPeople = fishingLesson.getMaxNumberOfPeople();
+
+//        Set<TermDto> terms = new HashSet<>();
+//        for (Term term : house.getFreeTerms())
+//            terms.add(new TermDto(term));
+//        this.freeTerms = terms;
+
+        this.name = fishingLesson.getName();        //otisao sam sa bratom sad ovo da vidim, nastavi da menjas kontroler za instruktora, analogno weekend house kontroleru
+        this.imagePaths = fishingLesson.getImagePaths();
+        this.price = fishingLesson.getPrice();
+        this.instructor = new InstructorDTO(fishingLesson.getInstructor());
+    }
+
     public Integer getId() {
         return id;
     }
@@ -71,12 +96,12 @@ public class FishingLessonDTO {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {
@@ -95,13 +120,6 @@ public class FishingLessonDTO {
         this.description = description;
     }
 
-    public String getInstructorBiography() {
-        return instructorBiography;
-    }
-
-    public void setInstructorBiography(String instructorBiography) {
-        this.instructorBiography = instructorBiography;
-    }
 
     public Integer getMaxNumberOfPeople() {
         return maxNumberOfPeople;
@@ -111,11 +129,11 @@ public class FishingLessonDTO {
         this.maxNumberOfPeople = maxNumberOfPeople;
     }
 
-    public Set<TermDto> getFreeTerms() {
+    public Set<TermFishingLessonDTO> getFreeTerms() {
         return freeTerms;
     }
 
-    public void setFreeTerms(Set<TermDto> freeTerms) {
+    public void setFreeTerms(Set<TermFishingLessonDTO> freeTerms) {
         this.freeTerms = freeTerms;
     }
 
@@ -127,11 +145,11 @@ public class FishingLessonDTO {
         this.rules = rules;
     }
 
-    public Set<String> getFishingEquipment() {
+    public String getFishingEquipment() {
         return fishingEquipment;
     }
 
-    public void setFishingEquipment(Set<String> fishingEquipment) {
+    public void setFishingEquipment(String fishingEquipment) {
         this.fishingEquipment = fishingEquipment;
     }
 
@@ -173,5 +191,21 @@ public class FishingLessonDTO {
 
     public void setFishingLessonReservations(Set<FishingLessonReservationDTO> fishingLessonReservations) {
         this.fishingLessonReservations = fishingLessonReservations;
+    }
+
+    public double getAvgGrade() {
+        return avgGrade;
+    }
+
+    public void setAvgGrade(double avgGrade) {
+        this.avgGrade = avgGrade;
+    }
+
+    public String getImagePaths() {
+        return imagePaths;
+    }
+
+    public void setImagePaths(String imagePaths) {
+        this.imagePaths = imagePaths;
     }
 }

@@ -1,5 +1,9 @@
 package com.springboot.app.model;
 
+import com.springboot.app.model.dto.AdditionalServiceDTO;
+import com.springboot.app.model.dto.FishingLessonDTO;
+import com.springboot.app.model.dto.TermFishingLessonDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,25 +15,23 @@ public class FishingLesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String title;
+    private String name;
 
     private String address;
 
     private String description;
 
-    private String instructorBiography;
-
-    private Set<String> imagePaths = new HashSet<>();
+    private String imagePaths;
 
     private Integer maxNumberOfPeople;
 
     @OneToMany(mappedBy = "fishingLesson", fetch = FetchType.EAGER
             , cascade = CascadeType.ALL)
-    private Set<Term> freeTerms = new HashSet<>();
+    private Set<TermFishingLesson> freeTerms = new HashSet<>();
 
     private String rules;
 
-    private Set<String> fishingEquipment = new HashSet<>();
+    private String fishingEquipment;
 
     private Float price;
 
@@ -53,13 +55,12 @@ public class FishingLesson {
 
     }
 
-    public FishingLesson(Integer id, String title, String address, String description, String instructorBiography, Set<String> imagePaths, Integer maxNumberOfPeople, Set<Term> freeTerms, String rules, Set<String> fishingEquipment, Float price, Set<AdditionalService> additionalServices, String cancelConditions, Instructor instructor, Set<FishingLessonReservation> fishingLessonReservations) {
+    public FishingLesson(Integer id, String name, String address, String description, String imagePaths, Integer maxNumberOfPeople, Set<TermFishingLesson> freeTerms, String rules, String fishingEquipment, Float price, Set<AdditionalService> additionalServices, String cancelConditions, Instructor instructor, Set<FishingLessonReservation> fishingLessonReservations) {
 
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.address = address;
         this.description = description;
-        this.instructorBiography = instructorBiography;
         this.imagePaths = imagePaths;
         this.maxNumberOfPeople = maxNumberOfPeople;
         this.freeTerms = freeTerms;
@@ -72,6 +73,38 @@ public class FishingLesson {
         this.fishingLessonReservations = fishingLessonReservations;
     }
 
+    public FishingLesson(FishingLessonDTO dto) {
+        this.id = dto.getId();
+        this.name = dto.getName();
+        this.address = dto.getAddress();
+        this.description = dto.getDescription();
+        this.imagePaths = dto.getImagePaths();
+        this.fishingEquipment = dto.getFishingEquipment();
+        Set<TermFishingLesson> terms = new HashSet<>();
+        for (TermFishingLessonDTO termDto : dto.getFreeTerms())
+            terms.add(new TermFishingLesson(termDto));
+        this.freeTerms = terms;
+        this.price = dto.getPrice();
+        this.maxNumberOfPeople = dto.getMaxNumberOfPeople();
+        this.rules = dto.getRules();
+        this.cancelConditions = dto.getCancelConditions();
+
+        Set<AdditionalService> services = new HashSet<>();
+        for (AdditionalServiceDTO service : dto.getAdditionalServices())
+            services.add(new AdditionalService(service));
+        this.additionalServices = services;
+
+        this.instructor = new Instructor(dto.getInstructor());
+    }
+
+    public String getImagePaths() {
+        return imagePaths;
+    }
+
+    public void setImagePaths(String imagePaths) {
+        this.imagePaths = imagePaths;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -80,12 +113,12 @@ public class FishingLesson {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {
@@ -104,14 +137,6 @@ public class FishingLesson {
         this.description = description;
     }
 
-    public String getInstructorBiography() {
-        return instructorBiography;
-    }
-
-    public void setInstructorBiography(String instructorBiography) {
-        this.instructorBiography = instructorBiography;
-    }
-
     public Integer getMaxNumberOfPeople() {
         return maxNumberOfPeople;
     }
@@ -120,11 +145,11 @@ public class FishingLesson {
         this.maxNumberOfPeople = maxNumberOfPeople;
     }
 
-    public Set<Term> getFreeTerms() {
+    public Set<TermFishingLesson> getFreeTerms() {
         return freeTerms;
     }
 
-    public void setFreeTerms(Set<Term> freeTerms) {
+    public void setFreeTerms(Set<TermFishingLesson> freeTerms) {
         this.freeTerms = freeTerms;
     }
 
@@ -136,11 +161,11 @@ public class FishingLesson {
         this.rules = rules;
     }
 
-    public Set<String> getFishingEquipment() {
+    public String getFishingEquipment() {
         return fishingEquipment;
     }
 
-    public void setFishingEquipment(Set<String> fishingEquipment) {
+    public void setFishingEquipment(String fishingEquipment) {
         this.fishingEquipment = fishingEquipment;
     }
 

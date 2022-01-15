@@ -1,8 +1,6 @@
 package com.springboot.app.service;
 
-import com.springboot.app.model.FishingLesson;
-import com.springboot.app.model.FishingLessonReservation;
-import com.springboot.app.model.Instructor;
+import com.springboot.app.model.*;
 import com.springboot.app.model.dto.DateTimeRangeDTO;
 import com.springboot.app.model.dto.FishingLessonDTO;
 import com.springboot.app.model.dto.InstructorDTO;
@@ -30,4 +28,11 @@ public interface InstructorService {
 
     List<FishingLessonReservation> findAllReservationsForInstructor(Integer instructorId, boolean futureOnly);
 
+    Integer findAvgGradeForFishingLessonId(Integer id);
+
+    FishingLesson findFishingLessonById(Integer id);
+
+    List<TermFishingLesson> findFreeTermsForFishingLesson(FishingLesson fishingLesson);
+
+    List<FishingLessonReservation> findAllReservationsForFishingLesson(Integer fishingLessonId);
 }

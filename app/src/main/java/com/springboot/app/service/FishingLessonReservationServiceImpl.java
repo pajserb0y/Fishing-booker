@@ -39,13 +39,28 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
         return fishingLessonReservation;
     }
 
+
     @Override
-    public List<FishingLessonReservation> getFutureResForCustomer(String customerUsername) {
-        return fishingLessonReservationRepository.findAllByCustomerUsername(customerUsername);
+    public List<FishingLessonReservation> getFutureResForInstructor(Instructor instructorUsername) {
+        return fishingLessonReservationRepository.findAllByFishingLessonInstructor(instructorUsername);
     }
 
     @Override
-    public List<FishingLessonReservation> getFutureResForInstructor(String instructorUsername) {
-        return fishingLessonReservationRepository.findAllByInstructorUsername(instructorUsername);
+    public List<FishingLessonReservation> getFutureForCustomerUsername(String username) {
+        return fishingLessonReservationRepository.findAllFutureReservationsByCustomerUsername(username);
+    }
+
+    @Override
+    public List<FishingLessonReservation> getPastForCustomerUsername(String username) {
+        return fishingLessonReservationRepository.findAllPastReservationsByCustomerUsername(username);
+    }
+
+    @Override
+    public void cancel(Integer id) {
+        Optional<FishingLessonReservation> res = fishingLessonReservationRepository.findById(id);
+        if (res.isPresent()) {
+            res.get().setCancelled(true);
+            fishingLessonReservationRepository.save(res.get());
+        }
     }
 }

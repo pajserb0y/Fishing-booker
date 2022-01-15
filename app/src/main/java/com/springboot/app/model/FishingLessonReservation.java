@@ -1,5 +1,7 @@
 package com.springboot.app.model;
 
+import com.springboot.app.model.dto.AdditionalServiceDTO;
+import com.springboot.app.model.dto.FishingLessonReservationDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
@@ -15,7 +17,6 @@ public class FishingLessonReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String venueAddress;
 
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date startDateTime;
@@ -49,13 +50,16 @@ public class FishingLessonReservation {
     @JoinColumn(name = "fishing_lesson_id")
     private FishingLesson fishingLesson;
 
+    private boolean isCancelled = false;
+
+
+
     public FishingLessonReservation() {
 
     }
 
-    public FishingLessonReservation(Integer id, String venueAddress, Date startDateTime, Date endDateTime, Integer maxPeopleNumber, @Nullable Date startSpecialOffer, @Nullable Date endSpecialOffer, Set<AdditionalService> additionalServices, Float price, Customer customer, FishingLesson fishingLesson) {
+    public FishingLessonReservation(Integer id, Date startDateTime, Date endDateTime, Integer maxPeopleNumber, @Nullable Date startSpecialOffer, @Nullable Date endSpecialOffer, Set<AdditionalService> additionalServices, Float price, Customer customer, FishingLesson fishingLesson, boolean isCancelled) {
         this.id = id;
-        this.venueAddress = venueAddress;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.maxPeopleNumber = maxPeopleNumber;
@@ -65,6 +69,25 @@ public class FishingLessonReservation {
         this.price = price;
         this.customer = customer;
         this.fishingLesson = fishingLesson;
+        this.isCancelled = isCancelled;
+    }
+
+    public FishingLessonReservation(FishingLessonReservationDTO res) {
+        this.id = res.getId();
+        this.startDateTime = res.getStartDateTime();
+        this.endDateTime = res.getEndDateTime();
+        this.maxPeopleNumber = res.getMaxPeopleNumber();
+        Set<AdditionalService> services = new HashSet<>();
+        for (AdditionalServiceDTO service : res.getAdditionalServices())
+            services.add(new AdditionalService(service));
+        this.additionalServices = services;
+
+        this.startSpecialOffer = res.getStartSpecialOffer();
+        this.endSpecialOffer = res.getEndSpecialOffer();
+        this.price = res.getPrice();
+        this.customer =  new Customer(res.getCustomer());
+        this.fishingLesson = new FishingLesson(res.getFishingLesson());
+        this.isCancelled = res.isCancelled();
     }
 
     public Integer getId() {
@@ -73,14 +96,6 @@ public class FishingLessonReservation {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getVenueAddress() {
-        return venueAddress;
-    }
-
-    public void setVenueAddress(String venueAddress) {
-        this.venueAddress = venueAddress;
     }
 
     public Date getStartDateTime() {
@@ -155,5 +170,13 @@ public class FishingLessonReservation {
 
     public void setFishingLesson(FishingLesson fishingLesson) {
         this.fishingLesson = fishingLesson;
+    }
+
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        isCancelled = cancelled;
     }
 }
