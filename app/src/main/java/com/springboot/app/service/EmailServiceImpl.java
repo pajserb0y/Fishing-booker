@@ -72,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
         mail.setTo(reservation.getCustomer().getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Successfully reservation");
-        mail.setText("You have successfully reserved weekend house '" + reservation.getBoat().getName() +
+        mail.setText("You have successfully reserved boat '" + reservation.getBoat().getName() +
                 "' for period from " + reservation.getStartDateTime() + " to " + reservation.getEndDateTime());
 
         javaMailSender.send(mail);

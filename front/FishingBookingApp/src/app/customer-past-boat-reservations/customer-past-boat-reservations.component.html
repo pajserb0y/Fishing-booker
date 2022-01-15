@@ -1,108 +1,108 @@
 <mat-grid-list rowHeight="600px" cols="2">
 
-    <mat-grid-tile  colspan="2" >
-  <div style="margin-right: 63%; margin-top: -5%;">
-      <h2>Boats reservations history</h2>    
-      <div  class="tableView">
-      <table id="myTable" mat-table [dataSource]="boatReservations" class="mat-elevation-z8"  matSort (matSortChange)="sortData($event)">
-          <ng-container matColumnDef="boatName">
-              <mat-header-cell *matHeaderCellDef mat-sort-header='boatName'> Boat name </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.boat.name}} </mat-cell>
-            </ng-container>
-          
-          <ng-container matColumnDef="startDate">
-              <mat-header-cell *matHeaderCellDef mat-sort-header='startDate' > Start date </mat-header-cell>
-                  <mat-cell *matCellDef="let element" >
-                    <ng-container >{{element.startDateTime}}</ng-container>
-                      </mat-cell>
-            </ng-container>
-      
-            <ng-container matColumnDef="endDate">
-              <mat-header-cell *matHeaderCellDef mat-sort-header='endDate'> End date </mat-header-cell>
-                  <mat-cell *matCellDef="let element" >
-                    <ng-container >{{element.endDateTime}}</ng-container>
-                      </mat-cell>
-            </ng-container>
-      
-            <ng-container matColumnDef="cancel">
-              <mat-header-cell *matHeaderCellDef>Cancel </mat-header-cell>
-              <mat-cell *matCellDef="let element"> 
-                <ng-container *ngIf="element.cancelled " ><i>cancelled</i></ng-container>
-              </mat-cell>
-            </ng-container>
-  
-      
-            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showFeedbackAndComplaintInfo(row)" [class.selected]="row.selected"></mat-row>
-        </table>
-      </div>
-      </div>
-    </mat-grid-tile>
-  
-  
-     <!--  FEEDBACKS -->
-    <div  *ngIf="show">
-    <mat-grid-tile >
-      <div  style="margin-right: -10%;">
-        <h2>Boat feedback</h2>            
-          <div>
-          <mat-form-field appearance="fill" style="width: 150px;">
-            <mat-label>Grade [1-10]</mat-label>
-            <input matInput type="number" value="1" min="1" max="10" name="gradeBoat" [(ngModel)]="feedback.gradeBoat" required>
-            <mat-icon matSuffix></mat-icon>
-          </mat-form-field></div>
-  
-          <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
-            <textarea required matInput placeholder="Write your note about house" [(ngModel)]="feedback.noteBoat"  rows="15" cols="40" ></textarea>
-          </mat-form-field></div>
-  
-          <div style="margin-top: 5%;">
-            <button mat-raised-button color="accent" (click)="sendFeedback()" [disabled]="feedback.noteBoat === '' || feedback.noteOwner === ''">Send</button>
-          </div>  
-    </div>
-    </mat-grid-tile>
-  
-    <mat-grid-tile >
-      <div  style="margin-top: -9%; margin-left: -10%;">
-        <h2>House owner feedback</h2>      
-          <div>
-          <mat-form-field appearance="fill" style="width: 150px;">
-            <mat-label>Grade [1-10]</mat-label>
-            <input matInput type="number" value="1" min="1" max="10" name="gradeOwner" [(ngModel)]="feedback.gradeOwner" required>
-            <mat-icon matSuffix></mat-icon>
-          </mat-form-field></div>
-  
-          <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
-            <textarea required matInput placeholder="Write your note about owner" [(ngModel)]="feedback.noteOwner"  rows="15" cols="40" ></textarea>
-          </mat-form-field></div>
+  <mat-grid-tile  colspan="2" >
+<div style="margin-right: 63%; margin-top: -5%;">
+    <h2>Boats reservations history</h2>    
+    <div  class="tableView">
+    <table id="myTable" mat-table [dataSource]="boatReservations" class="mat-elevation-z8"  matSort (matSortChange)="sortData($event)">
+        <ng-container matColumnDef="boatName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='boatName'> Boat name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.boat.name}} </mat-cell>
+          </ng-container>
         
+        <ng-container matColumnDef="startDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='startDate' > Start date </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.startDateTime}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="endDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='endDate'> End date </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.endDateTime}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="cancel">
+            <mat-header-cell *matHeaderCellDef>Cancel </mat-header-cell>
+            <mat-cell *matCellDef="let element"> 
+              <ng-container *ngIf="element.cancelled " ><i>cancelled</i></ng-container>
+            </mat-cell>
+          </ng-container>
+
+    
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showFeedbackAndComplaintInfo(row)" [class.selected]="row.selected"></mat-row>
+      </table>
     </div>
-    </mat-grid-tile>
-  </div>
-  
-  
-   <!--  COMPLAINT -->
-   <div  *ngIf="show">
-    <mat-grid-tile >
-      <div  style="margin-right: -10%;">
-        <h2>Boat complaint</h2>            
-          <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
-            <textarea required matInput placeholder="Write your complaint about boat" [(ngModel)]="complaint.noteBoat"  rows="15" cols="40" ></textarea>
-          </mat-form-field></div>
-  
-          <div style="margin-top: 5%;">
-            <button mat-raised-button color="accent" (click)="sendComplaint()" [disabled]="complaint.noteBoat === '' && complaint.noteOwner === ''">Send</button>
-          </div>  
-        </div>
-    </mat-grid-tile>
-  
-    <mat-grid-tile >
-      <div  style="margin-top: -9%; margin-left: -10%;">
-        <h2>Boat owner complaint</h2>      
-          <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
-            <textarea required matInput placeholder="Write your complaint about owner" [(ngModel)]="complaint.noteOwner"  rows="15" cols="40" ></textarea>
-          </mat-form-field></div>    
     </div>
-    </mat-grid-tile>
+  </mat-grid-tile>
+
+
+   <!--  FEEDBACKS -->
+  <div  *ngIf="show">
+  <mat-grid-tile >
+    <div  style="margin-right: -10%;">
+      <h2>Boat feedback</h2>            
+        <div>
+        <mat-form-field appearance="fill" style="width: 150px;">
+          <mat-label>Grade [1-10]</mat-label>
+          <input matInput type="number" value="1" min="1" max="10" name="gradeBoat" [(ngModel)]="feedback.gradeBoat" required>
+          <mat-icon matSuffix></mat-icon>
+        </mat-form-field></div>
+
+        <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
+          <textarea required matInput placeholder="Write your note about house" [(ngModel)]="feedback.noteBoat"  rows="15" cols="40" ></textarea>
+        </mat-form-field></div>
+
+        <div style="margin-top: 5%;">
+          <button mat-raised-button color="accent" (click)="sendFeedback()" [disabled]="feedback.noteBoat === '' || feedback.noteOwner === ''">Send</button>
+        </div>  
   </div>
-  </mat-grid-list>
+  </mat-grid-tile>
+
+  <mat-grid-tile >
+    <div  style="margin-top: -9%; margin-left: -10%;">
+      <h2>House owner feedback</h2>      
+        <div>
+        <mat-form-field appearance="fill" style="width: 150px;">
+          <mat-label>Grade [1-10]</mat-label>
+          <input matInput type="number" value="1" min="1" max="10" name="gradeOwner" [(ngModel)]="feedback.gradeOwner" required>
+          <mat-icon matSuffix></mat-icon>
+        </mat-form-field></div>
+
+        <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
+          <textarea required matInput placeholder="Write your note about owner" [(ngModel)]="feedback.noteOwner"  rows="15" cols="40" ></textarea>
+        </mat-form-field></div>
+      
+  </div>
+  </mat-grid-tile>
+</div>
+
+
+ <!--  COMPLAINT -->
+ <div  *ngIf="show">
+  <mat-grid-tile >
+    <div  style="margin-right: -10%;">
+      <h2>Boat complaint</h2>            
+        <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
+          <textarea required matInput placeholder="Write your complaint about boat" [(ngModel)]="complaint.noteBoat"  rows="15" cols="40" ></textarea>
+        </mat-form-field></div>
+
+        <div style="margin-top: 5%;">
+          <button mat-raised-button color="accent" (click)="sendComplaint()" [disabled]="complaint.noteBoat === '' && complaint.noteOwner === ''">Send</button>
+        </div>  
+      </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile >
+    <div  style="margin-top: -9%; margin-left: -10%;">
+      <h2>Boat owner complaint</h2>      
+        <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
+          <textarea required matInput placeholder="Write your complaint about owner" [(ngModel)]="complaint.noteOwner"  rows="15" cols="40" ></textarea>
+        </mat-form-field></div>    
+  </div>
+  </mat-grid-tile>
+</div>
+</mat-grid-list>

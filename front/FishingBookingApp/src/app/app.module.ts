@@ -56,7 +56,7 @@ import { CustomerFutureWeekendHouseReservationsComponent } from './customer-futu
 import { CommonModule } from '@angular/common';
 import { SpecialOffersComponent } from './special-offers/special-offers.component';
 import { CustomerFutureBoatReservationsComponent } from './customer-future-boat-reservations/customer-future-boat-reservations.component';
-import { PastBoatReservationsComponent } from './past-boat-reservations/past-boat-reservations.component';
+import { CustomerPastBoatReservationsComponent } from './customer-past-boat-reservations/customer-past-boat-reservations.component';
 import { BoatOwnerService } from './service/boat-owner.service';
 import { WeekendHouseOwnerService } from './service/weekend-house-owner.service';
 
@@ -105,7 +105,7 @@ const MaterialComponents = [
     CustomerFutureWeekendHouseReservationsComponent,
     SpecialOffersComponent,
     CustomerFutureBoatReservationsComponent,
-    PastBoatReservationsComponent
+    CustomerPastBoatReservationsComponent
   ],
   imports: [
     BrowserModule,

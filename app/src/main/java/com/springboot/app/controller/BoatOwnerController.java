@@ -63,7 +63,7 @@ public class BoatOwnerController {
     }
 
     @GetMapping(path = "/allBoats")
-    public Set<BoatDTO> getAllWeekendHouses() {
+    public Set<BoatDTO> getAllBoats() {
         List<Boat> boats = boatOwnerService.findAllBoats();
         Set<BoatDTO> boatDTOS = new HashSet<>();
         for (Boat boat : boats) {
@@ -77,7 +77,7 @@ public class BoatOwnerController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping(path = "/findAvailableForDateRange")
-    public Set<BoatDTO> findAvailableHousesForDateRange(@RequestBody DateTimeRangeDTO dateRange) {
+    public Set<BoatDTO> findAvailableBoatsForDateRange(@RequestBody DateTimeRangeDTO dateRange) {
         Set<BoatDTO> boatDTOS = new HashSet<>();
         for (Boat boat : boatOwnerService.findAvailableBoatsForDateRange(dateRange)) {
             BoatDTO dto = new BoatDTO(boat);
