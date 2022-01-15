@@ -34,8 +34,8 @@ public class BoatReservation {
     private Date endSpecialOffer;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "weekend_house_reservation_services",
-            joinColumns = @JoinColumn(name = "weekend_house_reservation_id", referencedColumnName = "id"),
+    @JoinTable(name = "boat_reservation_services",
+            joinColumns = @JoinColumn(name = "boat_reservation_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
     private Set<AdditionalService> services = new HashSet<>();
 
