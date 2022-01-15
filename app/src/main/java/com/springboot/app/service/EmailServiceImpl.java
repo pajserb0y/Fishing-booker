@@ -1,5 +1,6 @@
 package com.springboot.app.service;
 
+import com.springboot.app.model.BoatReservation;
 import com.springboot.app.model.Customer;
 import com.springboot.app.model.FishingLessonReservation;
 import com.springboot.app.model.WeekendHouseReservation;
@@ -66,7 +67,18 @@ public class EmailServiceImpl implements EmailService {
         javaMailSender.send(mail);
     }
 
-    @Override
+    @Async
+    public void sendNotificationForBoatReservation(BoatReservation reservation) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(reservation.getCustomer().getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Successfully reservation");
+        mail.setText("You have successfully reserved boat '" + reservation.getBoat().getName() +
+                "' for period from " + reservation.getStartDateTime() + " to " + reservation.getEndDateTime());
+        javaMailSender.send(mail);
+    }
+
+    @Async
     public void sendNotificationForFishingLessonReservation(FishingLessonReservation reservation) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(reservation.getCustomer().getEmail());

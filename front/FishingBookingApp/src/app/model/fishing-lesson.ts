@@ -1,10 +1,17 @@
 import { Instructor } from "./instructor";
 
 export interface FishingLesson {
-    id: number ;
-    lessonName: string ;
+    /* id: number ;
+    name: string ;
     address: string ;
-    details: string ;
+    description: string ;
+    imagePath : string;
+    freeTerms: TermBoat[];
+    price: number; 
+    rules: string;
+    capacity: number
+    additionalServices: AdditionalService[];  
     instructor: Instructor;
-    grade: number ;
+    fishingReservations: BoatReservation[];
+    avgGrade: number ; */
   }

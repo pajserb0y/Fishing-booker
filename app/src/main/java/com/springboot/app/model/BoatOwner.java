@@ -19,6 +19,9 @@ public class BoatOwner extends SystemUser implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @OneToMany(mappedBy = "boatOwner")
+    private Set<Boat> boats = new HashSet<>();
+
 
     public BoatOwner() {
         super();
@@ -74,5 +77,13 @@ public class BoatOwner extends SystemUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.isActivated;
+    }
+
+    public Set<Boat> getBoats() {
+        return boats;
+    }
+
+    public void setBoats(Set<Boat> boats) {
+        this.boats = boats;
     }
 }

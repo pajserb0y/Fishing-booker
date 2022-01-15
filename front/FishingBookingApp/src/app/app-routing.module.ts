@@ -12,6 +12,8 @@ import { WeekendHouseProfileComponent } from './weekend-house-profile/weekend-ho
 import { CustomerFutureWeekendHouseReservationsComponent } from './customer-future-weekend-house-reservations/customer-future-weekend-house-reservations.component';
 import { CustomerPastWeekendHouseReservationsComponent } from './customer-past-weekend-house-reservations/customer-past-weekend-house-reservations.component';
 import { SpecialOffersComponent } from './special-offers/special-offers.component';
+import { CustomerFutureBoatReservationsComponent } from './customer-future-boat-reservations/customer-future-boat-reservations.component';
+import { CustomerPastBoatReservationsComponent } from './customer-past-boat-reservations/customer-past-boat-reservations.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -25,7 +27,9 @@ const routes: Routes = [
   { path: 'customer-future-weekend-house-reservations', component: CustomerFutureWeekendHouseReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
   { path: 'customer-past-weekend-house-reservations', component: CustomerPastWeekendHouseReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
   {path: 'weekend-house-profile', component: WeekendHouseProfileComponent, canActivate:[AuthGuard], data:{role : 'ROLE_WEEKEND_HOUSE_OWNER'}},
-  {path: 'special-offers', component: SpecialOffersComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'}}
+  {path: 'special-offers', component: SpecialOffersComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'}},
+  { path: 'customer-future-boat-reservations', component: CustomerFutureBoatReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
+  { path: 'customer-past-boat-reservations', component: CustomerPastBoatReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} }
 
   
 ];

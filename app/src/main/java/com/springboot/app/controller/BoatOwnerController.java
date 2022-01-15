@@ -1,14 +1,10 @@
 package com.springboot.app.controller;
 
-import com.springboot.app.model.BoatOwner;
-import com.springboot.app.model.Customer;
-import com.springboot.app.model.dto.BoatOwnerDTO;
-import com.springboot.app.model.dto.CustomerDTO;
-import com.springboot.app.model.dto.DeleteDTO;
+import com.springboot.app.model.*;
+import com.springboot.app.model.dto.*;
 import com.springboot.app.service.BoatOwnerService;
 import com.springboot.app.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +12,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/boatowners")
@@ -61,5 +60,43 @@ public class BoatOwnerController {
         emailService.sendNotificationForDeletingToAdmin(dto.note, dto.id);
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping(path = "/allBoats")
+    public Set<BoatDTO> getAllBoats() {
+        List<Boat> boats = boatOwnerService.findAllBoats();
+        Set<BoatDTO> boatDTOS = new HashSet<>();
+        for (Boat boat : boats) {
+            BoatDTO dto = new BoatDTO(boat);
+            dto.setAvgGrade(boatOwnerService.findAvgGradeForBoatId(boat.getId()));
+            boatDTOS.add(dto);
+        }
+
+        return boatDTOS;
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/findAvailableForDateRange")
+    public Set<BoatDTO> findAvailableBoatsForDateRange(@RequestBody DateTimeRangeDTO dateRange) {
+        Set<BoatDTO> boatDTOS = new HashSet<>();
+        for (Boat boat : boatOwnerService.findAvailableBoatsForDateRange(dateRange)) {
+            BoatDTO dto = new BoatDTO(boat);
+            dto.setAvgGrade(boatOwnerService.findAvgGradeForBoatId(boat.getId()));
+            boatDTOS.add(dto);
+        }
+
+        return boatDTOS;
+    }
+
+    @PreAuthorize("hasAnyRole('BOAT_OWNER', 'CUSTOMER')")
+    @GetMapping(path = "/getAllFreeTermsForBoat/{id}")
+    public Set<TermBoatDTO> getAllFreeTermsForBoat(@PathVariable Integer id) {
+        Boat boat = boatOwnerService.findBoatById(id);
+        List<TermBoat> terms = boatOwnerService.findAllFreeTermsForBoat(boat);
+        Set<TermBoatDTO> termDtos = new HashSet<>();
+        for (TermBoat term : terms)
+            termDtos.add(new TermBoatDTO(term));
+
+        return termDtos;
     }
 }

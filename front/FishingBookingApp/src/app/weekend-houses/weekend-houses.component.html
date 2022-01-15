@@ -1,7 +1,7 @@
 <mat-grid-list style="z-index:1;" rowHeight="600px" cols="4" >
 
             <!-- LISTA -->
-  <mat-grid-tile  colspan="3" >
+  <mat-grid-tile style="border: solid;"  colspan="3" >
   <div style="margin-right: 43%; margin-top: 0%;">
     <h2>Weekend houses</h2>    
     <mat-form-field appearance="fill" class="searchPosition"> 
@@ -66,7 +66,7 @@
 
 
           <!-- REZERVISANJE -->
-  <mat-grid-tile colspan="1"   >
+  <mat-grid-tile style="border: solid;" colspan="1"   >
   <div class="reserve" *ngIf="role === 'ROLE_CUSTOMER'">
     <h1>Reserve now</h1>
     <form name="rform" #registerForm="ngForm">       
@@ -103,7 +103,7 @@
       </mat-form-field>
     </div>
 
-    <div ><label><b>Total price:</b>  <span *ngIf="show && range.value.start != null">{{houseReservation.price}}</span></label></div>                
+    <div ><label><b>Total price: </b>  <span *ngIf="show && range.value.start != null">{{houseReservation.price}}</span></label></div>                
 
       <p style="margin-top: 70px;"><b>Before reserving, please check info you filled</b></p>
       <div>
@@ -117,7 +117,7 @@
 
 
     <!-- HOUSE INFO -->
-  <mat-grid-tile  colspan="2">
+  <mat-grid-tile style="border: solid;" colspan="2">
     <div  *ngIf="show && role != 'ROLE_WEEKEND_HOUSE_OWNER'" style="margin-top: -25%; margin-right: -20%; font-size: larger; position: static;">
       <h2>House informations</h2>
       <div class="infoDiv"><label><b>Name:</b>   {{selectedHouseInfo.name}}</label></div>
@@ -132,7 +132,7 @@
  
 
   <!-- HOUSE OWNER INFO -->
-  <mat-grid-tile colspan="2">
+  <mat-grid-tile style="border: solid;" colspan="2">
     <div *ngIf="show && role != 'ROLE_WEEKEND_HOUSE_OWNER'" style="margin-top: -25%; margin-left: -50%; font-size: larger;">
       <h2>House owner informations</h2>
       <div class="infoDiv"><label><b>First name:</b>   {{selectedHouseInfo.weekendHouseOwner.firstName}}</label></div>

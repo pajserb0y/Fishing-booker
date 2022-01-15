@@ -1,10 +1,9 @@
 package com.springboot.app.service;
 
-import com.springboot.app.model.BoatOwner;
-import com.springboot.app.model.Customer;
-import com.springboot.app.model.Role;
+import com.springboot.app.model.*;
 import com.springboot.app.model.dto.BoatOwnerDTO;
-import com.springboot.app.repository.BoatOwnerRepository;
+import com.springboot.app.model.dto.DateTimeRangeDTO;
+import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,10 +15,19 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
 
     private final BoatOwnerRepository boatOwnerRepository;
     private final RoleService roleService;
+    private final BoatRepository boatRepository;
+    private final BoatFeedbackRepository boatFeedbackRepository;
+    private final BoatReservationRepository boatReservationRepository;
+    private final TermBoatRepository termBoatRepository;
 
-    public BoatOwnerServiceImpl(BoatOwnerRepository boatOwnerRepository, RoleService roleService) {
+    public BoatOwnerServiceImpl(BoatOwnerRepository boatOwnerRepository, RoleService roleService, BoatRepository boatRepository, TermBoatRepository termBoatRepository,
+                                BoatFeedbackRepository boatFeedbackRepository, BoatReservationRepository boatReservationRepository) {
         this.boatOwnerRepository = boatOwnerRepository;
         this.roleService = roleService;
+        this.boatRepository = boatRepository;
+        this.boatFeedbackRepository = boatFeedbackRepository;
+        this.boatReservationRepository = boatReservationRepository;
+        this.termBoatRepository = termBoatRepository;
     }
 
     @Override
@@ -69,5 +77,35 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
             boatOwner.get().setWantDeleting(true);
             saveBoatOwner(boatOwner.get());
         }
+    }
+
+    @Override
+    public List<Boat> findAllBoats() {
+        return boatRepository.findAll();
+    }
+
+    @Override
+    public Integer findAvgGradeForBoatId(Integer id) {
+        return boatFeedbackRepository.findAverageGradeBoatByBoatId(id);
+    }
+
+    @Override
+    public List<Boat> findAvailableBoatsForDateRange(DateTimeRangeDTO dateRange) {
+        List<Integer> boatIds = boatReservationRepository.findAllForDateRange(dateRange.getStart(), dateRange.getEnd());
+        boatIds.addAll(termBoatRepository.findAllBoatIdsThatWorkForPeriod(dateRange.getStart(), dateRange.getEnd()));
+        if (boatIds.isEmpty())
+            return findAllBoats();
+        else
+            return boatRepository.findAllByIdNotIn(boatIds);
+    }
+
+    @Override
+    public Boat findBoatById(Integer id) {
+        return boatRepository.findById(id).get();
+    }
+
+    @Override
+    public List<TermBoat> findAllFreeTermsForBoat(Boat boat) {
+        return termBoatRepository.findByBoat(boat);
     }
 }

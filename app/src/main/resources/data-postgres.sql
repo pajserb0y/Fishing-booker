@@ -11,7 +11,7 @@ insert into customer (address, city, country, email, first_name, is_activated, i
 insert into customer (address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, hash_code, penals, role_id)
     values ('Masarikova 23', 'Novi Sad', 'Serbia', 'health.care.clinic.psw+predrag@gmail.com', 'Predrag', true, false, 'Miric', '$2a$10$l.fpbmzdA7ooTKv5nb5vheG7fX5lN2jxVQMUdsANPpVpGR4q7fDvy', '0656544432', 'predrag', false, '', 4, 1);
 
-
+--------- WEEKEND HOUSE
 insert into weekend_house_owner (address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, motive, role_id)
     values ('Makarska 42', 'Beograd', 'Serbia', 'health.care.clinic.psw+antonije@gmail.com', 'Antonije', true, false, 'Pusic', '$2a$10$tfmCyLyvVUpTAqmApmZwUej3aT3WiUVOQu8sx1/dk0AE3LHrqJVnC', '0654677567', 'antonije', false, '', 5);
 
@@ -91,3 +91,43 @@ INSERT INTO weekend_house_feedbacks(grade_house, grade_owner, is_approved, note_
             VALUES (9, 7, true, 'Nice', 'Okey', 1);
 INSERT INTO weekend_house_feedbacks(grade_house, grade_owner, is_approved, note_house, note_owner, weekend_house_reservation_id)
             VALUES (6, 7, true, 'Not bad', 'Hmm', 4);
+
+--------- BOAT
+INSERT INTO boat_owner(address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, motive, role_id)
+	VALUES ('Brdarska 142', 'Beograd', 'Serbia', 'health.care.clinic.psw+nikola@gmail.com', 'Nikola', true, false, 'Karic', '$2a$10$797QMButu1E5Qu6psORITOWE8gLRrxTaAVF6roezaNwAP5iDv7gNe', '0654477567', 'nikola', false, 'ehh', 3);
+
+INSERT INTO boat_owner(address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, motive, role_id)
+	VALUES ('Gogoljeva 14', 'Novi Sad', 'Serbia', 'health.care.clinic.psw+andrija@gmail.com', 'Andrija', true, false, 'Boric', '$2a$10$Va5zIXmRLx/8wn5A291rdeRuoZqPADGaFs.aIXBDjA3atgrDvbzcG', '0654477522', 'andrija', false, 'ehh', 3);
+
+
+INSERT INTO boat(address, capacity, description, image_path, name, price, rules, boat_owner_id)
+	values ('Sumadijska 23', 5, 'Mnogo lep brod', '123edas123', 'Heaven boat', 12000, 'Be good', 1);
+INSERT INTO boat(address, capacity, description, image_path, name, price, rules, boat_owner_id)
+	values ('Grncarska 3', 15, 'Zjuu lepote', '123edas123', 'Goddess', 34000, 'Be awesome', 1);
+INSERT INTO boat(address, capacity, description, image_path, name, price, rules, boat_owner_id)
+	values ('Rumenacka 23', 25, 'Dodji pa proceni', '123edas123', 'Brlja', 41000, 'Be nice', 2);
+
+
+INSERT INTO boat_reservation(capacity, end_date_time, end_special_offer, is_cancelled, price, start_date_time, start_special_offer, boat_id, customer_id)
+	values (2, '27.02.2022 14:00:00', null, false, 23000, '23.02.2022 14:00:00', '21.02.2022 14:00:00', 1, 1);
+INSERT INTO boat_reservation(capacity, end_date_time, end_special_offer, is_cancelled, price, start_date_time, start_special_offer, boat_id, customer_id)
+	values (5, '20.02.2022 14:00:00', null, false, 28000, '13.02.2022 14:00:00', '21.02.2022 14:00:00', 2, 1);
+
+INSERT INTO boat_services(boat_id, service_id) VALUES (1, 2);
+INSERT INTO boat_services(boat_id, service_id) VALUES (1, 5);
+INSERT INTO boat_services(boat_id, service_id) VALUES (2, 4);
+INSERT INTO boat_services(boat_id, service_id) VALUES (2, 3);
+INSERT INTO boat_services(boat_id, service_id) VALUES (2, 1);
+INSERT INTO boat_services(boat_id, service_id) VALUES (1, 1);
+
+INSERT INTO term_boat(end_date_time, start_date_time, boat_id) VALUES ('18.01.2022 14:00:00', '10.01.2022 14:00:00', 1);
+INSERT INTO term_boat(end_date_time, start_date_time, boat_id) VALUES ('22.01.2022 14:00:00', '20.01.2022 14:00:00', 1);
+INSERT INTO term_boat(end_date_time, start_date_time, boat_id) VALUES ('18.01.2022 14:00:00', '10.01.2022 14:00:00', 2);
+INSERT INTO term_boat(end_date_time, start_date_time, boat_id) VALUES ('18.02.2022 14:00:00', '02.02.2022 14:00:00', 2);
+
+INSERT INTO boat_feedbacks(grade_boat, grade_owner, is_approved, note_boat, note_owner, boat_reservation_id)
+	VALUES (6, 7, true, 'I have expected better services..', 'Okey', 1);
+INSERT INTO boat_feedbacks(grade_boat, grade_owner, is_approved, note_boat, note_owner, boat_reservation_id)
+	VALUES (10, 8, true, 'Not bad', 'Okey', 1);
+INSERT INTO boat_feedbacks(grade_boat, grade_owner, is_approved, note_boat, note_owner, boat_reservation_id)
+	VALUES (9, 9, true, 'Very good', 'Nice', 2);
