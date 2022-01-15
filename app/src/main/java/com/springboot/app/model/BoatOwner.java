@@ -19,8 +19,6 @@ public class BoatOwner extends SystemUser implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "boatOwner")
-    private Set<WeekendHouse> weekendHouse = new HashSet<>();
 
     public BoatOwner() {
         super();

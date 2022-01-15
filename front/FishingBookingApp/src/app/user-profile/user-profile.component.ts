@@ -101,6 +101,7 @@ export class UserProfileComponent implements OnInit {
             else
             {
               this.nonCustomer = data;
+              this.repassword = this.nonCustomer.password;
               this.nonCustomerToCustomer();//sad su u customeru sva bitna polja za prikaz od nonCustomera
             }
             },
@@ -123,6 +124,8 @@ export class UserProfileComponent implements OnInit {
       this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
       .subscribe(data => {
                   this.customer = data
+                  this.customer.customer.password = ''
+                  this.repassword = ''
                   this.repassword = this.customer.customer.password;
                   this.oldCustomer = data.customer
                   this.deleteDto.id = this.customer.customer.id

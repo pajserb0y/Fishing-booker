@@ -57,7 +57,7 @@ export class WeekendHouseProfileComponent implements OnInit {
     startSpecialOffer: new Date,
     endSpecialOffer: null,
     services: [],
-    price: 0,
+    price: this.weekendHouse.price,
     customer: {
       id: 0,
       firstName: "",
@@ -74,11 +74,38 @@ export class WeekendHouseProfileComponent implements OnInit {
     weekendHouse: this.weekendHouse,
     cancelled: false
   }
+specialOffers : WeekendHouseReservation [] = [] ;
+specialOffer  : WeekendHouseReservation = {
+    id: 0,
+    startDateTime: new Date,
+    endDateTime: new Date,
+    peopleNumber: 0,
+    startSpecialOffer: null,
+    endSpecialOffer: null,
+    services: [],
+    price: 0,
+    customer: null ,
+    weekendHouse: this.weekendHouse,
+    cancelled: false
+  }
+
 
   minDate = new Date();
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
+  });
+  rangeOffer = new FormGroup({
+    startOffer: new FormControl(),
+    endOffer: new FormControl(),
+  });
+  rangeDuration = new FormGroup({
+    startDuration: new FormControl(),
+    endDuration: new FormControl(),
+  });
+  rangeTerm = new FormGroup({
+    startTerm: new FormControl(),
+    endTerm: new FormControl(),
   });
   newFreeTerm : Term = {
     startDateTime: new Date(), 
@@ -91,12 +118,16 @@ export class WeekendHouseProfileComponent implements OnInit {
 
   displayedColumns: string[] = ['startDateTime', 'endDateTime', 'price', 'customer', 'weekendHouse'];
 
-  constructor(private _weekendHouseownerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar) { }
+  constructor(private _weekendHouseownerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar) { 
+    
+  }
 
   ngOnInit(): void {
       this.weekendHouse = this._weekendHouseownerService.weekendHouse;
-      this.getAllFreeTerms();
       this.getAllReservationsForWeekendHouse();
+      this.weekendHouseReservation.price = this.weekendHouse.price;
+      this.specialOffer.price = this.weekendHouse.price
+      this.getAllFreeTerms();
   }
 
   
@@ -137,20 +168,81 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
 
   reserveWeekendHouse()
   {
+    this.weekendHouseReservation.weekendHouse = this.weekendHouse
+    this.weekendHouseReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
+    this.weekendHouseReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
+    this.weekendHouseReservation.endSpecialOffer = null
+    this.weekendHouseReservation.price = this.weekendHouse.price
+    for (let service of this.weekendHouseReservation.services) {
+      this.weekendHouseReservation.price += service.price
+    }
+    this._weekendHouseownerService.reserve(this.weekendHouseReservation)
+          .subscribe(data =>  this.allReservationsForWeekendHouse = data,
+              error => this.errorMessage = <any>error); 
+    this.allReservationsForWeekendHouse.filter(res => res.customer != null)
+    this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+    this.weekendHouseReservation.customer = null;
+    this.range.value.start = null;
+    this.range.value.end = null;
+    this.weekendHouseReservation.services = [];
+    this.weekendHouseReservation.price = 0;
+   
+  }
+  makeSpecialOffer()
+  {
+    this.specialOffer.weekendHouse = this.weekendHouse;
+    this.specialOffer.endDateTime = this.getDateFromDatePickerRange(this.rangeOffer.value.endOffer);
+    this.specialOffer.startDateTime = this.getDateFromDatePickerRange(this.rangeOffer.value.startOffer);
+    this.specialOffer.startSpecialOffer = this.getDateFromDatePickerRange(this.rangeDuration.value.startDuration);
+    this.specialOffer.endSpecialOffer = this.getDateFromDatePickerRange(this.rangeDuration.value.endDuration);  
+    for (let service of this.specialOffer.services) {
+      this.specialOffer.price += service.price
+    }
+    this._weekendHouseownerService.makeSpecialOffer(this.specialOffer)
+          .subscribe(data =>  {this.specialOffers = data,     this.specialOffers.filter(offer => offer.customer == null)},
+              error => this.errorMessage = <any>error); 
 
+    this._snackBar.open('Special offer created successfuly', 'Close', {duration: 5000});
+    this.specialOffer.customer = null;
+    this.rangeOffer.value.startOffer = null;
+    this.rangeOffer.value.endOffer = null;
+    this.rangeDuration.value.startDuration = null;
+    this.rangeDuration.value.endDuration = null;
+    this.specialOffer.services = [];
+    this.specialOffer.price = 0;
+  }
+
+  getDateFromDatePickerRange(start: Date) {
+    return new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours(), start.getMinutes()));
   }
 
   checkAvailability(){
     
   }
+
+  calculateTotalPrice(ob : any)
+  {
+    let selectedService = ob.source.value;
+    console.log(selectedService);
+    if (ob.source._selected)
+      this.weekendHouseReservation.price += selectedService.price
+    else
+      this.weekendHouseReservation.price -= selectedService.price
+  }
   addFreeTerm()
   {
+    this.newFreeTerm.startDateTime = this.rangeTerm.value.startTerm;
+    this.newFreeTerm.endDateTime = this.rangeTerm.value.endTerm;
+    this.newFreeTerm.weekendHouse = this.weekendHouse;
     if(this.newFreeTerm.startDateTime < this.newFreeTerm.endDateTime)
-        if(this.newFreeTerm.endDateTime > new Date()) //OVDE CE VEROVATNO TREBATI DODATI NEW FREE TERM I PRE SUBSCRIBA DA BI BILO ODMAH VIDLJIVO
+        if(this.newFreeTerm.startDateTime >= new Date()) //OVDE CE VEROVATNO TREBATI DODATI NEW FREE TERM I PRE SUBSCRIBA DA BI BILO ODMAH VIDLJIVO
           this._weekendHouseownerService.addFreeTerm(this.newFreeTerm)
-          .subscribe(data =>  this.allFreeTerms.push(data),
+          .subscribe(data =>  this.allFreeTerms = data,
             error => this.errorMessage = <any>error); 
-
+    
+   this._snackBar.open('Free term created successfuly', 'Close', {duration: 5000});
+    this.rangeTerm.value.startTerm = null;
+    this.rangeTerm.value.endTerm = null;          
   }
 
   getAllFreeTerms()
@@ -163,7 +255,8 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
   getAllReservationsForWeekendHouse()
   {
     this._weekendHouseownerService.getAllReservationsForWeekendHouse(this.weekendHouse)
-       .subscribe(data =>  this.allReservationsForWeekendHouse = data,
+       .subscribe(data =>  {this.allReservationsForWeekendHouse = data, this.allReservationsForWeekendHouse.filter(res => res.customer != null)},
                   error => this.errorMessage = <any>error); 
+
   }
 }

@@ -32,15 +32,15 @@ export class WeekendHouseOwnerService {
   private _allWeekendHouses  = this._weekendHouseOwnerRegistration + '/allWeekendHouses';
   private _allWeekendHousesforOwner = this._weekendHouseOwnerRegistration + '/allWeekendHousesForOwner/';
   private _findAvailableWeekendHouses  = this._weekendHouseOwnerRegistration + '/findAvailableForDateRange';
-  private _makeReservation = this._weekendHouseRegistrationController + '/reserve';
+  private _makeReservationOrSpecialOffer = this._weekendHouseRegistrationController + '/reserve';
   private _getFutureReservationsForCustomerUsername = this._weekendHouseRegistrationController + '/getFutureForCustomerUsername/';
   private _getPastReservationsForCustomerUsername = this._weekendHouseRegistrationController + '/getPastForCustomerUsername/';
   private _cancelReservation = this._weekendHouseRegistrationController + '/cancel/';
   private _sendFeedback = this._weekendHouseRegistrationController + '/sendFeedback';
   private _sendComplaint = this._weekendHouseRegistrationController + '/sendComplaint';
-  private _addFreeTerm = this._weekendHouseOwnerRegistration + '/_addFreeTerm/';      //greska?
+  private _addFreeTerm = this._weekendHouseOwnerRegistration + '/addFreeTerm';      
   private _getAllFreeTermsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllFreeTermsForWeekendHouse/';
-  private _getAllReservationsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllReservationsForWeekendHouse/';
+  private _getAllReservationsForWeekendHouse = this._weekendHouseRegistrationController + '/getAllReservationsForWeekendHouse/';
 
 
   weekendHouse !: WeekendHouse;
@@ -110,8 +110,15 @@ export class WeekendHouseOwnerService {
   reserve(houseReservation: WeekendHouseReservation) : Observable<any>  {
     const body=JSON.stringify(houseReservation);
     console.log(body)
-    return this._http.post(this._makeReservation, body)
+    return this._http.post(this._makeReservationOrSpecialOffer, body)
   }
+
+  makeSpecialOffer(specialOffer: WeekendHouseReservation): Observable<any> {
+    const body=JSON.stringify(specialOffer);
+    console.log(body)
+    return this._http.post(this._makeReservationOrSpecialOffer, body)
+  }
+
 
   cancelReservation(id: number) : Observable<any>{
     return this._http.post(this._cancelReservation + id, {})

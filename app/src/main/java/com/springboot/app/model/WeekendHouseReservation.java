@@ -86,7 +86,10 @@ public class WeekendHouseReservation {
         this.endSpecialOffer = res.getEndSpecialOffer();
         this.services = services;
         this.price = res.getPrice();
-        this.customer =  new Customer(res.getCustomer());
+        if(res.getCustomer() != null)
+            this.customer =  new Customer(res.getCustomer());
+        else
+            this.customer = null;
         this.weekendHouse = new WeekendHouse(res.getWeekendHouse());
         this.isCancelled = res.isCancelled();
     }

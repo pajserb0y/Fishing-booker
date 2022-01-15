@@ -134,11 +134,6 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     }
 
     @Override
-    public List<WeekendHouseReservation> findAllReservationsForWeekendHouse(WeekendHouse weekendHouse) {
-        return weekendHouseReservationRepository.findByWeekendHouse(weekendHouse);
-    }
-
-    @Override
     public WeekendHouse findWeekendHouseById(Integer id) {
         return weekendHouseRepository.findById(id).get();
     }
@@ -146,5 +141,10 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     @Override
     public Integer findAvgGradeForHouseId(Integer id) {
         return weekendHouseFeedbackRepository.findAverageGradeHouseByWeekendHouseId(id);
+    }
+
+    @Override
+    public void addFreeTerm(Term term) {
+        termRepository.save(term);
     }
 }
