@@ -26,21 +26,35 @@ import java.util.Set;
 public class WeekendHouseReservationController {
 
     private final WeekendHouseReservationService weekendHouseReservationService;
+    private final WeekendHouseOwnerService weekendHouseOwnerService;
     private final EmailService emailService;
 
     @Autowired
-    public WeekendHouseReservationController(WeekendHouseReservationService weekendHouseReservationService, EmailService emailService) {
+    public WeekendHouseReservationController(WeekendHouseReservationService weekendHouseReservationService,WeekendHouseOwnerService weekendHouseOwnerService, EmailService emailService) {
         this.weekendHouseReservationService = weekendHouseReservationService;
         this.emailService = emailService;
+        this.weekendHouseOwnerService = weekendHouseOwnerService;
     }
 
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','WEEKEND_HOUSE_OWNER')")
     @PostMapping(path = "/reserve")
-    public ResponseEntity<?> reserve(@RequestBody WeekendHouseReservationDTO reservationDto) {
+    public Set<WeekendHouseReservationDTO> reserve(@RequestBody WeekendHouseReservationDTO reservationDto) {
+        if(reservationDto.getCustomer() != null)
+            if(reservationDto.getStartSpecialOffer() != null && reservationDto.getEndSpecialOffer() != null)
+            {
+               //nekako treba vratiti bad request
+            }
         WeekendHouseReservation reservation = weekendHouseReservationService.reserve(new WeekendHouseReservation(reservationDto));
-        emailService.sendNotificationForWeekendHouseReservation(reservation);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        if(reservation.getCustomer() != null)
+            emailService.sendNotificationForWeekendHouseReservation(reservation);
+        List<WeekendHouseReservation> weekendHouseReservations = weekendHouseReservationService.findAllReservationsForWeekendHouse(reservation.getWeekendHouse());
+        Set<WeekendHouseReservationDTO> resDtos = new HashSet<>();
+        for (WeekendHouseReservation res : weekendHouseReservations)
+        {
+            resDtos.add(new WeekendHouseReservationDTO(res));
+        }
+        return resDtos;
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")
@@ -84,5 +98,16 @@ public class WeekendHouseReservationController {
         Optional<WeekendHouseReservation> res = weekendHouseReservationService.findById(complaintDTO.getWeekendHouseReservationId());
         weekendHouseReservationService.sendComplaint(new WeekendHouseComplaint(complaintDTO, res.get()));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
+    @GetMapping(path = "/getAllReservationsForWeekendHouse/{id}")
+    public Set<WeekendHouseReservationDTO> getAllReservationsForWeekendHouse(@PathVariable Integer id) {
+        WeekendHouse weekendHouse = weekendHouseOwnerService.findWeekendHouseById(id);
+        List<WeekendHouseReservation> weekendHouseReservations = weekendHouseReservationService.findAllReservationsForWeekendHouse(weekendHouse);
+        Set<WeekendHouseReservationDTO> weekendHouseReservationDTOs = new HashSet<>();
+        for (WeekendHouseReservation res : weekendHouseReservations)
+            weekendHouseReservationDTOs.add(new WeekendHouseReservationDTO(res));
+        return weekendHouseReservationDTOs;
     }
 }

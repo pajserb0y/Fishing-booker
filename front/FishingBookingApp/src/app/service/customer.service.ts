@@ -8,7 +8,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import 'rxjs/add/operator/catch';
 import { DeleteDto } from '../model/deleteDto';
-import { CustomerLoyalty } from '../model/customer-loyalty';
+import { CustomerLoyalty } from '../model/customer-loyalty';   
 
 const headers = { 'content-type': 'application/json'} 
 

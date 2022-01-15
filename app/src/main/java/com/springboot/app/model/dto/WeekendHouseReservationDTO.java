@@ -59,7 +59,10 @@ public class WeekendHouseReservationDTO {
 
         this.startSpecialOffer = res.getStartSpecialOffer();
         this.endSpecialOffer = res.getEndSpecialOffer();
-        this.customer = new CustomerDTO(res.getCustomer());
+        if(res.getCustomer() != null)
+            this.customer = new CustomerDTO(res.getCustomer());
+        else
+            this.customer = null;
         this.weekendHouse = new WeekendHouseDTO(res.getWeekendHouse());
         this.isCancelled = res.isCancelled();
     }

@@ -22,6 +22,7 @@ public class BoatOwner extends SystemUser implements UserDetails {
     @OneToMany(mappedBy = "boatOwner")
     private Set<Boat> boats = new HashSet<>();
 
+
     public BoatOwner() {
         super();
     }

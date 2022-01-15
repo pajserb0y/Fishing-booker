@@ -3,7 +3,6 @@ package com.springboot.app.controller;
 import com.springboot.app.model.Term;
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseOwner;
-import com.springboot.app.model.WeekendHouseReservation;
 import com.springboot.app.model.dto.*;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.WeekendHouseOwnerService;
@@ -73,6 +72,15 @@ public class WeekendHouseOwnerController {
     }
 
     @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
+    @PostMapping(path = "/addFreeTerm")
+    public Set<TermDto> addFreeTerm(@RequestBody TermDto termDto){
+        Term term = new Term(termDto);
+        weekendHouseOwnerService.addFreeTerm(term);
+
+        return this.getAllFreeTermsForWeekendHouse(term.getWeekendHouse().getId());
+    }
+
+    @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
     @PostMapping(path = "/delete")
     public ResponseEntity<?> proccessWeekendHouseOwnerDeleting(@RequestBody DeleteDTO dto) {
         if (!weekendHouseOwnerService.findById(dto.id).isPresent())
@@ -138,16 +146,5 @@ public class WeekendHouseOwnerController {
             termDtos.add(new TermDto(term));
 
         return termDtos;
-    }
-
-    @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
-    @GetMapping(path = "/getAllReservationsForWeekendHouse/{id}")
-    public Set<WeekendHouseReservationDTO> getAllReservationsForWeekendHouse(@PathVariable Integer id) {
-        WeekendHouse weekendHouse = weekendHouseOwnerService.findWeekendHouseById(id);
-        List<WeekendHouseReservation> weekendHouseReservations = weekendHouseOwnerService.findAllReservationsForWeekendHouse(weekendHouse);
-        Set<WeekendHouseReservationDTO> weekendHouseReservationDTOs = new HashSet<>();
-        for (WeekendHouseReservation res : weekendHouseReservations)
-            weekendHouseReservationDTOs.add(new WeekendHouseReservationDTO(res));
-        return weekendHouseReservationDTOs;
     }
 }

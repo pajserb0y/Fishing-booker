@@ -156,7 +156,7 @@ export class WeekendHousesComponent implements OnInit {
   }
 
   reserve() {
-    if (this.houseReservation.customer.penals > 2)
+    if(this.houseReservation.customer != null && this.houseReservation.customer.penals > 2)
         this._snackBar.open('You can not make any reservations because you are banned for the end of the month!', 'Close', {duration: 5000});
     else {
         this.houseReservation.weekendHouse = this.selectedHouseInfo
@@ -168,7 +168,7 @@ export class WeekendHousesComponent implements OnInit {
           this.houseReservation.price += service.price
         }
         this._weekendHouseOwnerService.reserve(this.houseReservation)
-              .subscribe(data =>  this.weekendHouses = data,
+              .subscribe(data => {},
                   error => this.errorMessage = <any>error); 
 
         this.router.navigateByUrl('/').then(() => {

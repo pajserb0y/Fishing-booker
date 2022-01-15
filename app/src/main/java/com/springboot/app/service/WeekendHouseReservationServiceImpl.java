@@ -29,11 +29,20 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     @Override
     public WeekendHouseReservation reserve(WeekendHouseReservation weekendHouseReservation) {
         Optional<WeekendHouse> house = weekendHouseRepository.findById(weekendHouseReservation.getWeekendHouse().getId());
-        Optional<Customer> customer = customerRepository.findById(weekendHouseReservation.getCustomer().getId());
-        if (house.isPresent() && customer.isPresent()) {
-            weekendHouseReservation.setWeekendHouse(house.get());
-            weekendHouseReservation.setCustomer(customer.get());
-            weekendHouseReservationRepository.save(weekendHouseReservation);
+        if(weekendHouseReservation.getCustomer() != null) {
+            Optional<Customer> customer = customerRepository.findById(weekendHouseReservation.getCustomer().getId());
+            if (house.isPresent() && customer.isPresent()) {
+                weekendHouseReservation.setWeekendHouse(house.get());
+                weekendHouseReservation.setCustomer(customer.get());
+                weekendHouseReservationRepository.save(weekendHouseReservation);
+            }
+        }
+        else {
+            if (house.isPresent()) {
+                weekendHouseReservation.setWeekendHouse(house.get());
+                weekendHouseReservation.setCustomer(null);
+                weekendHouseReservationRepository.save(weekendHouseReservation);
+            }
         }
         return weekendHouseReservation;
     }
@@ -70,5 +79,10 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     @Override
     public void sendComplaint(WeekendHouseComplaint weekendHouseComplaint) {
         weekendHouseComplaintRepository.save(weekendHouseComplaint);
+    }
+
+    @Override
+    public List<WeekendHouseReservation> findAllReservationsForWeekendHouse(WeekendHouse weekendHouse) {
+        return weekendHouseReservationRepository.findByWeekendHouse(weekendHouse);
     }
 }

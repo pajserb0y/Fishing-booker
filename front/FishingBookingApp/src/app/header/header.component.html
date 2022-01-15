@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" class="navbar">
+<mat-toolbar style="z-index:2; position: absolute;" color="primary" class="navbar">
     <button mat-button style="font-size : 25px" [routerLink]="['']">FishingBooking</button>
     <button *ngIf="role != 'ROLE_ADMIN' && role != 'ROLE_BOAT_OWNER'&& role != 'ROLE_INSTRUCTOR'"
              style="margin-left : 25px" mat-button [routerLink]="['weekend-houses']">Weekend houses</button>
