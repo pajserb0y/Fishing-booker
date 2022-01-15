@@ -54,6 +54,7 @@ import { WeekendHouseProfileComponent } from './weekend-house-profile/weekend-ho
 import { CustomerPastWeekendHouseReservationsComponent } from './customer-past-weekend-house-reservations/customer-past-weekend-house-reservations.component';
 import { CustomerFutureWeekendHouseReservationsComponent } from './customer-future-weekend-house-reservations/customer-future-weekend-house-reservations.component';
 import { CommonModule } from '@angular/common';
+import { SpecialOffersComponent } from './special-offers/special-offers.component';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -97,7 +98,8 @@ const MaterialComponents = [
     UserProfileComponent,
     WeekendHouseProfileComponent,
     CustomerPastWeekendHouseReservationsComponent,
-    CustomerFutureWeekendHouseReservationsComponent
+    CustomerFutureWeekendHouseReservationsComponent,
+    SpecialOffersComponent
   ],
   imports: [
     BrowserModule,

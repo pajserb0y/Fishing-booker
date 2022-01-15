@@ -2,10 +2,7 @@ package com.springboot.app.service;
 
 import com.springboot.app.model.*;
 import com.springboot.app.model.dto.*;
-import com.springboot.app.repository.TermRepository;
-import com.springboot.app.repository.WeekendHouseOwnerRepository;
-import com.springboot.app.repository.WeekendHouseRepository;
-import com.springboot.app.repository.WeekendHouseReservationRepository;
+import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,14 +14,17 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     private final WeekendHouseReservationRepository weekendHouseReservationRepository;
     private final RoleService roleService;
     private final TermRepository termRepository;
+    private final WeekendHouseFeedbackRepository weekendHouseFeedbackRepository;
 
     public WeekendHouseOwnerServiceImpl(WeekendHouseOwnerRepository weekendHouseOwnerRepository, WeekendHouseRepository weekendHouseRepository,
-                                        RoleService roleService, WeekendHouseReservationRepository weekendHouseReservationRepository,TermRepository termRepository) {
+                                        RoleService roleService, WeekendHouseReservationRepository weekendHouseReservationRepository, TermRepository termRepository,
+                                        WeekendHouseFeedbackRepository weekendHouseFeedbackRepository) {
         this.weekendHouseOwnerRepository = weekendHouseOwnerRepository;
         this.roleService = roleService;
         this.weekendHouseRepository = weekendHouseRepository;
         this.weekendHouseReservationRepository = weekendHouseReservationRepository;
         this.termRepository = termRepository;
+        this.weekendHouseFeedbackRepository = weekendHouseFeedbackRepository;
     }
 
     @Override
@@ -88,6 +88,7 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     @Override
     public List<WeekendHouse> findAvailableHousesForDateRange(DateTimeRangeDTO dateRange) {
         List<Integer> weekendHouseIds = weekendHouseReservationRepository.findAllForDateRange(dateRange.getStart(), dateRange.getEnd());
+        weekendHouseIds.addAll(termRepository.findAllHouseIdsThatWorkForPeriod(dateRange.getStart(), dateRange.getEnd()));
         if (weekendHouseIds.isEmpty())
             return findAllWeekendHouses();
         else
@@ -133,12 +134,17 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     }
 
     @Override
-    public List<WeekendHouseReservation> findAllReservationsForWeekendHouse(WeekendHouse weekendHouse) {
-        return weekendHouseReservationRepository.findByWeekendHouse(weekendHouse);
+    public WeekendHouse findWeekendHouseById(Integer id) {
+        return weekendHouseRepository.findById(id).get();
     }
 
     @Override
-    public WeekendHouse findWeekendHouseById(Integer id) {
-        return weekendHouseRepository.findById(id).get();
+    public Integer findAvgGradeForHouseId(Integer id) {
+        return weekendHouseFeedbackRepository.findAverageGradeHouseByWeekendHouseId(id);
+    }
+
+    @Override
+    public void addFreeTerm(Term term) {
+        termRepository.save(term);
     }
 }

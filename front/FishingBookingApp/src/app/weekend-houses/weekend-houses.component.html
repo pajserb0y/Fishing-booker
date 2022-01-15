@@ -1,4 +1,4 @@
-<mat-grid-list rowHeight="600px" cols="4" >
+<mat-grid-list style="z-index:1;" rowHeight="600px" cols="4" >
 
             <!-- LISTA -->
   <mat-grid-tile  colspan="3" >
@@ -15,42 +15,51 @@
         <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header='name' > Name </mat-header-cell>
                 <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.name}}</ng-container>
+                  <ng-container >{{element.weekendHouse.name}}</ng-container>
                     </mat-cell>
           </ng-container>
     
           <ng-container matColumnDef="address">
             <mat-header-cell *matHeaderCellDef mat-sort-header='address'> Address </mat-header-cell>
                 <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.address}}</ng-container>
+                  <ng-container >{{element.weekendHouse.address}}</ng-container>
                     </mat-cell>
           </ng-container>
     
           <ng-container matColumnDef="description">
             <mat-header-cell *matHeaderCellDef mat-sort-header='description'> Description </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.weekendHouse.description}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="bedNumber">
             <mat-header-cell *matHeaderCellDef mat-sort-header='bedNumber'> Bed number </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.bedNumber}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.weekendHouse.bedNumber}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="owner">
             <mat-header-cell *matHeaderCellDef mat-sort-header='owner'> Owner </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.weekendHouseOwner.firstName}} {{element.weekendHouseOwner.lastName}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.weekendHouse.weekendHouseOwner.firstName}} {{element.weekendHouse.weekendHouseOwner.lastName}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="price">
             <mat-header-cell *matHeaderCellDef mat-sort-header='price'> Price </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.weekendHouse.price}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="grade">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='grade'> Grade </mat-header-cell>
+            <mat-cell *matCellDef="let element" >  
+              <ng-container *ngIf="element.avgGrade != null"> {{element.avgGrade}} </ng-container>
+              <ng-container *ngIf="element.avgGrade == null"> <i>none</i> </ng-container>
+            </mat-cell>
           </ng-container>
           
     
           <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showInfo(row)" [class.selected]="row.selected"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showInfo(row.weekendHouse)" [class.selected]="row.selected"></mat-row>
       </table>
     </div>
+    <div *ngIf="role === 'ROLE_CUSTOMER'" style="margin-top: 2%;"><a [routerLink]="['../special-offers']">Check out all special offers</a></div>
     </div>
     </mat-grid-tile>
 
@@ -65,8 +74,8 @@
       <mat-form-field appearance="fill">
         <mat-label>Select date</mat-label>
         <mat-date-range-input [min]="minDate" [formGroup]="range" [rangePicker]="picker">
-          <input matStartDate formControlName="start" placeholder="Start date">
-          <input matEndDate formControlName="end" placeholder="End date" (dateChange)="findAvailableHousesForSelectedTerm()">
+          <input matStartDate formControlName="start" placeholder="Start date" >
+          <input matEndDate formControlName="end" placeholder="End date"  (dateChange)="findAvailableHousesForSelectedTerm()">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
@@ -75,27 +84,31 @@
         <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
+      <div>
+      <mat-form-field appearance="fill" style="width: 150px;">
         <mat-label>Number of guests</mat-label>
-        <input matInput type="number" value="1" min="1" [max]='selectedHouseInfo.bedNumber' name="peopleNumber" [(ngModel)]="houseReservation.peopleNumber" required>
+        <input matInput type="number" value="1" min="1" [max]='selectedHouseInfo.bedNumber' name="peopleNumber" [(ngModel)]="houseReservation.peopleNumber" required
+                [disabled]="!show || range.value.start == null">
         <mat-icon matSuffix></mat-icon>
-      </mat-form-field>
+      </mat-form-field></div>
 
       <div>
+        <mat-form-field style="width: 150px;" appearance="fill">
         <mat-label style="padding-top: 20px;" for="services">List of our services</mat-label>
-        <mat-select name="services" [(ngModel)]="houseReservation.services" multiple>
-          <mat-option checkboxPosition="before" *ngFor="let service of selectedHouseInfo.additionalServices" [value]="service">
+        <mat-select [disabled]="!show || range.value.start == null" name="services" [(ngModel)]="houseReservation.services" multiple>
+          <mat-option checkboxPosition="before" *ngFor="let service of selectedHouseInfo.additionalServices" [value]="service" (onSelectionChange)="calculateTotalPrice($event)">
               {{ service.name }} - {{ service.price }}
           </mat-option>
-        </mat-select>  
+        </mat-select> 
+      </mat-form-field>
     </div>
 
-    <div><label><b>Total price:</b>   {{houseReservation.price}}</label></div>                
+    <div ><label><b>Total price:</b>  <span *ngIf="show && range.value.start != null">{{houseReservation.price}}</span></label></div>                
 
       <p style="margin-top: 70px;"><b>Before reserving, please check info you filled</b></p>
       <div>
         <button mat-raised-button color="accent" (click)="reserve()" 
-                [disabled]="selectedHouseInfo.id === 0 || range.value.start === null || range.value.end === null || houseReservation.peopleNumber === 0">Reserve</button>
+                [disabled]="!show || range.value.start === null || range.value.end === null || houseReservation.peopleNumber === 0">Reserve</button>
       </div>
 
     </form>
@@ -105,7 +118,7 @@
 
     <!-- HOUSE INFO -->
   <mat-grid-tile  colspan="2">
-    <div  *ngIf="selectedHouseInfo.id !== 0 && role != 'ROLE_WEEKEND_HOUSE_OWNER'" style="margin-top: -35%; margin-right: -20%; font-size: larger; position: static;">
+    <div  *ngIf="show && role != 'ROLE_WEEKEND_HOUSE_OWNER'" style="margin-top: -25%; margin-right: -20%; font-size: larger; position: static;">
       <h2>House informations</h2>
       <div class="infoDiv"><label><b>Name:</b>   {{selectedHouseInfo.name}}</label></div>
       <div class="infoDiv"><label><b>Address:</b>   {{selectedHouseInfo.address}}</label></div>
@@ -120,7 +133,7 @@
 
   <!-- HOUSE OWNER INFO -->
   <mat-grid-tile colspan="2">
-    <div *ngIf="selectedHouseInfo.id !== 0 && role != 'ROLE_WEEKEND_HOUSE_OWNER'" style="margin-top: -35%; margin-left: -50%; font-size: larger;">
+    <div *ngIf="show && role != 'ROLE_WEEKEND_HOUSE_OWNER'" style="margin-top: -25%; margin-left: -50%; font-size: larger;">
       <h2>House owner informations</h2>
       <div class="infoDiv"><label><b>First name:</b>   {{selectedHouseInfo.weekendHouseOwner.firstName}}</label></div>
       <div class="infoDiv"><label><b>Last name:</b>   {{selectedHouseInfo.weekendHouseOwner.lastName}}</label></div>

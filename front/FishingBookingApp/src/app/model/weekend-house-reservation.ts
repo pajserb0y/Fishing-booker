@@ -7,10 +7,11 @@ export interface WeekendHouseReservation {
     startDateTime: Date ;
     endDateTime: Date;
     peopleNumber: number ;
-    startSpecialOffer: Date ;
+    startSpecialOffer: Date | null ;
     endSpecialOffer: Date | null;
     services: AdditionalService[];
     price: number;
-    customer: Customer;
+    customer: Customer | null;
     weekendHouse: WeekendHouse;
+    cancelled: boolean;
   }

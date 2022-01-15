@@ -29,8 +29,10 @@ public class CustomerDTO {
     @Pattern(regexp = "[0-9]+", message = "Phone must contain only digits")
     @NotEmpty(message = "Please fill out phone")
     private String phone;
+    private Integer penals;
 
-    public CustomerDTO(int id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone) {
+
+    public CustomerDTO(int id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, Integer penals) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -41,6 +43,7 @@ public class CustomerDTO {
         this.city = city;
         this.country = country;
         this.phone = phone;
+        this.penals = penals;
     }
 
     public CustomerDTO() { }
@@ -56,6 +59,7 @@ public class CustomerDTO {
         this.city = customer.getCity();
         this.country = customer.getCountry();
         this.phone = customer.getPhone();
+        this.penals = customer.getPenals();
     }
 
     public int getId() {
@@ -136,5 +140,13 @@ public class CustomerDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Integer getPenals() {
+        return penals;
+    }
+
+    public void setPenals(Integer penals) {
+        this.penals = penals;
     }
 }

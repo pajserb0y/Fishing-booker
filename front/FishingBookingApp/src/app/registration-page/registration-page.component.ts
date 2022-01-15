@@ -37,7 +37,8 @@ export class RegistrationPageComponent implements OnInit {
     address: "",
     city: "",
     country: "",
-    phone: ""
+    phone: "",
+    penals: 0
   }
   errorMessage : string  = '';
   repassword: string = '';

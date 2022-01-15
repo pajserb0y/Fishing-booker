@@ -19,6 +19,7 @@ import java.util.Set;
 @Entity
 public class Customer extends SystemUser implements UserDetails {
     private String hashCode;
+    private Integer penals;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
@@ -27,10 +28,11 @@ public class Customer extends SystemUser implements UserDetails {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<WeekendHouseReservation> weekendHouseReservations = new HashSet<WeekendHouseReservation>();
 
-    public Customer(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String hashCode) {
+    public Customer(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String hashCode, Integer penals) {
         super(id, firstName, lastName, email, username, password, address, city, country, phone, isDeleted, isActivated, roles);
         this.hashCode = hashCode;
         this.role = roles;
+        this.penals = penals;
     }
 
     public Customer() { }
@@ -49,6 +51,7 @@ public class Customer extends SystemUser implements UserDetails {
         this.country = customerDto.getCountry();
         this.phone = customerDto.getPhone();
         this.hashCode = generateHashCode(this.password);
+        this.penals = customerDto.getPenals();
     }
 
     public Role getRole() {
@@ -107,6 +110,21 @@ public class Customer extends SystemUser implements UserDetails {
         return this.isActivated;
     }
 
+    public Integer getPenals() {
+        return penals;
+    }
+
+    public void setPenals(Integer penals) {
+        this.penals = penals;
+    }
+
+    public Set<WeekendHouseReservation> getWeekendHouseReservations() {
+        return weekendHouseReservations;
+    }
+
+    public void setWeekendHouseReservations(Set<WeekendHouseReservation> weekendHouseReservations) {
+        this.weekendHouseReservations = weekendHouseReservations;
+    }
 
     public static Customer DtoToCustomerWithoutHashingPassword(CustomerDTO customerDto ) {
         Customer customer = new Customer();

@@ -11,6 +11,7 @@ import { WeekendHousesComponent } from './weekend-houses/weekend-houses.componen
 import { WeekendHouseProfileComponent } from './weekend-house-profile/weekend-house-profile.component';
 import { CustomerFutureWeekendHouseReservationsComponent } from './customer-future-weekend-house-reservations/customer-future-weekend-house-reservations.component';
 import { CustomerPastWeekendHouseReservationsComponent } from './customer-past-weekend-house-reservations/customer-past-weekend-house-reservations.component';
+import { SpecialOffersComponent } from './special-offers/special-offers.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -23,7 +24,10 @@ const routes: Routes = [
                               data: { role: ['ROLE_CUSTOMER', 'ROLE_INSTRUCTOR','ROLE_WEEKEND_HOUSE_OWNER','ROLE_BOAT_OWNER','ROLE_ADMIN']} },
   { path: 'customer-future-weekend-house-reservations', component: CustomerFutureWeekendHouseReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
   { path: 'customer-past-weekend-house-reservations', component: CustomerPastWeekendHouseReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
-  {path: 'weekend-house-profile', component: WeekendHouseProfileComponent, canActivate:[AuthGuard], data:{role : 'ROLE_WEEKEND_HOUSE_OWNER'}}
+  {path: 'weekend-house-profile', component: WeekendHouseProfileComponent, canActivate:[AuthGuard], data:{role : 'ROLE_WEEKEND_HOUSE_OWNER'}},
+  {path: 'special-offers', component: SpecialOffersComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'}}
+
+  
 ];
 
 @NgModule({

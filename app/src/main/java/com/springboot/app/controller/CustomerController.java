@@ -1,8 +1,8 @@
 package com.springboot.app.controller;
 
-import com.springboot.app.adapter.CustomerAdapter;
 import com.springboot.app.model.Customer;
 import com.springboot.app.model.dto.CustomerDTO;
+import com.springboot.app.model.dto.CustomerLoyalty;
 import com.springboot.app.model.dto.DeleteDTO;
 import com.springboot.app.service.CustomerService;
 import com.springboot.app.service.EmailService;
@@ -61,9 +61,9 @@ public class CustomerController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping(path = "/{username}")
-    public CustomerDTO getCustomerByUsername(@PathVariable String username) {
+    public CustomerLoyalty getCustomerByUsername(@PathVariable String username) {
         Customer customer = customerService.findByUsername(username);
-        return new CustomerDTO(customer);
+        return new CustomerLoyalty(customer);
     }
 
 //    @PreAuthorize("hasRole('CUSTOMER')")

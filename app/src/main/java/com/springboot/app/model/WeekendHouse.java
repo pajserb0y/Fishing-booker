@@ -30,18 +30,17 @@ public class WeekendHouse {
     private String imagePath; //ovo bi trebala biti lista??
 
 
-    @NotEmpty(message = "Please fill out number of beds in weekend house")
+    //@NotEmpty(message = "Please fill out number of beds in weekend house")
     private Integer bedNumber;
 
     //@NotEmpty(message = "Please fill out first name")
-    @OneToMany(mappedBy = "weekendHouse", fetch = FetchType.EAGER
-            , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "weekendHouse", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Term> freeTerms = new HashSet<>();
 
     @NotEmpty(message = "Please fill out rules")
     private String rules;
 
-    @NotEmpty(message = "Please fill out price lists")
+    //@NotEmpty(message = "Please fill out price lists")
     private Float price;
 
     //@NotEmpty(message = "Please fill out services")

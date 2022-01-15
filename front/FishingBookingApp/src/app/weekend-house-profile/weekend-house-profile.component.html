@@ -1,9 +1,9 @@
-<mat-grid-list  rowHeight="500px" cols="4" >
+<mat-grid-list style="z-index:1;" rowHeight="500px" cols="4" >
   <!--TABELA REZERVACIJA-->
 
   <mat-grid-tile colspan="3" style="border: solid">
    
-    <div style="margin-right: 55%; margin-top: -20%;">
+    <div style="margin-right: 55%; margin-top: 0%;">
       <h2>Weekend house reservations: </h2>  
       <table mat-table [dataSource]="allReservationsForWeekendHouse" class="mat_table_reservation" style="width: 240%;">
         <ng-container matColumnDef="startDateTime">
@@ -25,9 +25,9 @@
             <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="customer">
+          <ng-container  matColumnDef="customer">
             <mat-header-cell *matHeaderCellDef> Customer </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.customer.firstName}} {{ element.customer.lastName}} </mat-cell>
+            <mat-cell  *matCellDef="let element"> {{element.customer.firstName}} {{ element.customer.lastName}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="weekendHouse">
@@ -44,7 +44,7 @@
 
   <!-- CUSTOMER INFO -->
   <mat-grid-tile style="border: solid;" colspan="1">
-    <div style="margin-top: -35%; margin-right: -20%; font-size: larger;">
+    <div *ngIf=" weekendHouseReservation.customer !== null" style="margin-top: 20%; margin-LEFT: 10%; font-size: larger;">
           <h2>Customer informations</h2>
           <div class="infoDiv"><label><b>First name:</b>   {{weekendHouseReservation.customer.firstName}}</label></div>
           <div class="infoDiv"><label><b>Last name:</b>   {{weekendHouseReservation.customer.lastName}}</label></div>
@@ -58,69 +58,160 @@
 
   <!-- REZERVISANJE WEEKEND HOUSE-A -->
   <mat-grid-tile colspan="1"  style="border: solid">
-      <div class="reserve">
+      <div class="reserve" style="margin-top: 1%; margin-left: 10%;">
         <h1>Reserve now</h1>
         <form name="reserveform" #reserveForm="ngForm"> 
           <mat-form-field appearance="fill">
             <mat-label>Customer's name</mat-label>
-            <input matInput type="text" name="name"  [(ngModel)]="weekendHouseReservation.customer.firstName +' '+ weekendHouseReservation.customer.lastName" required disabled>
+            <input matInput type="text" name="name" id="reservation_customer_name" *ngIf=" weekendHouseReservation.customer !== null" [(ngModel)]="weekendHouseReservation.customer.firstName +' '+ weekendHouseReservation.customer.lastName" required disabled>
             <mat-icon matSuffix></mat-icon>
-          </mat-form-field>
-          
-          <mat-form-field appearance="fill">
+          </mat-form-field>  
+      
+            <mat-form-field appearance="fill">
               <mat-label>Select date</mat-label>
               <mat-date-range-input [min]="minDate" [formGroup]="range" [rangePicker]="picker">
-                <input matStartDate formControlName="start" placeholder="Start date">
-                <input matEndDate formControlName="end" placeholder="End date" (dateChange)="checkAvailability()">
+                <input matStartDate formControlName="start" placeholder="Start date" >
+                <input matEndDate formControlName="end" placeholder="End date"  (dateChange)="checkAvailability()">
               </mat-date-range-input>
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
-
+      
               <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
               <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Number of guests</mat-label>
-            <input matInput type="number" name="peopleNumber" [(ngModel)]="weekendHouseReservation.peopleNumber" required>
-            <mat-icon matSuffix></mat-icon>
-          </mat-form-field>
-    
-          <div>
-            <mat-label style="padding-top: 20px;" for="services">List of our services</mat-label>
-            <mat-select name="services" [(ngModel)]="weekendHouseReservation.services" multiple>
-              <mat-option checkboxPosition="before" *ngFor="let service of weekendHouse.additionalServices" [value]="service">
-                  {{ service.name }} - {{ service.name }}
-              </mat-option>
-            </mat-select>  
-        </div>
-    
-        <div><label><b>Total price:</b>   {{weekendHouseReservation.price}}</label></div>                
-    
-          <p style="margin-top: 70px;"><b>Before reserving, please check info you filled</b></p>
-          <div>
-            <button mat-raised-button color="accent" (click)="reserveWeekendHouse()" [disabled]="weekendHouse.id === 0 || range.value.start === null || range.value.end === null">Reserve</button>
-          </div> 
-    
-        </form>
-      </div>
-  </mat-grid-tile>
+            </mat-form-field>
+      
+            <div>
+            <mat-form-field appearance="fill" style="width: 150px;">
+              <mat-label>Number of guests</mat-label>
+              <input matInput type="number" value="1" min="1" [max]='weekendHouse.bedNumber' name="peopleNumber" [(ngModel)]="weekendHouseReservation.peopleNumber" required
+                      [disabled]=" range.value.start == null">
+              <mat-icon matSuffix></mat-icon>
+            </mat-form-field></div>
+      
+            <div>
+              <mat-form-field style="width: 150px;" appearance="fill">
+              <mat-label style="padding-top: 20px;" for="services">List of our services</mat-label>
+              <mat-select [disabled]=" range.value.start == null" name="services" [(ngModel)]="weekendHouseReservation.services" multiple>
+                <mat-option checkboxPosition="before" *ngFor="let service of weekendHouse.additionalServices" [value]="service" (onSelectionChange)="calculateTotalPrice($event)">
+                    {{ service.name }} - {{ service.price }}
+                </mat-option>
+              </mat-select> 
+            </mat-form-field>
+          </div>
 
+          <div ><label><b>Total price:</b>  <span *ngIf=" range.value.start != null">{{weekendHouseReservation.price}}</span></label></div>                
+      
+            <p style="margin-top: 20px;"><b>Before reserving, please check info you filled</b></p>
+            <div>
+              <button mat-raised-button color="accent" (click)="reserveWeekendHouse()" 
+                      [disabled]=" range.value.start === null || range.value.end === null || weekendHouseReservation.peopleNumber === 0 || weekendHouseReservation.customer === null ">Reserve</button>
+            </div>
+      
+          </form>
+        </div>
+  </mat-grid-tile>
 
    <!-- SPECIAL OFFER INFO -->
    <mat-grid-tile style="border: solid;" colspan="2">
-    <h1>Make Special Offer:</h1>
-    <div style="margin-top: -35%; margin-right: -20%; font-size: larger; position: static;">
-      
-  </div>
+    <div style="  font-size: larger; position: static;">
+      <h1>Make Special Offer:</h1>
+      <form name="specialOfferform" #specialOfferForm="ngForm"> 
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Select offer date</mat-label>
+            <mat-date-range-input [min]="minDate" [formGroup]="rangeOffer" [rangePicker]="pickerr">
+              <input matStartDate formControlName="startOffer" placeholder="Start date" >
+              <input matEndDate formControlName="endOffer" placeholder="End date"  (dateChange)="checkAvailability()">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="pickerr"></mat-datepicker-toggle>
+            <mat-date-range-picker #pickerr></mat-date-range-picker>
+            <mat-error *ngIf="rangeOffer.controls.startOffer.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="rangeOffer.controls.endOffer.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+          </mat-form-field>
+          </div>
+
+          <div>
+           <mat-form-field appearance="fill">
+            <mat-label>Select duration date</mat-label>
+            <mat-date-range-input [min]="minDate" [formGroup]="rangeDuration" [rangePicker]="pickerrr">
+              <input matStartDate formControlName="startDuration" placeholder="Start date for offer duration" >
+              <input matEndDate formControlName="endDuration" placeholder="End date for offer duration" >          
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="pickerrr"></mat-datepicker-toggle>
+            <mat-date-range-picker #pickerrr></mat-date-range-picker>
+            <mat-hint *ngIf="rangeOffer.value.startOffer < rangeDuration.value.endDuration">Duration date range has to be before spcial offer</mat-hint>
+            <mat-error *ngIf="rangeDuration.controls.startDuration.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="rangeDuration.controls.endDuration.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+          </mat-form-field> 
+        </div>
+
+          <div>
+            <mat-form-field appearance="fill" style="width: 100px;">
+              <mat-label>Number of guests</mat-label>
+              <input matInput type="number" value="1" min="1" [max]="weekendHouse.bedNumber" name="peopleNumber" [(ngModel)]="specialOffer.peopleNumber" required
+                      [disabled]=" rangeOffer.value.startOffer == null || rangeDuration.value.startDuration == null ">
+              <mat-icon matSuffix></mat-icon>
+            </mat-form-field>
+
+    
+
+            <mat-form-field style="width: 150px; padding-left: 15px;" appearance="fill">
+              <mat-label  for="services">List of our services</mat-label>
+              <mat-select [disabled]=" rangeOffer.value.startOffer == null || rangeDuration.value.startDuration == null" name="services" [(ngModel)]="specialOffer.services" multiple>
+                <mat-option checkboxPosition="before" *ngFor="let service of weekendHouse.additionalServices" [value]="service" (onSelectionChange)="calculateTotalPrice($event)">
+                    {{ service.name }} - {{ service.price }}
+                </mat-option>
+              </mat-select> 
+            </mat-form-field>
+          </div> 
+          <div>
+            <mat-form-field style="width: 150px;" appearance="fill">
+              <label><b>Total price:</b></label>
+            <input matInput type="number"  name="totalPriceOffer" [(ngModel)]="specialOffer.price" required
+                      [disabled]=" rangeOffer.value.startOffer === null || rangeDuration.value.startDuration === null ">
+            </mat-form-field>    
+          </div>
+          <p style="margin-top: 5px;"><b>Before making special offer, please check info you filled</b></p>
+          <div>
+            <button mat-raised-button color="accent" (click)="makeSpecialOffer()" 
+               [disabled]=" rangeOffer.value.startOffer === null || rangeOffer.value.endOffer === null  || rangeDuration.value.startDuration === null || rangeDuration.value.endDuration === null || specialOffer.peopleNumber === 0 || specialOffer.price === 0 || rangeOffer.value.startOffer < rangeDuration.value.endDuration ">Make special offer</button>
+          </div>
+      </form>
+    </div>
+
   </mat-grid-tile>
   <!--SLOBODNI TERMINI-->
   <mat-grid-tile style="border: solid;" colspan="1">
-    <h1>Add Available Terms:</h1>
+    <div style="  margin-left: 10%; font-size: larger; position: static;">
+      <h1>Add Available Terms:</h1>
+      <form name="FreeTermform" #FreeTermform="ngForm"> 
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Select available date range</mat-label>
+            <mat-date-range-input [min]="minDate" [formGroup]="rangeTerm" [rangePicker]="pickerrrr">
+              <input matStartDate formControlName="startTerm" placeholder="Start date" >
+              <input matEndDate formControlName="endTerm" placeholder="End date"  (dateChange)="checkAvailability()">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="pickerrrr"></mat-datepicker-toggle>
+            <mat-date-range-picker #pickerrrr></mat-date-range-picker>
+            <mat-error *ngIf="rangeTerm.controls.startTerm.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="rangeTerm.controls.endTerm.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+          </mat-form-field>
+          </div>
+
+          <p style="margin-top: 5px;"><b>Before adding available term, please check info you filled</b></p>
+          <div>
+            <button mat-raised-button color="accent" (click)="addFreeTerm()" 
+               [disabled]=" rangeTerm.value.startTerm === null || rangeTerm.value.endTerm === null ">Add free term</button>
+          </div>
+      </form>
+      </div>
+    
   </mat-grid-tile>
 
   <!--IZMENA WEEKEND HOUSE-A-->
   <mat-grid-tile style="border: solid;" colspan="4">
-    <div class="edit_weekend_house" style="margin-bottom: 15%; margin-top: 1  0%;" >
+    <div class="edit_weekend_house" style="margin-bottom: 20%; margin-top: 20%;" >
       <h1>Weekend House: "{{weekendHouse.name}}" informations</h1>
     <form  #editForm="ngForm">                       
       <mat-form-field appearance="fill" style="margin-right: 2%;">
@@ -136,28 +227,27 @@
           <mat-hint *ngIf="weekendHouse.address == ''">Required</mat-hint>
         </mat-form-field>
   
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="fill" style="margin-right: 2%;">
         <mat-label>Description</mat-label>
         <input matInput type="text" name="description" [(ngModel)]="weekendHouse.description" required>
         <mat-hint *ngIf="weekendHouse.description == ''">Required</mat-hint>
       </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-          <mat-label>Bed number</mat-label>
-          <input matInput type="text" name="bedNumber" [(ngModel)]="weekendHouse.bedNumber" required>
-        </mat-form-field>
+        <mat-form-field appearance="fill" style="margin-right: 2%;">
+            <mat-label>Bed number</mat-label>
+            <input matInput type="text" name="bedNumber" [(ngModel)]="weekendHouse.bedNumber" required>
+          </mat-form-field>
+      
+          <mat-form-field appearance="fill" style="margin-right: 2%;">
+            <mat-label>Rules</mat-label>
+            <textarea required matInput  name="rules" placeholder="Rules" [(ngModel)]="weekendHouse.rules"  rows="5" cols="20" ></textarea>
+            <mat-hint *ngIf="weekendHouse.rules == ''">Required</mat-hint>
+          </mat-form-field>
     
-        <mat-form-field appearance="fill" style="margin-right: 2%;">
-          <mat-label>Rules</mat-label>
-          <textarea required matInput  name="rules" placeholder="Rules" [(ngModel)]="weekendHouse.rules"  rows="10" cols="20" ></textarea>
-          <mat-hint *ngIf="weekendHouse.rules == ''">Required</mat-hint>
-        </mat-form-field>
-  
-        <mat-form-field appearance="fill" style="margin-right: 2%;">
-          <mat-label>Price</mat-label>
-          <input matInput  name="password" id="price" name="price" [(ngModel)]="weekendHouse.price" required>
-        </mat-form-field>
-  
+          <mat-form-field appearance="fill" style="margin-right: 2%;">
+            <mat-label>Price</mat-label>
+            <input matInput  name="password" id="price" name="price" [(ngModel)]="weekendHouse.price" required>
+          </mat-form-field>
+    
           <div>
           <mat-label style="padding-top: 20px;" for="additionalServices">List of services</mat-label>
           <mat-select name="additionalServices" [(ngModel)]="selectedServices" multiple>
@@ -179,7 +269,7 @@
               <button mat-raised-button color="warn" (click)="addNewService()" [disabled]="newService.name === '' || newService.price === 0" >Add</button> 
           </mat-form-field> 
       
-        <div style="margin-top: 3%;">
+        <div >
           <button mat-raised-button color="warn" (click)="editWeekendHouse()" [disabled]="!editForm.valid" >Edit</button>
         </div>
        </form>
