@@ -1,38 +1,31 @@
 package com.springboot.app.model;
 
-import com.springboot.app.model.dto.BoatFeedbackDTO;
+import com.springboot.app.model.dto.BoatComplaintDTO;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "boat_feedbacks")
-public class BoatFeedback {
+@Table(name = "boat_complaints")
+public class BoatComplaint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer gradeBoat;
     private String noteBoat;
-    private Integer gradeOwner;
     private String noteOwner;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "boat_reservation_id")
     private BoatReservation boatReservation;
 
-    private boolean isApproved;
 
-
-    public BoatFeedback() {
+    public BoatComplaint() {
     }
 
-    public BoatFeedback(BoatFeedbackDTO dto, BoatReservation boatReservation) {
+    public BoatComplaint(BoatComplaintDTO dto, BoatReservation boatReservation) {
         this.id = dto.getId();
-        this.gradeBoat = dto.getGradeBoat();
         this.noteBoat = dto.getNoteBoat();
-        this.gradeOwner = dto.getGradeOwner();
         this.noteOwner = dto.getNoteOwner();
         this.boatReservation = boatReservation;
-        this.isApproved = false;
     }
 
     public Integer getId() {
@@ -43,14 +36,6 @@ public class BoatFeedback {
         this.id = id;
     }
 
-    public Integer getGradeBoat() {
-        return gradeBoat;
-    }
-
-    public void setGradeBoat(Integer gradeBoat) {
-        this.gradeBoat = gradeBoat;
-    }
-
     public String getNoteBoat() {
         return noteBoat;
     }
@@ -59,28 +44,12 @@ public class BoatFeedback {
         this.noteBoat = noteBoat;
     }
 
-    public Integer getGradeOwner() {
-        return gradeOwner;
-    }
-
-    public void setGradeOwner(Integer gradeOwner) {
-        this.gradeOwner = gradeOwner;
-    }
-
     public String getNoteOwner() {
         return noteOwner;
     }
 
     public void setNoteOwner(String noteOwner) {
         this.noteOwner = noteOwner;
-    }
-
-    public boolean isApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(boolean approved) {
-        isApproved = approved;
     }
 
     public BoatReservation getBoatReservation() {

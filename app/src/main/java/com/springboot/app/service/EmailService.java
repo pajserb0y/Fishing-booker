@@ -1,5 +1,6 @@
 package com.springboot.app.service;
 
+import com.springboot.app.model.BoatReservation;
 import com.springboot.app.model.Customer;
 import com.springboot.app.model.WeekendHouseReservation;
 import org.springframework.mail.MailException;
@@ -12,4 +13,6 @@ public interface EmailService {
     void sendNotificationForDeletingToAdmin(String note, Integer id) throws MailException;
     @Async
     void sendNotificationForWeekendHouseReservation(WeekendHouseReservation reservation);
+
+    void sendNotificationForBoatReservation(BoatReservation reservation);
 }

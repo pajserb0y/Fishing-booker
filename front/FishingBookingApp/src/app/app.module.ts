@@ -55,6 +55,10 @@ import { CustomerPastWeekendHouseReservationsComponent } from './customer-past-w
 import { CustomerFutureWeekendHouseReservationsComponent } from './customer-future-weekend-house-reservations/customer-future-weekend-house-reservations.component';
 import { CommonModule } from '@angular/common';
 import { SpecialOffersComponent } from './special-offers/special-offers.component';
+import { CustomerFutureBoatReservationsComponent } from './customer-future-boat-reservations/customer-future-boat-reservations.component';
+import { PastBoatReservationsComponent } from './past-boat-reservations/past-boat-reservations.component';
+import { BoatOwnerService } from './service/boat-owner.service';
+import { WeekendHouseOwnerService } from './service/weekend-house-owner.service';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -99,7 +103,9 @@ const MaterialComponents = [
     WeekendHouseProfileComponent,
     CustomerPastWeekendHouseReservationsComponent,
     CustomerFutureWeekendHouseReservationsComponent,
-    SpecialOffersComponent
+    SpecialOffersComponent,
+    CustomerFutureBoatReservationsComponent,
+    PastBoatReservationsComponent
   ],
   imports: [
     BrowserModule,
@@ -113,7 +119,7 @@ const MaterialComponents = [
     CommonModule
     
   ],
-  providers: [CustomerService,WeekendHouseProfileComponent,
+  providers: [CustomerService, WeekendHouseProfileComponent, BoatOwnerService, WeekendHouseOwnerService,
                 { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
                 { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],
   bootstrap: [AppComponent]

@@ -1,5 +1,6 @@
 package com.springboot.app.service;
 
+import com.springboot.app.model.BoatReservation;
 import com.springboot.app.model.Customer;
 import com.springboot.app.model.WeekendHouseReservation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,18 @@ public class EmailServiceImpl implements EmailService {
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Successfully reservation");
         mail.setText("You have successfully reserved weekend house '" + reservation.getWeekendHouse().getName() +
+                "' for period from " + reservation.getStartDateTime() + " to " + reservation.getEndDateTime());
+
+        javaMailSender.send(mail);
+    }
+
+    @Override
+    public void sendNotificationForBoatReservation(BoatReservation reservation) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(reservation.getCustomer().getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Successfully reservation");
+        mail.setText("You have successfully reserved weekend house '" + reservation.getBoat().getName() +
                 "' for period from " + reservation.getStartDateTime() + " to " + reservation.getEndDateTime());
 
         javaMailSender.send(mail);

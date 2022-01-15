@@ -227,11 +227,16 @@ export class WeekendHousesComponent implements OnInit {
     tr = table.getElementsByTagName("mat-row") as HTMLCollectionOf<HTMLElement>;        
 
     var hideList = [];
+    var grade;
 
     for (i = 0; i < tr.length; i++) {
+      if (this.weekendHouses[i].avgGrade == null)
+        grade = ''
+      else
+        grade =  this.weekendHouses[i].avgGrade.toString()
       let allText = this.weekendHouses[i].weekendHouse.name.toString() + ' ' + this.weekendHouses[i].weekendHouse.address.toString() + ' ' + this.weekendHouses[i].weekendHouse.description.toString() + ' ' + 
                       this.weekendHouses[i].weekendHouse.bedNumber.toString() + ' ' + this.weekendHouses[i].weekendHouse.price.toString() + ' ' + this.weekendHouses[i].weekendHouse.weekendHouseOwner.firstName.toString() + ' ' +
-                      this.weekendHouses[i].weekendHouse.weekendHouseOwner.lastName.toString() + ' ' + this.weekendHouses[i].avgGrade.toString()
+                      this.weekendHouses[i].weekendHouse.weekendHouseOwner.lastName.toString() + ' ' + grade
       if (!(allText.toUpperCase().indexOf(this.searchField.toUpperCase()) > -1)) 
                 hideList.push(i);
     }    

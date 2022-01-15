@@ -1,5 +1,6 @@
 package com.springboot.app.repository;
 
+import com.springboot.app.model.Boat;
 import com.springboot.app.model.Term;
 import com.springboot.app.model.TermBoat;
 import com.springboot.app.model.WeekendHouse;
@@ -20,4 +21,6 @@ public interface TermBoatRepository extends JpaRepository<TermBoat, Integer> {
 //     @Query("SELECT r.weekendHouse.id FROM Term r WHERE (cast(:start as timestamp) NOT BETWEEN r.startDateTime AND r.endDateTime) " +
 //             "OR (cast(:end as timestamp) NOT BETWEEN r.startDateTime AND r.endDateTime)")
     List<Integer> findAllBoatIdsThatWorkForPeriod(@Param("start") Date start, @Param("end") Date end);
+
+    List<TermBoat> findByBoat(Boat boat);
 }

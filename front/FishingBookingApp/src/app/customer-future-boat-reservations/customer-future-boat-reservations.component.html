@@ -1,0 +1,40 @@
+<div style="margin-left: 10%; margin-top: 3%; margin-right: 10%;">
+    <h2>Boats future reservations</h2>    
+    
+    <!--  <div class="tableViewNonCustomer" *ngIf="role != 'ROLE_CUSTOMER' && role != 'ROLE_ADMIN' && role != 'ROLE_BOAT_OWNER' && role != 'ROLE_WEEKEND_HOUSE_OWNER' && role != 'ROLE_INSTRUCTOR'"> -->
+    <div class="tableView">
+    <table id="myTable" mat-table [dataSource]="boatReservations" class="mat-elevation-z8"  matSort (matSortChange)="sortData($event)">
+        <ng-container matColumnDef="boatName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='boatName'> Boat name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.boat.name}} </mat-cell>
+          </ng-container>
+        
+        <ng-container matColumnDef="startDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='startDate' > Start date </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.startDateTime}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="endDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='endDate'> End date </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.endDateTime}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="cancel">
+            <mat-header-cell *matHeaderCellDef>Cancel </mat-header-cell>
+            <mat-cell *matCellDef="let element"> 
+              <button mat-button *ngIf="!element.cancelled " (click)="cancelReservation(element)" [disabled]="!checkIsItMinThreeDaysBefore(element)">Cancel</button>
+              <ng-container *ngIf="element.cancelled " ><i>cancelled</i></ng-container>
+            </mat-cell>
+          </ng-container>
+    
+    
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected]="row.selected"></mat-row>
+      </table>
+    </div>
+    </div>
+    

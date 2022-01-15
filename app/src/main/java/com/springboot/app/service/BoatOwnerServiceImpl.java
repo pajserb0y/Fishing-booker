@@ -98,4 +98,14 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
         else
             return boatRepository.findAllByIdNotIn(boatIds);
     }
+
+    @Override
+    public Boat findBoatById(Integer id) {
+        return boatRepository.findById(id).get();
+    }
+
+    @Override
+    public List<TermBoat> findAllFreeTermsForBoat(Boat boat) {
+        return termBoatRepository.findByBoat(boat);
+    }
 }

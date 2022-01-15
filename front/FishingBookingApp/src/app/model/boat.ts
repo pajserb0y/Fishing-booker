@@ -1,10 +1,20 @@
+import { AdditionalService } from "./additional-service";
+import { BoatOwner } from "./boat-owner";
+import { BoatReservation } from "./boat-reservation";
+import { TermBoat } from "./term-boat";
+
 export interface Boat {
     id: number ;
     name: string ;
     address: string ;
-    details: string ;
-    freeTerms: Date[];
-    priceList: string;  //treba da bude neki item koji ce sadrzati opis i cenu kao dva polja
-    additionalServes: string;  //i ovo treba menjati
-    grade: number ;
+    description: string ;
+    imagePath : string;
+    freeTerms: TermBoat[];
+    price: number; 
+    rules: string;
+    capacity: number
+    additionalServices: AdditionalService[];
+    boatOwner: BoatOwner;
+    boatReservations: BoatReservation[];
+    avgGrade: number;
   }

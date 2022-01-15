@@ -18,11 +18,11 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
             "OR (r.endDateTime BETWEEN cast(:start as timestamp) AND cast(:end as timestamp))")
     List<Integer> findAllForDateRange(@Param("start") Date start, @Param("end") Date end);
 
-//    @Query("SELECT a FROM WeekendHouseReservation a WHERE a.customer.username = :username AND a.startDateTime > cast(NOW() as timestamp)")
-//    List<WeekendHouseReservation> findAllFutureReservationsByCustomerUsername(@Param("username") String username);
-//
-//    @Query("SELECT a FROM WeekendHouseReservation a WHERE a.customer.username = :username AND a.startDateTime <= cast(NOW() as timestamp)")
-//    List<WeekendHouseReservation> findAllPastReservationsByCustomerUsername(@Param("username") String username);
+    @Query("SELECT a FROM BoatReservation a WHERE a.customer.username = :username AND a.startDateTime > cast(NOW() as timestamp)")
+    List<BoatReservation> findAllFutureReservationsByCustomerUsername(@Param("username") String username);
+
+    @Query("SELECT a FROM BoatReservation a WHERE a.customer.username = :username AND a.startDateTime <= cast(NOW() as timestamp)")
+    List<BoatReservation> findAllPastReservationsByCustomerUsername(@Param("username") String username);
 //
 //    List<WeekendHouseReservation> findByWeekendHouse(WeekendHouse weekendHouse);
 }

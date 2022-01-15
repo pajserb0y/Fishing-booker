@@ -1,8 +1,6 @@
 package com.springboot.app.controller;
 
-import com.springboot.app.model.Boat;
-import com.springboot.app.model.BoatOwner;
-import com.springboot.app.model.WeekendHouse;
+import com.springboot.app.model.*;
 import com.springboot.app.model.dto.*;
 import com.springboot.app.service.BoatOwnerService;
 import com.springboot.app.service.EmailService;
@@ -88,5 +86,17 @@ public class BoatOwnerController {
         }
 
         return boatDTOS;
+    }
+
+    @PreAuthorize("hasAnyRole('BOAT_OWNER', 'CUSTOMER')")
+    @GetMapping(path = "/getAllFreeTermsForBoat/{id}")
+    public Set<TermBoatDTO> getAllFreeTermsForBoat(@PathVariable Integer id) {
+        Boat boat = boatOwnerService.findBoatById(id);
+        List<TermBoat> terms = boatOwnerService.findAllFreeTermsForBoat(boat);
+        Set<TermBoatDTO> termDtos = new HashSet<>();
+        for (TermBoat term : terms)
+            termDtos.add(new TermBoatDTO(term));
+
+        return termDtos;
     }
 }

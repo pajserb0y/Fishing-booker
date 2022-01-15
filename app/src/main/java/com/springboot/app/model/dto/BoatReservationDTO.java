@@ -1,5 +1,7 @@
 package com.springboot.app.model.dto;
 
+import com.springboot.app.model.AdditionalService;
+import com.springboot.app.model.BoatReservation;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -37,6 +39,24 @@ public class BoatReservationDTO {
     public BoatReservationDTO() {
     }
 
+    public BoatReservationDTO(BoatReservation res) {
+        this.id = res.getId();
+        this.startDateTime = res.getStartDateTime();
+        this.endDateTime = res.getEndDateTime();
+        this.capacity = res.getCapacity();
+        this.price = res.getPrice();
+
+        Set<AdditionalServiceDTO> services = new HashSet<>();
+        for (AdditionalService service : res.getServices())
+            services.add(new AdditionalServiceDTO(service));
+        this.services = services;
+
+        this.startSpecialOffer = res.getStartSpecialOffer();
+        this.endSpecialOffer = res.getEndSpecialOffer();
+        this.customer = new CustomerDTO(res.getCustomer());
+        this.boat = new BoatDTO(res.getBoat());
+        this.isCancelled = res.isCancelled();
+    }
 
 
     public Integer getId() {

@@ -23,7 +23,7 @@ import { ComplaintWeekendHouse } from '../model/complaint-weekend-house';
 export class WeekendHouseOwnerService {
 
   private _weekendHouseOwnerRegistration = '/api/weekendhouseowners';
-  private _weekendHouseRegistrationController = '/api/weekendHouseReservations';
+  private _weekendHouseReservationController = '/api/weekendHouseReservations';
   private _submitRegistration  = this._weekendHouseOwnerRegistration + '/create';
   private _getWeekendHouseOwnerByUsername  = this._weekendHouseOwnerRegistration + '/';
   private _getAllUsernames =  '/api/auth/getAllWeekendHouseOwnerUsernames';
@@ -32,12 +32,12 @@ export class WeekendHouseOwnerService {
   private _allWeekendHouses  = this._weekendHouseOwnerRegistration + '/allWeekendHouses';
   private _allWeekendHousesforOwner = this._weekendHouseOwnerRegistration + '/allWeekendHousesForOwner/';
   private _findAvailableWeekendHouses  = this._weekendHouseOwnerRegistration + '/findAvailableForDateRange';
-  private _makeReservation = this._weekendHouseRegistrationController + '/reserve';
-  private _getFutureReservationsForCustomerUsername = this._weekendHouseRegistrationController + '/getFutureForCustomerUsername/';
-  private _getPastReservationsForCustomerUsername = this._weekendHouseRegistrationController + '/getPastForCustomerUsername/';
-  private _cancelReservation = this._weekendHouseRegistrationController + '/cancel/';
-  private _sendFeedback = this._weekendHouseRegistrationController + '/sendFeedback';
-  private _sendComplaint = this._weekendHouseRegistrationController + '/sendComplaint';
+  private _makeReservation = this._weekendHouseReservationController + '/reserve';
+  private _getFutureReservationsForCustomerUsername = this._weekendHouseReservationController + '/getFutureForCustomerUsername/';
+  private _getPastReservationsForCustomerUsername = this._weekendHouseReservationController + '/getPastForCustomerUsername/';
+  private _cancelReservation = this._weekendHouseReservationController + '/cancel/';
+  private _sendFeedback = this._weekendHouseReservationController + '/sendFeedback';
+  private _sendComplaint = this._weekendHouseReservationController + '/sendComplaint';
   private _addFreeTerm = this._weekendHouseOwnerRegistration + '/_addFreeTerm/';      //greska?
   private _getAllFreeTermsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllFreeTermsForWeekendHouse/';
   private _getAllReservationsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllReservationsForWeekendHouse/';
