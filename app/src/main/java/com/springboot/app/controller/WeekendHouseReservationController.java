@@ -43,7 +43,7 @@ public class WeekendHouseReservationController {
         if(reservationDto.getCustomer() != null)
             if(reservationDto.getStartSpecialOffer() != null && reservationDto.getEndSpecialOffer() != null)
             {
-               //nekako treba vratiti bad request
+               //nekako treba vratiti bad request -> vrati null, pa onda na frontu ako je null izbaci neko obavestenje sa porukom
             }
         WeekendHouseReservation reservation = weekendHouseReservationService.reserve(new WeekendHouseReservation(reservationDto));
         if(reservation.getCustomer() != null)

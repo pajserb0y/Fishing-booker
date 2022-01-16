@@ -72,25 +72,25 @@
 <form name="rform" #registerForm="ngForm">       
 
 <mat-form-field appearance="fill">
-<mat-label>Select date</mat-label>
-<mat-date-range-input [min]="minDate" [formGroup]="range" [rangePicker]="picker">
-<input matStartDate formControlName="start" placeholder="Start date" >
-<input matEndDate formControlName="end" placeholder="End date"  (dateChange)="findAvailableBoatsForSelectedTerm()">
-</mat-date-range-input>
-<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-<mat-date-range-picker #picker></mat-date-range-picker>
+  <mat-label>Select date</mat-label>
+  <mat-date-range-input [min]="minDate" [formGroup]="range" [rangePicker]="picker">
+  <input matStartDate formControlName="start" placeholder="Start date" >
+  <input matEndDate formControlName="end" placeholder="End date"  (dateChange)="findAvailableBoatsForSelectedTerm()">
+  </mat-date-range-input>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
 
-<mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-<mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+  <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+  <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
 </mat-form-field>
 
 <div>
-<mat-form-field appearance="fill" style="width: 150px;">
-<mat-label>Number of travellers</mat-label>
-<input matInput type="number" value="1" min="1" [max]='selectedBoatInfo.capacity' name="capacity" [(ngModel)]="boatReservation.capacity" required
-      [disabled]="!show || range.value.start == null">
-<mat-icon matSuffix></mat-icon>
-</mat-form-field></div>
+  <mat-form-field appearance="fill" style="width: 150px;">
+    <mat-label>Number of travellers</mat-label>
+    <input matInput type="number" value="1" min="1" [max]='selectedBoatInfo.capacity' name="capacity" [(ngModel)]="boatReservation.capacity" required
+          [disabled]="!show || range.value.start == null">
+    <mat-icon matSuffix></mat-icon>
+  </mat-form-field></div>
 
 <div>
 <mat-form-field style="width: 150px;" appearance="fill">

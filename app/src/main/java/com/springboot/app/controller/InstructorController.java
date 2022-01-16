@@ -54,7 +54,7 @@ public class InstructorController {
     }
 
     @GetMapping(path = "/allFishingLessons")
-    public Set<FishingLessonDTO> getAllWeekendHouses() {
+    public Set<FishingLessonDTO> getAllFishingLessons() {
         List<FishingLesson> fishingLessons = instructorService.findAllFishingLessons();
         Set<FishingLessonDTO> fishingLessonDTOS = new HashSet<>();
         for (FishingLesson fishingLesson : fishingLessons) {
@@ -94,7 +94,7 @@ public class InstructorController {
         return fishingLessonDTOS;
     }
 
-    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PreAuthorize("hasAnyRole('INSTRUCTOR', 'CUSTOMER')")
     @GetMapping(path = "/getAllFreeTermsForFishingLesson/{id}")
     public Set<TermFishingLessonDTO> getAllFreeTermsForFishingLesson(@PathVariable Integer id) {
         FishingLesson fishingLesson = instructorService.findFishingLessonById(id);

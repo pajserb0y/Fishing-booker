@@ -6,6 +6,7 @@ package com.springboot.app.model;
 import com.springboot.app.model.dto.TermFishingLessonDTO;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -63,4 +64,5 @@ public class TermFishingLesson {
     public void setFishingLesson(FishingLesson fishingLesson) {
         this.fishingLesson = fishingLesson;
     }
+
 }

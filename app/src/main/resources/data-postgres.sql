@@ -131,3 +131,39 @@ INSERT INTO boat_feedbacks(grade_boat, grade_owner, is_approved, note_boat, note
 	VALUES (10, 8, true, 'Not bad', 'Okey', 1);
 INSERT INTO boat_feedbacks(grade_boat, grade_owner, is_approved, note_boat, note_owner, boat_reservation_id)
 	VALUES (9, 9, true, 'Very good', 'Nice', 2);
+
+
+--------- FISHING
+INSERT INTO instructor(address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, motive, role_id)
+	VALUES ('Sombroska 12', 'Subotica', 'Serbia', 'health.care.clinic.psw+borisa@gmail.com', 'Borisa', true, false, 'Stojic', '$2a$10$TwjDOLQ3Z3tRBeYs6soNZO8hn6b69ocY4lMCadxjaRP7RwGEDgeyW', '0654471567', 'borisa', false, 'Good', 4);
+
+
+INSERT INTO fishing_lesson(address, cancel_conditions, description, fishing_equipment, image_paths, max_number_of_people, name, price, rules, fishing_lesson_instructor_id)
+	VALUES ('Uzicka 213', 'Mogu da otkazem', 'Dodji pa proceni', 'Stap za pecanje, crvi', '123edas123', 4, 'River heaven', 3500, 'Be nice, be good', 1);
+INSERT INTO fishing_lesson(address, cancel_conditions, description, fishing_equipment, image_paths, max_number_of_people, name, price, rules, fishing_lesson_instructor_id)
+	VALUES ('Suboticka 23', 'Mogu da otkazem', 'Dodji pa proceni', 'Stap za pecanje, crvi', '123edas123', 6, 'Lake hell', 5500, 'Be nice, be good', 1);
+
+INSERT INTO fishing_lesson_reservation(end_date_time, end_special_offer, is_cancelled, max_people_number, price, start_date_time, start_special_offer, customer_id, fishing_lesson_id)
+	VALUES ('20.02.2022 14:00:00', null, false, 4, 28000, '13.02.2022 14:00:00', '21.02.2022 14:00:00', 2, 1);
+INSERT INTO fishing_lesson_reservation(end_date_time, end_special_offer, is_cancelled, max_people_number, price, start_date_time, start_special_offer, customer_id, fishing_lesson_id)
+	values ('27.02.2022 14:00:00', null, false, 2, 23000, '23.02.2022 14:00:00', '21.02.2022 14:00:00', 1, 2);
+
+INSERT INTO fishing_lesson_services(fishing_lesson_id, service_id) VALUES (1, 2);
+INSERT INTO fishing_lesson_services(fishing_lesson_id, service_id) VALUES (1, 5);
+INSERT INTO fishing_lesson_services(fishing_lesson_id, service_id) VALUES (2, 4);
+INSERT INTO fishing_lesson_services(fishing_lesson_id, service_id) VALUES (2, 3);
+INSERT INTO fishing_lesson_services(fishing_lesson_id, service_id) VALUES (2, 1);
+INSERT INTO fishing_lesson_services(fishing_lesson_id, service_id) VALUES (1, 1);
+
+INSERT INTO term_fishing_lesson(end_date_time, start_date_time, fishing_lesson_id) VALUES ('18.01.2022 14:00:00', '10.01.2022 14:00:00', 1);
+INSERT INTO term_fishing_lesson(end_date_time, start_date_time, fishing_lesson_id) VALUES ('22.01.2022 14:00:00', '20.01.2022 14:00:00', 1);
+INSERT INTO term_fishing_lesson(end_date_time, start_date_time, fishing_lesson_id) VALUES ('18.01.2022 14:00:00', '10.01.2022 14:00:00', 2);
+INSERT INTO term_fishing_lesson(end_date_time, start_date_time, fishing_lesson_id) VALUES ('18.02.2022 14:00:00', '02.02.2022 14:00:00', 2);
+
+INSERT INTO fishing_lesson_feedbacks(grade_fishing_lesson, grade_owner, is_approved, note_fishing_lesson, note_owner, fishing_lesson_reservation_id)
+	VALUES (6, 7, true, 'I have expected better services..', 'Okey', 1);
+INSERT INTO fishing_lesson_feedbacks(grade_fishing_lesson, grade_owner, is_approved, note_fishing_lesson, note_owner, fishing_lesson_reservation_id)
+	VALUES (10, 8, true, 'Not bad', 'Okey', 1);
+INSERT INTO fishing_lesson_feedbacks(grade_fishing_lesson, grade_owner, is_approved, note_fishing_lesson, note_owner, fishing_lesson_reservation_id)
+	VALUES (9, 9, true, 'Very good', 'Nice', 2);
+

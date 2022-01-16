@@ -132,7 +132,7 @@ export class BoatsComponent implements OnInit {
       this._weekendHouseOwnerService.weekendHouse = boat;
       this.router.navigateByUrl("weekend-house-profile")
     } */
-    if(this.role != 'ROLE_WEEKEND_HOUSE_OWNER')
+    if(this.role != 'ROLE_BOAT_OWNER')
     {
       this.selectedBoatInfo = boat
       this.boatReservation.price = this.selectedBoatInfo.price

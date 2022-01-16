@@ -59,6 +59,7 @@ import { CustomerFutureBoatReservationsComponent } from './customer-future-boat-
 import { CustomerPastBoatReservationsComponent } from './customer-past-boat-reservations/customer-past-boat-reservations.component';
 import { BoatOwnerService } from './service/boat-owner.service';
 import { WeekendHouseOwnerService } from './service/weekend-house-owner.service';
+import { InstructorService } from './service/instructor.service';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -119,7 +120,7 @@ const MaterialComponents = [
     CommonModule
     
   ],
-  providers: [CustomerService, WeekendHouseProfileComponent, BoatOwnerService, WeekendHouseOwnerService,
+  providers: [CustomerService, WeekendHouseProfileComponent, BoatOwnerService, WeekendHouseOwnerService, InstructorService,
                 { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
                 { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],
   bootstrap: [AppComponent]

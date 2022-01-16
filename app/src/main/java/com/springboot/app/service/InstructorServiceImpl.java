@@ -4,9 +4,7 @@ import com.springboot.app.model.*;
 import com.springboot.app.model.dto.DateTimeRangeDTO;
 import com.springboot.app.model.dto.FishingLessonDTO;
 import com.springboot.app.model.dto.InstructorDTO;
-import com.springboot.app.repository.FishingLessonRepository;
-import com.springboot.app.repository.FishingLessonReservationRepository;
-import com.springboot.app.repository.InstructorRepository;
+import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +15,17 @@ public class InstructorServiceImpl implements InstructorService {
     private final FishingLessonReservationRepository fishingLessonReservationRepository;
     private final FishingLessonRepository fishingLessonRepository;
     private final RoleService roleService;
+    private final FishingLessonFeedbackRepository fishingLessonFeedbackRepository;
+    private final TermFishingLessonRepository termFishingLessonRepository;
 
-    public InstructorServiceImpl(InstructorRepository instructorRepository, RoleService roleService, FishingLessonReservationRepository fishingLessonReservationRepository, FishingLessonRepository fishingLessonRepository) {
+    public InstructorServiceImpl(InstructorRepository instructorRepository, RoleService roleService, FishingLessonReservationRepository fishingLessonReservationRepository,
+                                 FishingLessonRepository fishingLessonRepository, FishingLessonFeedbackRepository fishingLessonFeedbackRepository, TermFishingLessonRepository termFishingLessonRepository) {
         this.instructorRepository = instructorRepository;
         this.roleService = roleService;
         this.fishingLessonReservationRepository = fishingLessonReservationRepository;
         this.fishingLessonRepository = fishingLessonRepository;
+        this.fishingLessonFeedbackRepository = fishingLessonFeedbackRepository;
+        this.termFishingLessonRepository = termFishingLessonRepository;
     }
 
     @Override
@@ -72,12 +75,17 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public List<FishingLesson> findAllFishingLessons() {
-        return null;
+        return fishingLessonRepository.findAll();
     }
 
     @Override
     public List<FishingLesson> findAllAvailableFishingLessons(DateTimeRangeDTO dateRange) {
-        return null;
+        List<Integer> fishingLessonIds = fishingLessonReservationRepository.findAllForDateRange(dateRange.getStart(), dateRange.getEnd());
+        fishingLessonIds.addAll(termFishingLessonRepository.findAllFishingLessonIdsThatWorkForPeriod(dateRange.getStart(), dateRange.getEnd()));
+        if (fishingLessonIds.isEmpty())
+            return findAllFishingLessons();
+        else
+            return fishingLessonRepository.findAllByIdNotIn(fishingLessonIds);
     }
 
     @Override
@@ -92,18 +100,17 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public Integer findAvgGradeForFishingLessonId(Integer id) {
-//        return fishingLessonFeedbackRepository.findAverageGradeBoatByBoatId(id);
-        return 0;
+        return fishingLessonFeedbackRepository.findAverageGradeFishingLessonByFishingLessonId(id);
     }
 
     @Override
     public FishingLesson findFishingLessonById(Integer id) {
-        return null;
+        return fishingLessonRepository.findById(id).get();
     }
 
     @Override
     public List<TermFishingLesson> findFreeTermsForFishingLesson(FishingLesson fishingLesson) {
-        return null;
+        return termFishingLessonRepository.findByFishingLesson(fishingLesson);
     }
 
     @Override

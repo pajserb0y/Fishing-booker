@@ -1,6 +1,10 @@
 package com.springboot.app.controller;
 
+import com.springboot.app.model.FishingLessonComplaint;
+import com.springboot.app.model.FishingLessonFeedback;
 import com.springboot.app.model.FishingLessonReservation;
+import com.springboot.app.model.dto.FishingLessonComplaintDTO;
+import com.springboot.app.model.dto.FishingLessonFeedbackDTO;
 import com.springboot.app.model.dto.FishingLessonReservationDTO;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.FishingLessonReservationService;
@@ -62,19 +66,19 @@ public class FishingLessonReservationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('CUSTOMER')")
-//    @PostMapping(path = "/sendFeedback")
-//    public ResponseEntity<?> sendFeedback(@RequestBody FishingLessonFeedbackDTO boatFeedbackDTO) {
-//        Optional<BoatReservation> res = fishingLessonReservationService.findById(boatFeedbackDTO.getBoatReservationId());
-//        fishingLessonReservationService.sendFeedback(new FishingLessonFeedback(boatFeedbackDTO, res.get()));
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
-//
-//    @PreAuthorize("hasRole('CUSTOMER')")
-//    @PostMapping(path = "/sendComplaint")
-//    public ResponseEntity<?> sendComplaint(@RequestBody FishingLessonComplaintDTO complaintDTO) {
-//        Optional<BoatReservation> res = fishingLessonReservationService.findById(complaintDTO.getBoatReservationId());
-//        fishingLessonReservationService.sendComplaint(new BoatComplaint(complaintDTO, res.get()));
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/sendFeedback")
+    public ResponseEntity<?> sendFeedback(@RequestBody FishingLessonFeedbackDTO fishingLessonFeedbackDTO) {
+        Optional<FishingLessonReservation> res = fishingLessonReservationService.findById(fishingLessonFeedbackDTO.getFishingLessonReservationId());
+        fishingLessonReservationService.sendFeedback(new FishingLessonFeedback(fishingLessonFeedbackDTO, res.get()));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/sendComplaint")
+    public ResponseEntity<?> sendComplaint(@RequestBody FishingLessonComplaintDTO complaintDTO) {
+        Optional<FishingLessonReservation> res = fishingLessonReservationService.findById(complaintDTO.getFishingLessonReservationId());
+        fishingLessonReservationService.sendComplaint(new FishingLessonComplaint(complaintDTO, res.get()));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }

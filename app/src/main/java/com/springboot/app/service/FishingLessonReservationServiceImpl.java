@@ -1,10 +1,7 @@
 package com.springboot.app.service;
 
 import com.springboot.app.model.*;
-import com.springboot.app.repository.CustomerRepository;
-import com.springboot.app.repository.FishingLessonRepository;
-import com.springboot.app.repository.FishingLessonReservationRepository;
-import com.springboot.app.repository.InstructorRepository;
+import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +14,17 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
     private final FishingLessonRepository fishingLessonRepository;
     private final CustomerRepository customerRepository;
     private final InstructorRepository instructorRepository;
+    private final FishingLessonFeedbackRepository fishingLessonFeedbackRepository;
+    private final FishingLessonComplaintRepository fishingLessonComplaintRepository;
 
-    public FishingLessonReservationServiceImpl(FishingLessonReservationRepository fishingLessonReservationRepository, FishingLessonRepository fishingLessonRepository, CustomerRepository customerRepository, InstructorRepository instructorRepository) {
+    public FishingLessonReservationServiceImpl(FishingLessonReservationRepository fishingLessonReservationRepository, FishingLessonRepository fishingLessonRepository, FishingLessonComplaintRepository fishingLessonComplaintRepository,
+                                               CustomerRepository customerRepository, InstructorRepository instructorRepository, FishingLessonFeedbackRepository fishingLessonFeedbackRepository) {
         this.fishingLessonReservationRepository = fishingLessonReservationRepository;
         this.fishingLessonRepository = fishingLessonRepository;
         this.customerRepository = customerRepository;
         this.instructorRepository = instructorRepository;
+        this.fishingLessonFeedbackRepository = fishingLessonFeedbackRepository;
+        this.fishingLessonComplaintRepository = fishingLessonComplaintRepository;
     }
 
     @Override
@@ -62,5 +64,20 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
             res.get().setCancelled(true);
             fishingLessonReservationRepository.save(res.get());
         }
+    }
+
+    @Override
+    public Optional<FishingLessonReservation> findById(Integer fishingLessonReservationId) {
+        return fishingLessonReservationRepository.findById(fishingLessonReservationId);
+    }
+
+    @Override
+    public void sendFeedback(FishingLessonFeedback fishingLessonFeedback) {
+        fishingLessonFeedbackRepository.save(fishingLessonFeedback);
+    }
+
+    @Override
+    public void sendComplaint(FishingLessonComplaint fishingLessonComplaint) {
+        fishingLessonComplaintRepository.save(fishingLessonComplaint);
     }
 }

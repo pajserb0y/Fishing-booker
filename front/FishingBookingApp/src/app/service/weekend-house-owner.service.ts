@@ -41,7 +41,7 @@ export class WeekendHouseOwnerService {
   private _sendComplaint = this._weekendHouseReservationController + '/sendComplaint';
   private _addFreeTerm = this._weekendHouseOwnerRegistration + '/_addFreeTerm/';      //greska?
 
-  private _makeReservationOrSpecialOffer = this._weekendHouseReservationController + '/reserve';   //gadja isti endpoint kao _makeReservation
+  private _makeReservationOrSpecialOffer = this._weekendHouseReservationController + '/reserve';   //gadja isti endpoint kao _makeReservation??
 
   private _getAllFreeTermsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllFreeTermsForWeekendHouse/';
   private _getAllReservationsForWeekendHouse = this._weekendHouseReservationController + '/getAllReservationsForWeekendHouse/';
