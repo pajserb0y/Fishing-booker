@@ -4,11 +4,11 @@ import { FishingLesson } from "./fishing-lesson";
 
 export interface FishingLessonReservationWithDateAsString {
     id: number ;
-    startDateTime: Date ;
-    endDateTime: Date;
+    startDateTime: string ;
+    endDateTime: string;
     maxPeopleNumber: number ;
-    startSpecialOffer: Date ;
-    endSpecialOffer: Date | null;
+    startSpecialOffer: string ;
+    endSpecialOffer: string | null;
     additionalServices: AdditionalService[];
     price: number;
     customer: Customer;

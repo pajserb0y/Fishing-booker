@@ -11,14 +11,14 @@
         <mat-menu #menu="matMenu">
         <button mat-menu-item [routerLink]="['customer-past-weekend-house-reservations']">Weekend houses</button>
         <button mat-menu-item [routerLink]="['customer-past-boat-reservations']">Boats</button>
-        <button mat-menu-item >Fishing lessons</button>
+        <button mat-menu-item [routerLink]="['customer-past-fishing-lesson-reservations']">Fishing lessons</button>
         </mat-menu>
 
     <button *ngIf="role == 'ROLE_CUSTOMER'" mat-button [matMenuTriggerFor]="menu1">My future reservations</button>
         <mat-menu #menu1="matMenu">
         <button mat-menu-item [routerLink]="['customer-future-weekend-house-reservations']">Weekend houses</button>
         <button mat-menu-item [routerLink]="['customer-future-boat-reservations']">Boats</button>
-        <button mat-menu-item >Fishing lessons</button>
+        <button mat-menu-item [routerLink]="['customer-future-fishing-lesson-reservations']">Fishing lessons</button>
         </mat-menu>
     
 

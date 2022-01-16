@@ -1,5 +1,8 @@
 package com.springboot.app.model.dto;
 
+import com.springboot.app.model.AdditionalService;
+import com.springboot.app.model.Customer;
+import com.springboot.app.model.FishingLesson;
 import com.springboot.app.model.FishingLessonReservation;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
@@ -42,8 +45,22 @@ public class FishingLessonReservationDTO {
 
     }
 
-    public FishingLessonReservationDTO(FishingLessonReservation reservation) {
+    public FishingLessonReservationDTO(FishingLessonReservation res) {
+        this.id = res.getId();
+        this.startDateTime = res.getStartDateTime();
+        this.endDateTime = res.getEndDateTime();
+        this.maxPeopleNumber = res.getMaxPeopleNumber();
+        Set<AdditionalServiceDTO> services = new HashSet<>();
+        for (AdditionalService service : res.getAdditionalServices())
+            services.add(new AdditionalServiceDTO(service));
+        this.additionalServices = services;
 
+        this.startSpecialOffer = res.getStartSpecialOffer();
+        this.endSpecialOffer = res.getEndSpecialOffer();
+        this.price = res.getPrice();
+        this.customer =  new CustomerDTO(res.getCustomer());
+        this.fishingLesson = new FishingLessonDTO(res.getFishingLesson());
+        this.isCancelled = res.isCancelled();
     }
 
 

@@ -76,6 +76,8 @@ public class FishingLessonDTO {
         this.description = fishingLesson.getDescription();
         this.rules = fishingLesson.getRules();
         this.maxNumberOfPeople = fishingLesson.getMaxNumberOfPeople();
+        this.cancelConditions = fishingLesson.getCancelConditions();
+        this.fishingEquipment = fishingLesson.getFishingEquipment();
 
 //        Set<TermDto> terms = new HashSet<>();
 //        for (Term term : house.getFreeTerms())

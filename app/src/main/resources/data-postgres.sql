@@ -147,6 +147,12 @@ INSERT INTO fishing_lesson_reservation(end_date_time, end_special_offer, is_canc
 	VALUES ('20.02.2022 14:00:00', null, false, 4, 28000, '13.02.2022 14:00:00', '21.02.2022 14:00:00', 2, 1);
 INSERT INTO fishing_lesson_reservation(end_date_time, end_special_offer, is_cancelled, max_people_number, price, start_date_time, start_special_offer, customer_id, fishing_lesson_id)
 	values ('27.02.2022 14:00:00', null, false, 2, 23000, '23.02.2022 14:00:00', '21.02.2022 14:00:00', 1, 2);
+INSERT INTO fishing_lesson_reservation(end_date_time, end_special_offer, is_cancelled, max_people_number, price, start_date_time, start_special_offer, customer_id, fishing_lesson_id)
+	values ('27.03.2022 14:00:00', null, false, 2, 23000, '23.03.2022 14:00:00', '21.02.2022 14:00:00', 1, 2);
+INSERT INTO fishing_lesson_reservation(end_date_time, end_special_offer, is_cancelled, max_people_number, price, start_date_time, start_special_offer, customer_id, fishing_lesson_id)
+	values ('07.01.2022 14:00:00', null, false, 2, 23000, '03.01.2022 14:00:00', '21.02.2022 14:00:00', 1, 2);
+INSERT INTO fishing_lesson_reservation(end_date_time, end_special_offer, is_cancelled, max_people_number, price, start_date_time, start_special_offer, customer_id, fishing_lesson_id)
+	values ('04.01.2022 14:00:00', null, false, 2, 23000, '01.01.2022 14:00:00', '21.02.2022 14:00:00', 1, 1);
 
 INSERT INTO fishing_lesson_services(fishing_lesson_id, service_id) VALUES (1, 2);
 INSERT INTO fishing_lesson_services(fishing_lesson_id, service_id) VALUES (1, 5);

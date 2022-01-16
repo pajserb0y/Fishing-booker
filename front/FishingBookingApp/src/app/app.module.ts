@@ -60,6 +60,8 @@ import { CustomerPastBoatReservationsComponent } from './customer-past-boat-rese
 import { BoatOwnerService } from './service/boat-owner.service';
 import { WeekendHouseOwnerService } from './service/weekend-house-owner.service';
 import { InstructorService } from './service/instructor.service';
+import { CustomerFutureFishingLessonReservationsComponent } from './customer-future-fishing-lesson-reservations/customer-future-fishing-lesson-reservations.component';
+import { CustomerPastFishingLessonReservationsComponent } from './customer-past-fishing-lesson-reservations/customer-past-fishing-lesson-reservations.component';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -106,7 +108,9 @@ const MaterialComponents = [
     CustomerFutureWeekendHouseReservationsComponent,
     SpecialOffersComponent,
     CustomerFutureBoatReservationsComponent,
-    CustomerPastBoatReservationsComponent
+    CustomerPastBoatReservationsComponent,
+    CustomerFutureFishingLessonReservationsComponent,
+    CustomerPastFishingLessonReservationsComponent
   ],
   imports: [
     BrowserModule,
