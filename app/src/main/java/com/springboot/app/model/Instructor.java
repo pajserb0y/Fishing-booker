@@ -22,6 +22,17 @@ public class Instructor extends SystemUser implements UserDetails {
         this.role = roles;
     }
 
+    public void edit(InstructorDTO dto) {
+
+        this.phone = dto.getPhone();
+        this.country = dto.getCountry();
+        this.city = dto.getCity();
+        this.address = dto.getAddress();
+        this.lastName = dto.getLastName();
+        this.firstName = dto.getFirstName();
+        this.motive = dto.getMotive();
+    }
+
     public Instructor() {
         super();
     }

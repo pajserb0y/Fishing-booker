@@ -97,6 +97,30 @@ public class FishingLesson {
         this.instructor = new Instructor(dto.getInstructor());
     }
 
+    public void edit(FishingLessonDTO dto) {
+        this.name = dto.getName();
+        this.address = dto.getAddress();
+        this.description = dto.getDescription();
+        this.imagePaths = dto.getImagePaths();
+        this.fishingEquipment = dto.getFishingEquipment();
+        this.price = dto.getPrice();
+        this.maxNumberOfPeople = dto.getMaxNumberOfPeople();
+        this.rules = dto.getRules();
+        this.cancelConditions = dto.getCancelConditions();
+
+        Set<TermFishingLesson> terms = new HashSet<>();
+        for (TermFishingLessonDTO termDto : dto.getFreeTerms())
+            terms.add(new TermFishingLesson(termDto));
+        this.freeTerms = terms;
+
+        Set<AdditionalService> services = new HashSet<>();
+        for (AdditionalServiceDTO service : dto.getAdditionalServices())
+            services.add(new AdditionalService(service));
+        this.additionalServices = services;
+
+        this.instructor = new Instructor(dto.getInstructor());
+    }
+
     public String getImagePaths() {
         return imagePaths;
     }

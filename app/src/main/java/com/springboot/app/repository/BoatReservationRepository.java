@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,9 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
 
     @Query("SELECT a FROM BoatReservation a WHERE a.customer.username = :username AND a.startDateTime <= cast(NOW() as timestamp)")
     List<BoatReservation> findAllPastReservationsByCustomerUsername(@Param("username") String username);
+
+    @Query("SELECT res.id FROM BoatReservation res WHERE res.boat.id = :id AND res.startDateTime > cast(NOW() as timestamp)")
+    List<Integer> existsFutureReservation(@Param("id") Integer boatId);
 //
 //    List<WeekendHouseReservation> findByWeekendHouse(WeekendHouse weekendHouse);
 }

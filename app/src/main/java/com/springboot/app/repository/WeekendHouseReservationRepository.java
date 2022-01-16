@@ -24,4 +24,7 @@ public interface WeekendHouseReservationRepository extends JpaRepository<Weekend
     List<WeekendHouseReservation> findAllPastReservationsByCustomerUsername(@Param("username") String username);
 
     List<WeekendHouseReservation> findByWeekendHouse(WeekendHouse weekendHouse);
+
+    @Query("SELECT res.id FROM BoatReservation res WHERE res.boat.id = :id AND res.startDateTime > cast(NOW() as timestamp)")
+    List<Integer> existsFutureReservation(@Param("id") Integer houseId);
 }

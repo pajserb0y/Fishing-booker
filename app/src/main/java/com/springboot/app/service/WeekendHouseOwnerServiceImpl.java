@@ -81,6 +81,20 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
         }
     }
 
+    @Override
+    public boolean removeWeekendHouse(Integer weekendHouseId) {
+        Optional<WeekendHouse> weekendHouse = weekendHouseRepository.findById(weekendHouseId);
+
+        if (!weekendHouse.isPresent())
+            return false;
+
+        if (!weekendHouseReservationRepository.existsFutureReservation(weekendHouse.get().getId()).isEmpty())
+            return false;
+
+        weekendHouseRepository.delete(weekendHouse.get());
+        return true;
+    }
+
     public List<WeekendHouse> findAllWeekendHouses() {
         return weekendHouseRepository.findAll();
     }
