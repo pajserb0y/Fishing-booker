@@ -80,6 +80,20 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
     }
 
     @Override
+    public boolean removeBoat(Integer boatId) {
+        Optional<Boat> boat = boatRepository.findById(boatId);
+
+        if (!boat.isPresent())
+            return false;
+
+        if (!boatReservationRepository.existsFutureReservation(boat.get().getId()).isEmpty())
+            return false;
+
+        boatRepository.delete(boat.get());
+        return true;
+    }
+
+    @Override
     public List<Boat> findAllBoats() {
         return boatRepository.findAll();
     }

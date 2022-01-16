@@ -23,6 +23,8 @@ public interface BoatOwnerService {
 
     void setWantedToDelete(int id);
 
+    boolean removeBoat(Integer boatId);
+
     List<Boat> findAllBoats();
 
     Integer findAvgGradeForBoatId(Integer id);

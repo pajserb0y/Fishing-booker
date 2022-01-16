@@ -8,6 +8,8 @@ import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class InstructorServiceImpl implements InstructorService {
 
@@ -44,33 +46,52 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public Instructor changeInstructor(InstructorDTO instructorDTO) {
-        Instructor instructor = findByUsername(instructorDTO.getUsername());
+        Optional<Instructor> instructor = instructorRepository.findById(instructorDTO.getId());
 
-        instructor.setPhone(instructorDTO.getPhone());
-        instructor.setCountry(instructorDTO.getCountry());
-        instructor.setCity(instructorDTO.getCity());
-        instructor.setAddress(instructorDTO.getAddress());
-        instructor.setLastName(instructorDTO.getLastName());
-        instructor.setFirstName(instructorDTO.getFirstName());
-        instructor.setMotive(instructorDTO.getMotive());
+        if (instructor.isPresent()) {
+            instructor.get().edit(instructorDTO);
+            instructorRepository.save(instructor.get());
+            return instructor.get();
+        }
 
-        saveInstructor(instructor);
         return null;
     }
 
     @Override
     public void addFishingLessonForInstructor(FishingLessonDTO fishingLessonDTO, Integer id) {
+        FishingLesson fishingLesson = new FishingLesson(fishingLessonDTO);
+        Optional<Instructor> instructor = instructorRepository.findById(id);
 
+        if (instructor.isPresent()) {
+            fishingLesson.setInstructor(instructor.get());
+            fishingLessonRepository.save(fishingLesson);
+        }
     }
 
     @Override
     public FishingLesson changeFishingLesson(FishingLessonDTO fishingLessonDTO) {
-        return null;
+        Optional<FishingLesson> fishingLesson = fishingLessonRepository.findById(fishingLessonDTO.getId());
+
+        if (fishingLesson.isPresent()) {
+            fishingLesson.get().edit(fishingLessonDTO);
+            fishingLessonRepository.save(fishingLesson.get());
+        }
+
+        return fishingLesson.get();
     }
 
     @Override
-    public boolean removeFishingLesson(Integer id) {
-        return false;
+    public boolean removeFishingLesson(Integer fishingLessonId) {
+        Optional<FishingLesson> fishingLesson = fishingLessonRepository.findById(fishingLessonId);
+
+        if (!fishingLesson.isPresent())
+            return false;
+
+        if (!fishingLessonReservationRepository.existsFutureReservation(fishingLesson.get().getId()).isEmpty())
+            return false;
+
+        fishingLessonRepository.delete(fishingLesson.get());
+        return true;
     }
 
     @Override
@@ -90,12 +111,15 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public List<FishingLesson> findAllFishingLessonsForInstructor(Integer instructorId) {
-        return null;
+        return fishingLessonRepository.findAllByInstructorId(instructorId);
     }
 
     @Override
     public List<FishingLessonReservation> findAllReservationsForInstructor(Integer instructorId, boolean futureOnly) {
-        return null;
+        if (futureOnly)
+            return fishingLessonReservationRepository.findOnlyFutureReservationsForInstructor(instructorId);
+        else
+            return fishingLessonReservationRepository.findAllReservationsForInstructor(instructorId);
     }
 
     @Override
@@ -115,6 +139,6 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public List<FishingLessonReservation> findAllReservationsForFishingLesson(Integer fishingLessonId) {
-        return null;
+        return fishingLessonReservationRepository.findAllByFishingLessonId(fishingLessonId);
     }
 }
