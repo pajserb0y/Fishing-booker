@@ -11,6 +11,7 @@ import { WeekendHouseProfileComponent } from '../weekend-house-profile/weekend-h
 import {MatSort, Sort} from '@angular/material/sort';
 import { CustomerService } from '../service/customer.service';
 import { WeekendHouseWithAvgGrade } from '../model/weekend-house-with-avg-grade';
+import { Customer } from '../model/customer';
 
 @Component({
   selector: 'app-weekend-houses',
@@ -74,7 +75,10 @@ export class WeekendHousesComponent implements OnInit {
       city: "",
       country: "",
       phone: "",
-      penals: 0
+      penals: 0,
+      subscribedWeekendHouses: [],
+      subscribedBoats: [],
+      subscribedFishingLessons: []
     },
     weekendHouse: this.selectedHouseInfo,
     cancelled: false
@@ -82,6 +86,7 @@ export class WeekendHousesComponent implements OnInit {
   role : string|null = localStorage.getItem('role');
   searchField: string = '';
   show: boolean = false;
+  currentCustomer! : Customer;
   
 
   constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService, private router: Router, private _snackBar: MatSnackBar, public _customerService: CustomerService) { }
@@ -127,6 +132,7 @@ export class WeekendHousesComponent implements OnInit {
     this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
               .subscribe(data => {
                 this.houseReservation.customer = data.customer
+                this.currentCustomer = data.customer
                 console.log('Dobio: ', data)},
               error => this.errorMessage = <any>error);  
   }
@@ -146,6 +152,24 @@ export class WeekendHousesComponent implements OnInit {
         this.getAllFreeTerms();
     }    
     this.show = true;
+  }
+
+  subscribe() {
+    var exists = false;
+    for (var house of this.currentCustomer.subscribedWeekendHouses)
+      if(house.id == this.selectedHouseInfo.id) {
+        exists = true;
+        break;
+      }
+    if(!exists) {
+      this._customerService.subscribeCustomerForWeekendHouse(localStorage.getItem('username') || '', this.selectedHouseInfo.id)
+                .subscribe(data =>  {
+                  this._snackBar.open('You are succesfully subscribed for this house', 'Close', {duration: 5000})
+                    window.location.reload();
+                  },
+                    error => this.errorMessage = <any>error); 
+    } else 
+        this._snackBar.open('You are already subscribed for this house', 'Close', {duration: 5000});
   }
 
   findAvailableHousesForSelectedTerm() {

@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { subscribeTo } from 'rxjs/internal-compatibility';
+import { Boat } from '../model/boat';
 import { Customer } from '../model/customer';
 import { CustomerLoyalty } from '../model/customer-loyalty';
 import { DeleteDto } from '../model/deleteDto';
+import { FishingLesson } from '../model/fishing-lesson';
 import { Instructor } from '../model/instructor';
+import { WeekendHouse } from '../model/weekend-house';
 import { BoatOwnerService } from '../service/boat-owner.service';
 import { CustomerService } from '../service/customer.service';
+import { InstructorService } from '../service/instructor.service';
 import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
 
 @Component({
@@ -16,6 +20,7 @@ import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service
 })
 export class UserProfileComponent implements OnInit {
 
+  displayedColumns: string[] = ['name', 'address', 'description', 'owner', 'price'];
   customer: CustomerLoyalty = {
     customer : {
       id: 0,
@@ -28,11 +33,18 @@ export class UserProfileComponent implements OnInit {
       city: "",
       country: "",
       phone: "",
-      penals: 0
+      penals: 0,
+      subscribedWeekendHouses: [],
+      subscribedBoats: [],
+      subscribedFishingLessons: []
     },
     points: 0,
     category: ""
   };
+  subscriptions : (WeekendHouse | Boat | FishingLesson)[] = [];
+  subscriptionsHouse : WeekendHouse[] = [];
+  subscriptionsBoat : Boat[] = [];
+  subscriptionsLesson : FishingLesson[] = [];
   repassword: string = "";
   nonCustomer!: Instructor;
   oldCustomer!: Customer;
@@ -43,7 +55,8 @@ export class UserProfileComponent implements OnInit {
   };
   role: string|null = localStorage.getItem('role');
 
-  constructor(public _customerService: CustomerService,private _boatOwnerService: BoatOwnerService,private _weekendHouseOwnerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar) { }
+  constructor(public _customerService: CustomerService,private _boatOwnerService: BoatOwnerService,private _weekendHouseOwnerService: WeekendHouseOwnerService,
+                    private _instructorService: InstructorService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getUserByUsername();
@@ -129,6 +142,11 @@ export class UserProfileComponent implements OnInit {
                   this.repassword = this.customer.customer.password;
                   this.oldCustomer = data.customer
                   this.deleteDto.id = this.customer.customer.id
+
+                  this.subscriptions = []
+                  this.subscriptionsHouse = data.customer.subscribedWeekendHouses
+                  this.subscriptionsBoat = data.customer.subscribedBoats
+                  this.subscriptionsLesson = data.customer.subscribedFishingLessons
                   console.log('Dobio: ', data)},
                 error => this.errorMessage = <any>error);  
     }
@@ -164,6 +182,30 @@ export class UserProfileComponent implements OnInit {
     {
       
     }  
+  }
+
+  unsubscribeHouse(entity : WeekendHouse) {
+    this._customerService.unsubscribeHouse(this.customer.customer.username, entity.id)
+      .subscribe(data => {
+                  const index = this.subscriptionsHouse.indexOf(entity);
+                  this.subscriptionsHouse.splice(index, 1);},
+                error => this.errorMessage = <any>error); 
+  }
+
+  unsubscribeBoat(entity : Boat) {
+    this._customerService.unsubscribeBoat(this.customer.customer.username, entity.id)
+      .subscribe(data => {
+                  const index = this.subscriptionsBoat.indexOf(entity);
+                  this.subscriptionsBoat.splice(index, 1);},
+                error => this.errorMessage = <any>error); 
+  }
+
+  unsubscribeLesson(entity : FishingLesson) {
+    this._customerService.unsubscribeLesson(this.customer.customer.username, entity.id)
+      .subscribe(data => {
+                  const index = this.subscriptionsLesson.indexOf(entity);
+                  this.subscriptionsLesson.splice(index, 1);},
+                error => this.errorMessage = <any>error); 
   }
 
   delete() {

@@ -1,1 +1,60 @@
-<p>special-offers works!</p>
+<div style="margin-left: 10%; margin-top: 3%; margin-right: 10%;">
+    <h2>Special offers</h2>    
+    
+    <!--  <div class="tableViewNonCustomer" *ngIf="role != 'ROLE_CUSTOMER' && role != 'ROLE_ADMIN' && role != 'ROLE_BOAT_OWNER' && role != 'ROLE_WEEKEND_HOUSE_OWNER' && role != 'ROLE_INSTRUCTOR'"> -->
+    <div class="tableView">
+    <table id="myTable" mat-table [dataSource]="specialOffers" class="mat-elevation-z8"  matSort (matSortChange)="sortData($event)">
+        <ng-container matColumnDef="entity">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='entity'> Entity </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.entityType}} </mat-cell>
+          </ng-container>
+
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='name'> Entity name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.entity.name}} </mat-cell>
+          </ng-container>
+
+        <!-- <ng-container matColumnDef="peopleNumber">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='peopleNumber'> People number </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.entity.peopleNumber}} </mat-cell>
+          </ng-container> -->
+        
+        <ng-container matColumnDef="startDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='startDate' > Start date </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.startDateTime}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="endDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='endDate'> End date </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.endDateTime}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="originalPrice">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='originalPrice'> Original price </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.originalPrice}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="discountPrice">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='discountPrice'> Discount price </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.discountPrice}} </mat-cell>
+          </ng-container>
+
+
+          <ng-container matColumnDef="reserveNow">
+            <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+            <mat-cell *matCellDef="let element"> 
+              <button mat-button  (click)="reserveNow(element)" [disabled]="customer.penals > 2">Reserve now</button>
+            </mat-cell>
+          </ng-container>
+    
+    
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+      </table>
+    </div>
+    </div>
+    

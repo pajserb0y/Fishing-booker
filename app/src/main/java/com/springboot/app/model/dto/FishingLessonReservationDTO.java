@@ -58,7 +58,10 @@ public class FishingLessonReservationDTO {
         this.startSpecialOffer = res.getStartSpecialOffer();
         this.endSpecialOffer = res.getEndSpecialOffer();
         this.price = res.getPrice();
-        this.customer =  new CustomerDTO(res.getCustomer());
+        if(res.getCustomer() != null)
+            this.customer = new CustomerDTO(res.getCustomer());
+        else
+            this.customer = null;
         this.fishingLesson = new FishingLessonDTO(res.getFishingLesson());
         this.isCancelled = res.isCancelled();
     }

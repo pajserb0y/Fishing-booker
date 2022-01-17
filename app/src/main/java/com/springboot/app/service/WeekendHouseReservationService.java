@@ -24,4 +24,6 @@ public interface WeekendHouseReservationService {
     Optional<WeekendHouseReservation> findById(Integer weekendHouseReservationId);
 
     void sendComplaint(WeekendHouseComplaint weekendHouseComplaint);
+
+    List<WeekendHouseReservation> getCurrentSpecialOffers();
 }

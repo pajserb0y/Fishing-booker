@@ -1,10 +1,13 @@
 package com.springboot.app.model.dto;
 
-import com.springboot.app.model.Customer;
+import com.springboot.app.model.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CustomerDTO {
     private int id;
@@ -30,6 +33,10 @@ public class CustomerDTO {
     @NotEmpty(message = "Please fill out phone")
     private String phone;
     private Integer penals;
+
+    private Set<WeekendHouseDTO> subscribedWeekendHouses;
+    private Set<BoatDTO> subscribedBoats;
+    private Set<FishingLessonDTO> subscribedFishingLessons;
 
 
     public CustomerDTO(int id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, Integer penals) {
@@ -60,6 +67,21 @@ public class CustomerDTO {
         this.country = customer.getCountry();
         this.phone = customer.getPhone();
         this.penals = customer.getPenals();
+
+        Set<WeekendHouseDTO> houses = new HashSet<>();
+        for (WeekendHouse w : customer.getSubscribedWeekendHouses())
+            houses.add(new WeekendHouseDTO(w));
+        this.subscribedWeekendHouses = houses;
+
+        Set<BoatDTO> boats = new HashSet<>();
+        for (Boat w : customer.getSubscribedBoats())
+            boats.add(new BoatDTO(w));
+        this.subscribedBoats = boats;
+
+        Set<FishingLessonDTO> lessons = new HashSet<>();
+        for (FishingLesson w : customer.getSubscribedFishingLessons())
+            lessons.add(new FishingLessonDTO(w));
+        this.subscribedFishingLessons = lessons;
     }
 
     public int getId() {
@@ -148,5 +170,29 @@ public class CustomerDTO {
 
     public void setPenals(Integer penals) {
         this.penals = penals;
+    }
+
+    public Set<WeekendHouseDTO> getSubscribedWeekendHouses() {
+        return subscribedWeekendHouses;
+    }
+
+    public void setSubscribedWeekendHouses(Set<WeekendHouseDTO> subscribedWeekendHouses) {
+        this.subscribedWeekendHouses = subscribedWeekendHouses;
+    }
+
+    public Set<BoatDTO> getSubscribedBoats() {
+        return subscribedBoats;
+    }
+
+    public void setSubscribedBoats(Set<BoatDTO> subscribedBoats) {
+        this.subscribedBoats = subscribedBoats;
+    }
+
+    public Set<FishingLessonDTO> getSubscribedFishingLessons() {
+        return subscribedFishingLessons;
+    }
+
+    public void setSubscribedFishingLessons(Set<FishingLessonDTO> subscribedFishingLessons) {
+        this.subscribedFishingLessons = subscribedFishingLessons;
     }
 }

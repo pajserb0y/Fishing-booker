@@ -30,10 +30,18 @@ export class InstructorService {
   private _getPastReservationsForCustomerUsername = this._fishingLessonReservationController + '/getPastForCustomerUsername/';
   private _sendFeedback = this._fishingLessonReservationController + '/sendFeedback';
   private _sendComplaint = this._fishingLessonReservationController + '/sendComplaint';
+  private _getCurrentSpecialOffers = this._fishingLessonReservationController + '/getCurrentSpecialOffers';
 
 
   constructor(private _http: HttpClient) { }
 
+  
+
+  getCurrentSpecialOffers() : Observable<FishingLessonReservationWithDateAsString[]> {
+    return this._http.get<FishingLessonReservationWithDateAsString[]>(this._getCurrentSpecialOffers)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
 
   sendComplaint(complaint: FishingLessonComplaint) : Observable<any> {
     const body=JSON.stringify(complaint);

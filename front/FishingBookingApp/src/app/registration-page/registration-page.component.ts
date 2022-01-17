@@ -38,7 +38,10 @@ export class RegistrationPageComponent implements OnInit {
     city: "",
     country: "",
     phone: "",
-    penals: 0
+    penals: 0,
+    subscribedWeekendHouses: [],
+      subscribedBoats: [],
+      subscribedFishingLessons: []
   }
   errorMessage : string  = '';
   repassword: string = '';
@@ -71,6 +74,7 @@ export class RegistrationPageComponent implements OnInit {
   submit(): void {
     if(this.role == "customer")
     {
+      this.customer.penals = 1
       this._customerService.createCustomer(this.customer)
       .subscribe(
         data => console.log('Success!', data),

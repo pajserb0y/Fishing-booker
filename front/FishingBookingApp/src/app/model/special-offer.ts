@@ -4,16 +4,18 @@ import { Customer } from "./customer";
 import { FishingLesson } from "./fishing-lesson";
 import { WeekendHouse } from "./weekend-house";
 
-export interface WeekendHouseReservation {
+export interface SpecialOffer {
     id: number ;
-    startDateTime: Date ;
-    endDateTime: Date;
+    startDateTime: string ;
+    endDateTime: string ;
     peopleNumber: number ;
-    startSpecialOffer: Date | null ;
-    endSpecialOffer: Date | null;
+    startSpecialOffer: string ;
+    endSpecialOffer: string ;
     services: AdditionalService[];
-    price: number;
-    customer: Customer | null;
-    weekendHouse: WeekendHouse|Boat|FishingLesson;
+    originalPrice: number;
+    discountPrice: number;
+    customer: Customer;
+    entity: WeekendHouse|Boat|FishingLesson;
+    entityType: string;
     cancelled: boolean;
   }

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';;
 import { CustomerService } from '../service/customer.service';
 import { FishingLessonReservation } from '../model/fishing-lesson-reservation';
 import { InstructorService } from '../service/instructor.service';
+import { Customer } from '../model/customer';
 
 @Component({
   selector: 'app-fishing-lessons',
@@ -22,6 +23,8 @@ export class FishingLessonsComponent implements OnInit {
   });
   fishingLessons: FishingLesson[] = []
   displayedColumns: string[] = ['name', 'address', 'description', 'capacity', 'owner', 'price', 'grade'];
+  terms: string[] = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+  selectedTerm: string = ''
   errorMessage : string  = '';
   selectedFishingLessonInfo: FishingLesson = {
     id: 0,
@@ -73,7 +76,10 @@ export class FishingLessonsComponent implements OnInit {
       city: "",
       country: "",
       phone: "",
-      penals: 0
+      penals: 0,
+      subscribedWeekendHouses: [],
+      subscribedBoats: [],
+      subscribedFishingLessons: []
     },
     fishingLesson: this.selectedFishingLessonInfo,
     cancelled: false
@@ -82,6 +88,7 @@ export class FishingLessonsComponent implements OnInit {
   searchField: string = '';
   show: boolean = false;
   username: string|null = localStorage.getItem('username');
+  currentCustomer! : Customer;
 
 
   constructor(private _instructorService: InstructorService, private router: Router, private _snackBar: MatSnackBar, public _customerService: CustomerService) { }
@@ -96,6 +103,24 @@ export class FishingLessonsComponent implements OnInit {
         this.getAllWeekendHousesForOwner(this.username) */   
     else
       this.getAllFishingLessons();
+  }
+
+  subscribe() {
+    var exists = false;
+    for (var lesson of this.currentCustomer.subscribedFishingLessons)
+      if(lesson.id == this.selectedFishingLessonInfo.id) {
+        exists = true;
+        break;
+      }
+    if(!exists) {
+      this._customerService.subscribeCustomerForFishingLesson(localStorage.getItem('username') || '', this.selectedFishingLessonInfo.id)
+                .subscribe(data =>  {
+                  this._snackBar.open('You are succesfully subscribed for this fishing lesson', 'Close', {duration: 5000})
+                    window.location.reload();
+                  },
+                    error => this.errorMessage = <any>error); 
+    } else 
+        this._snackBar.open('You are already subscribed for this fishing lesson', 'Close', {duration: 5000});
   }
 
   getAllFishingLessons() {
@@ -117,6 +142,7 @@ export class FishingLessonsComponent implements OnInit {
     this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
               .subscribe(data => {
                 this.fishingReservation.customer = data.customer
+                this.currentCustomer = data.customer
                 console.log('Dobio: ', data)},
               error => this.errorMessage = <any>error);  
   }
@@ -152,6 +178,7 @@ export class FishingLessonsComponent implements OnInit {
         this.fishingReservation.fishingLesson = this.selectedFishingLessonInfo
         this.fishingReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
         this.fishingReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
+        this.fishingReservation.startDateTime.setHours(Number(this.selectedTerm.split(':')[0]), 0) 
         this.fishingReservation.endSpecialOffer = null
         this.fishingReservation.price = this.selectedFishingLessonInfo.price
         for (let service of this.fishingReservation.additionalServices) {

@@ -61,6 +61,71 @@
                 <button mat-raised-button color="accent" [disabled]="!(registerForm.valid && customer.customer.password === repassword)" (click)="edit()"  >Edit</button>
               </div>
      </form>
+
+
+
+
+     <div style="margin-left: 0%; margin-top: 8%; margin-right: 0%;">
+      <h2>List of your subscriptions</h2> 
+      <div *ngFor="let s of subscriptionsHouse" style="width: 1000px;">
+        <p><b>Weekend house '{{s.name}}',</b> {{s.price}}, {{s.address}}, {{s.description}}, {{s.weekendHouseOwner.firstName}} {{s.weekendHouseOwner.lastName}}   
+          <button mat-icon-button color="accent" (click)="unsubscribeHouse(s)"  ><mat-icon>clear</mat-icon></button> 
+        </p>   
+      </div>
+      <div *ngFor="let s of subscriptionsBoat" style="width: 1000px;">
+        <p><b>Boat '{{s.name}}',</b> {{s.price}}, {{s.address}}, {{s.description}}, {{s.boatOwner.firstName}} {{s.boatOwner.lastName}} 
+          <button mat-icon-button color="accent" (click)="unsubscribeBoat(s)"  ><mat-icon>clear</mat-icon></button> 
+        </p>   
+      </div>
+      <div *ngFor="let s of subscriptionsLesson" style="width: 1000px;">
+        <p><b>Fishing lesson '{{s.name}}',</b> {{s.price}}, {{s.address}}, {{s.description}}, {{s.instructor.firstName}} {{s.instructor.lastName}} 
+          <button mat-icon-button color="accent" (click)="unsubscribeLesson(s)"  ><mat-icon>clear</mat-icon></button> 
+        </p>   
+      </div>
+
+      <!-- <div class="tableView">
+      <table id="myTable" mat-table [dataSource]="subscriptions" class="mat-elevation-z8">
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef  > Name </mat-header-cell>
+              <mat-cell *matCellDef="let element" >
+                <ng-container >{{element.name}}</ng-container>
+                  </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="address">
+          <mat-header-cell *matHeaderCellDef > Address </mat-header-cell>
+              <mat-cell *matCellDef="let element" >
+                <ng-container >{{element.address}}</ng-container>
+                  </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef > Description </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="owner">
+          <mat-header-cell *matHeaderCellDef > Owner </mat-header-cell>
+          <mat-cell *matCellDef="let element" *ngIf="element.weekendHouseOwner"> {{element.weekendHouseOwner.firstName}} {{element.weekendHouseOwner.lastName}} </mat-cell>
+          <mat-cell *matCellDef="let element" *ngIf="element.boatOwner"> {{element.boatOwner.firstName}} {{element.boatOwner.lastName}} </mat-cell>
+          <mat-cell *matCellDef="let element" *ngIf="element.instructor"> {{element.instructor.firstName}} {{element.instructor.lastName}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <mat-header-cell *matHeaderCellDef > Price </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
+        </ng-container>
+        
+  
+        <mat-header-row *matHeaderRowDef="displayedColumns;" ></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+        </table>
+      </div> -->
+      </div>
+      
+
+
+
      <div style="margin-top: 10%;">
       <h1>If you want to delete your profile write your reasons and send</h1>
       <mat-form-field style="width: 600px; height: 200px;" appearance="fill">

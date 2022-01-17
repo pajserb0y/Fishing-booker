@@ -32,7 +32,12 @@ public class BoatReservationController {
     @PostMapping(path = "/reserve")
     public ResponseEntity<?> reserve(@RequestBody BoatReservationDTO reservationDto) {
         BoatReservation reservation = boatReservationService.reserve(new BoatReservation(reservationDto));
-        emailService.sendNotificationForBoatReservation(reservation);
+        if(reservation.getCustomer() != null)
+            emailService.sendNotificationForBoatReservation(reservation);
+        else
+            for (Customer customer : reservation.getBoat().getSubscribedCustomers())
+                emailService.sendNotificationForSpecialOfferBoat(customer, reservation);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -77,5 +82,15 @@ public class BoatReservationController {
         Optional<BoatReservation> res = boatReservationService.findById(complaintDTO.getBoatReservationId());
         boatReservationService.sendComplaint(new BoatComplaint(complaintDTO, res.get()));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @GetMapping(path = "/getCurrentSpecialOffers")
+    public Set<BoatReservationDTO> getCurrentSpecialOffers() {
+        Set<BoatReservationDTO> reservationsDto = new HashSet<>();
+        for (BoatReservation res : boatReservationService.getCurrentSpecialOffers())
+            reservationsDto.add(new BoatReservationDTO(res));
+
+        return reservationsDto;
     }
 }

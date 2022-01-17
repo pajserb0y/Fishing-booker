@@ -57,6 +57,11 @@ public class WeekendHouse {
     @JoinColumn(name = "weekend_house_owner_id")
     private WeekendHouseOwner weekendHouseOwner;
 
+    @ManyToMany(mappedBy="subscribedWeekendHouses",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Customer> subscribedCustomers = new HashSet<>();
+
+
+
 
     public WeekendHouse() {
     }
@@ -198,5 +203,13 @@ public class WeekendHouse {
 
     public void setWeekendHouseReservations(Set<WeekendHouseReservation> weekendHouseReservations) {
         this.weekendHouseReservations = weekendHouseReservations;
+    }
+
+    public Set<Customer> getSubscribedCustomers() {
+        return subscribedCustomers;
+    }
+
+    public void setSubscribedCustomers(Set<Customer> subscribedCustomers) {
+        this.subscribedCustomers = subscribedCustomers;
     }
 }

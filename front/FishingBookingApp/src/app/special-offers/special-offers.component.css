@@ -3,11 +3,8 @@
     cursor: pointer;
   }
 
-.searchPosition {
-   /*  margin-left: 20%; */
-  }
 
-  .selected {
+/*   .selected {
     background-color: red!important;
   }
 
@@ -18,15 +15,12 @@
 .infoDiv{
   margin-bottom: 8%;
   position: sticky;
-}
+} */
 
-.tableViewNonCustomer {
-    
-}
 
 .tableView {
     height: 400px;
-    width: 200%;
+    width: 100%;
     overflow: auto;
 }
 

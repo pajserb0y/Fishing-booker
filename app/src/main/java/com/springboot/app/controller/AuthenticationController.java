@@ -22,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -62,6 +63,11 @@ public class AuthenticationController {
         String jwt;
         try {
             Customer customer = (Customer) authentication.getPrincipal();
+            if(customer.getPenalsResetingDate().getMonth() < (new Date().getMonth()) || customer.getPenalsResetingDate().getYear() <= (new Date().getYear())) {
+                customer.setPenalsResetingDate(new Date());
+                customer.setPenals(0);
+                customerService.saveCustomer(customer);
+            }
             jwt = tokenUtils.generateToken(customer.getUsername(), customer.getRole());
         } catch (Exception e) {
             try {

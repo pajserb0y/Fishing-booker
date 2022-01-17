@@ -2,6 +2,7 @@ import { AdditionalService } from "./additional-service";
 import { Boat } from "./boat";
 import { Customer } from "./customer";
 import { FishingLesson } from "./fishing-lesson";
+import { WeekendHouse } from "./weekend-house";
 
 export interface FishingLessonReservation {
     id: number ;
@@ -13,6 +14,6 @@ export interface FishingLessonReservation {
     additionalServices: AdditionalService[];
     price: number;
     customer: Customer;
-    fishingLesson: FishingLesson;
+    fishingLesson: FishingLesson|WeekendHouse|Boat;
     cancelled: boolean;
   }

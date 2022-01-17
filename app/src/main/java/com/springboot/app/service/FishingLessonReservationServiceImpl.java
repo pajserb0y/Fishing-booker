@@ -29,16 +29,23 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
 
     @Override
     public FishingLessonReservation reserve(FishingLessonReservation fishingLessonReservation) {
-        Optional<FishingLesson> fishingLesson = fishingLessonRepository.findById(fishingLessonReservation.getFishingLesson().getId());
-        Optional<Customer> customer = customerRepository.findById(fishingLessonReservation.getCustomer().getId());
-
-        if (fishingLesson.isPresent() && customer.isPresent()) {
-            fishingLessonReservation.setFishingLesson(fishingLesson.get());
-            fishingLessonReservation.setCustomer(customer.get());
-            fishingLessonReservationRepository.save(fishingLessonReservation);
+        Optional<FishingLessonReservation> resInDatabase = fishingLessonReservationRepository.findById(fishingLessonReservation.getId());
+        if (resInDatabase.isPresent()) {
+            resInDatabase.get().setCustomer(customerRepository.findById(fishingLessonReservation.getCustomer().getId()).get());
+            fishingLessonReservationRepository.save(resInDatabase.get());
+            return resInDatabase.get();
         }
+        else {
+            Optional<FishingLesson> fishingLesson = fishingLessonRepository.findById(fishingLessonReservation.getFishingLesson().getId());
+            Optional<Customer> customer = customerRepository.findById(fishingLessonReservation.getCustomer().getId());
 
-        return fishingLessonReservation;
+            if (fishingLesson.isPresent() && customer.isPresent()) {
+                fishingLessonReservation.setFishingLesson(fishingLesson.get());
+                fishingLessonReservation.setCustomer(customer.get());
+                fishingLessonReservationRepository.save(fishingLessonReservation);
+            }
+            return fishingLessonReservation;
+        }
     }
 
 
@@ -79,5 +86,10 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
     @Override
     public void sendComplaint(FishingLessonComplaint fishingLessonComplaint) {
         fishingLessonComplaintRepository.save(fishingLessonComplaint);
+    }
+
+    @Override
+    public List<FishingLessonReservation> getCurrentSpecialOffers() {
+        return fishingLessonReservationRepository.getCurrentSpecialOffers();
     }
 }

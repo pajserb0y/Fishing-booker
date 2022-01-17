@@ -181,4 +181,5 @@ public class WeekendHouseReservation {
     public void setCancelled(boolean cancelled) {
         isCancelled = cancelled;
     }
+
 }

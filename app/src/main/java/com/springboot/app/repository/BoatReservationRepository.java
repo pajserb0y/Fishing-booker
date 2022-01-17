@@ -27,6 +27,10 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
 
     @Query("SELECT res.id FROM BoatReservation res WHERE res.boat.id = :id AND res.startDateTime > cast(NOW() as timestamp)")
     List<Integer> existsFutureReservation(@Param("id") Integer boatId);
+
+    @Query("SELECT a FROM BoatReservation a WHERE a.customer = null AND a.endSpecialOffer != null AND a.startSpecialOffer <= cast(NOW() as timestamp)" +
+            "AND a.endSpecialOffer >= cast(NOW() as timestamp)")
+    List<BoatReservation> getCurrentSpecialOffers();
 //
 //    List<WeekendHouseReservation> findByWeekendHouse(WeekendHouse weekendHouse);
 }

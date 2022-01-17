@@ -19,4 +19,9 @@ public interface EmailService {
     @Async
     void sendNotificationForFishingLessonReservation(FishingLessonReservation reservation);
 
+    void sendNotificationForSpecialOfferWeekendHouse(Customer customer, WeekendHouseReservation reservation);
+
+    void sendNotificationForSpecialOfferBoat(Customer customer, BoatReservation reservation);
+
+    void sendNotificationForSpecialOfferFishingLesson(Customer customer, FishingLessonReservation reservation);
 }

@@ -39,4 +39,8 @@ public interface FishingLessonReservationRepository extends JpaRepository<Fishin
 
     @Query("SELECT res FROM FishingLessonReservation res WHERE res.fishingLesson.id = :id")
     List<FishingLessonReservation> findAllByFishingLessonId(@Param("id") Integer fishingLessonId);
+
+    @Query("SELECT a FROM FishingLessonReservation a WHERE a.customer = null AND a.endSpecialOffer != null AND a.startSpecialOffer <= cast(NOW() as timestamp)" +
+            "AND a.endSpecialOffer >= cast(NOW() as timestamp)")
+    List<FishingLessonReservation> getCurrentSpecialOffers();
 }

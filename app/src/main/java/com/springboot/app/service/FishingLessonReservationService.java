@@ -23,4 +23,6 @@ public interface FishingLessonReservationService {
     void sendFeedback(FishingLessonFeedback fishingLessonFeedback);
 
     void sendComplaint(FishingLessonComplaint fishingLessonComplaint);
+
+    List<FishingLessonReservation> getCurrentSpecialOffers();
 }

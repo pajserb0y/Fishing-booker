@@ -56,6 +56,9 @@ public class Boat {
     @JoinColumn(name = "boat_owner_id")
     private BoatOwner boatOwner;
 
+    @ManyToMany(mappedBy="subscribedBoats",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Customer> subscribedCustomers = new HashSet<>();
+
 
     public Boat() {
     }
@@ -177,5 +180,13 @@ public class Boat {
 
     public void setBoatReservations(Set<BoatReservation> boatReservations) {
         this.boatReservations = boatReservations;
+    }
+
+    public Set<Customer> getSubscribedCustomers() {
+        return subscribedCustomers;
+    }
+
+    public void setSubscribedCustomers(Set<Customer> subscribedCustomers) {
+        this.subscribedCustomers = subscribedCustomers;
     }
 }

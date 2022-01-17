@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Customer } from '../model/customer'
 import { FormControl, FormGroup } from '@angular/forms';
 import { Term } from '../model/term';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 @Component({
   selector: 'app-weekend-house-profile',
   templateUrl: './weekend-house-profile.component.html',
@@ -69,7 +70,10 @@ export class WeekendHouseProfileComponent implements OnInit {
       city: "",
       country: "",
       phone: "",
-      penals: 0
+      penals: 0,
+      subscribedWeekendHouses: [],
+      subscribedBoats: [],
+      subscribedFishingLessons: []
     },
     weekendHouse: this.weekendHouse,
     cancelled: false
@@ -199,7 +203,9 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
       this.specialOffer.price += service.price
     }
     this._weekendHouseownerService.makeSpecialOffer(this.specialOffer)
-          .subscribe(data =>  {this.specialOffers = data,     this.specialOffers.filter(offer => offer.customer == null)},
+          .subscribe(data =>  {
+                              this.specialOffers = data,     
+                              this.specialOffers = this.specialOffers.filter(offer => offer.customer == null)},
               error => this.errorMessage = <any>error); 
 
     this._snackBar.open('Special offer created successfuly', 'Close', {duration: 5000});
@@ -255,8 +261,11 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
   getAllReservationsForWeekendHouse()
   {
     this._weekendHouseownerService.getAllReservationsForWeekendHouse(this.weekendHouse)
-       .subscribe(data =>  {this.allReservationsForWeekendHouse = data, this.allReservationsForWeekendHouse.filter(res => res.customer != null)},
+       .subscribe(data =>  {
+                      this.allReservationsForWeekendHouse = data, 
+                      this.allReservationsForWeekendHouse = this.allReservationsForWeekendHouse.filter(res => res.customer !== null)},
                   error => this.errorMessage = <any>error); 
 
   }
+ 
 }

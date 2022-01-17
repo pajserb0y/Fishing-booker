@@ -45,10 +45,18 @@ export class WeekendHouseOwnerService {
 
   private _getAllFreeTermsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllFreeTermsForWeekendHouse/';
   private _getAllReservationsForWeekendHouse = this._weekendHouseReservationController + '/getAllReservationsForWeekendHouse/';
+  private _getCurrentSpecialOffers = this._weekendHouseReservationController + '/getCurrentSpecialOffers/';
 
 
   weekendHouse !: WeekendHouse;
   constructor(private _http: HttpClient) { }
+
+
+  getCurrentSpecialOffers() : Observable<WeekendHouseReservationWithDateAsString[]>  {
+    return this._http.get<WeekendHouseReservationWithDateAsString[]>(this._getCurrentSpecialOffers)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
 
   createWeekendHouseOwner(weekendHouseOwner: WeekendHouseOwner) : Observable<any> {
     const body=JSON.stringify(weekendHouseOwner);

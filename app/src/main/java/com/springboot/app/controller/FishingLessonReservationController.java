@@ -1,11 +1,10 @@
 package com.springboot.app.controller;
 
-import com.springboot.app.model.FishingLessonComplaint;
-import com.springboot.app.model.FishingLessonFeedback;
-import com.springboot.app.model.FishingLessonReservation;
+import com.springboot.app.model.*;
 import com.springboot.app.model.dto.FishingLessonComplaintDTO;
 import com.springboot.app.model.dto.FishingLessonFeedbackDTO;
 import com.springboot.app.model.dto.FishingLessonReservationDTO;
+import com.springboot.app.model.dto.WeekendHouseReservationDTO;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.FishingLessonReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,12 @@ public class FishingLessonReservationController {
     @PostMapping(path = "/reserve")
     public ResponseEntity<?> reserve(@RequestBody FishingLessonReservationDTO reservationDto) {
         FishingLessonReservation reservation = fishingLessonReservationService.reserve(new FishingLessonReservation(reservationDto));
-        emailService.sendNotificationForFishingLessonReservation(reservation);
+        if(reservation.getCustomer() != null)
+            emailService.sendNotificationForFishingLessonReservation(reservation);
+        else
+            for (Customer customer : reservation.getFishingLesson().getSubscribedCustomers())
+                emailService.sendNotificationForSpecialOfferFishingLesson(customer, reservation);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -80,5 +84,15 @@ public class FishingLessonReservationController {
         Optional<FishingLessonReservation> res = fishingLessonReservationService.findById(complaintDTO.getFishingLessonReservationId());
         fishingLessonReservationService.sendComplaint(new FishingLessonComplaint(complaintDTO, res.get()));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @GetMapping(path = "/getCurrentSpecialOffers")
+    public Set<FishingLessonReservationDTO> getCurrentSpecialOffers() {
+        Set<FishingLessonReservationDTO> reservationsDto = new HashSet<>();
+        for (FishingLessonReservation res : fishingLessonReservationService.getCurrentSpecialOffers())
+            reservationsDto.add(new FishingLessonReservationDTO(res));
+
+        return reservationsDto;
     }
 }

@@ -25,6 +25,10 @@ public interface WeekendHouseReservationRepository extends JpaRepository<Weekend
 
     List<WeekendHouseReservation> findByWeekendHouse(WeekendHouse weekendHouse);
 
-    @Query("SELECT res.id FROM BoatReservation res WHERE res.boat.id = :id AND res.startDateTime > cast(NOW() as timestamp)")
+    @Query("SELECT res.id FROM WeekendHouseReservation res WHERE res.weekendHouse.id = :id AND res.startDateTime > cast(NOW() as timestamp)")
     List<Integer> existsFutureReservation(@Param("id") Integer houseId);
+
+    @Query("SELECT a FROM WeekendHouseReservation a WHERE a.customer = null AND a.endSpecialOffer != null AND a.startSpecialOffer <= cast(NOW() as timestamp)" +
+                                                        "AND a.endSpecialOffer >= cast(NOW() as timestamp)")
+    List<WeekendHouseReservation> getCurrentSpecialOffers();
 }

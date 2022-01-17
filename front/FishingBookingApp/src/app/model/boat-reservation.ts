@@ -1,6 +1,8 @@
 import { AdditionalService } from "./additional-service";
 import { Boat } from "./boat";
 import { Customer } from "./customer";
+import { FishingLesson } from "./fishing-lesson";
+import { WeekendHouse } from "./weekend-house";
 
 export interface BoatReservation {
     id: number ;
@@ -12,6 +14,6 @@ export interface BoatReservation {
     services: AdditionalService[];
     price: number;
     customer: Customer;
-    boat: Boat;
+    boat: Boat|WeekendHouse|FishingLesson;
     cancelled: boolean;
   }

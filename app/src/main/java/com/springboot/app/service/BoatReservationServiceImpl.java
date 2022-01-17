@@ -27,14 +27,22 @@ public class BoatReservationServiceImpl implements BoatReservationService {
 
     @Override
     public BoatReservation reserve(BoatReservation boatReservation) {
-        Optional<Boat> boat = boatRepository.findById(boatReservation.getBoat().getId());
-        Optional<Customer> customer = customerRepository.findById(boatReservation.getCustomer().getId());
-        if (boat.isPresent() && customer.isPresent()) {
-            boatReservation.setBoat(boat.get());
-            boatReservation.setCustomer(customer.get());
-            boatReservationRepository.save(boatReservation);
+        Optional<BoatReservation> resInDatabase = boatReservationRepository.findById(boatReservation.getId());
+        if (resInDatabase.isPresent()) {
+            resInDatabase.get().setCustomer(customerRepository.findById(boatReservation.getCustomer().getId()).get());
+            boatReservationRepository.save(resInDatabase.get());
+            return resInDatabase.get();
         }
-        return boatReservation;
+        else {
+            Optional<Boat> boat = boatRepository.findById(boatReservation.getBoat().getId());
+            Optional<Customer> customer = customerRepository.findById(boatReservation.getCustomer().getId());
+            if (boat.isPresent() && customer.isPresent()) {
+                boatReservation.setBoat(boat.get());
+                boatReservation.setCustomer(customer.get());
+                boatReservationRepository.save(boatReservation);
+            }
+            return boatReservation;
+        }
     }
 
     @Override
@@ -69,5 +77,10 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     @Override
     public void sendComplaint(BoatComplaint boatComplaint) {
         boatComplaintRepository.save(boatComplaint);
+    }
+
+    @Override
+    public List<BoatReservation> getCurrentSpecialOffers() {
+        return boatReservationRepository.getCurrentSpecialOffers();
     }
 }

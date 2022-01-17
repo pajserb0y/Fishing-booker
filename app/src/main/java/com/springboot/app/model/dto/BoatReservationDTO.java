@@ -53,7 +53,10 @@ public class BoatReservationDTO {
 
         this.startSpecialOffer = res.getStartSpecialOffer();
         this.endSpecialOffer = res.getEndSpecialOffer();
-        this.customer = new CustomerDTO(res.getCustomer());
+        if(res.getCustomer() != null)
+            this.customer = new CustomerDTO(res.getCustomer());
+        else
+            this.customer = null;
         this.boat = new BoatDTO(res.getBoat());
         this.isCancelled = res.isCancelled();
     }

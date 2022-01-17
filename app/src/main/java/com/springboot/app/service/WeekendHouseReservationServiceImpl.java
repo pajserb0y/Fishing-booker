@@ -28,23 +28,30 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
 
     @Override
     public WeekendHouseReservation reserve(WeekendHouseReservation weekendHouseReservation) {
-        Optional<WeekendHouse> house = weekendHouseRepository.findById(weekendHouseReservation.getWeekendHouse().getId());
-        if(weekendHouseReservation.getCustomer() != null) {
-            Optional<Customer> customer = customerRepository.findById(weekendHouseReservation.getCustomer().getId());
-            if (house.isPresent() && customer.isPresent()) {
-                weekendHouseReservation.setWeekendHouse(house.get());
-                weekendHouseReservation.setCustomer(customer.get());
-                weekendHouseReservationRepository.save(weekendHouseReservation);
-            }
+        Optional<WeekendHouseReservation> resInDatabase = weekendHouseReservationRepository.findById(weekendHouseReservation.getId());
+        if (resInDatabase.isPresent()) {
+            resInDatabase.get().setCustomer(customerRepository.findById(weekendHouseReservation.getCustomer().getId()).get());
+            weekendHouseReservationRepository.save(resInDatabase.get());
+            return resInDatabase.get();
         }
         else {
-            if (house.isPresent()) {
-                weekendHouseReservation.setWeekendHouse(house.get());
-                weekendHouseReservation.setCustomer(null);
-                weekendHouseReservationRepository.save(weekendHouseReservation);
+            Optional<WeekendHouse> house = weekendHouseRepository.findById(weekendHouseReservation.getWeekendHouse().getId());
+            if (weekendHouseReservation.getCustomer() != null) {
+                Optional<Customer> customer = customerRepository.findById(weekendHouseReservation.getCustomer().getId());
+                if (house.isPresent() && customer.isPresent()) {
+                    weekendHouseReservation.setWeekendHouse(house.get());
+                    weekendHouseReservation.setCustomer(customer.get());
+                    weekendHouseReservationRepository.save(weekendHouseReservation);
+                }
+            } else {
+                if (house.isPresent()) {
+                    weekendHouseReservation.setWeekendHouse(house.get());
+                    weekendHouseReservation.setCustomer(null);
+                    weekendHouseReservationRepository.save(weekendHouseReservation);
+                }
             }
+            return weekendHouseReservation;
         }
-        return weekendHouseReservation;
     }
 
     @Override
@@ -79,6 +86,11 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     @Override
     public void sendComplaint(WeekendHouseComplaint weekendHouseComplaint) {
         weekendHouseComplaintRepository.save(weekendHouseComplaint);
+    }
+
+    @Override
+    public List<WeekendHouseReservation> getCurrentSpecialOffers() {
+        return weekendHouseReservationRepository.getCurrentSpecialOffers();
     }
 
     @Override

@@ -31,11 +31,18 @@ export class BoatOwnerService {
   private _getPastReservationsForCustomerUsername = this._boatsReservationController + '/getPastForCustomerUsername/';
   private _sendFeedback = this._boatsReservationController + '/sendFeedback';
   private _sendComplaint = this._boatsReservationController + '/sendComplaint';
+  private _getCurrentSpecialOffers = this._boatsReservationController + '/getCurrentSpecialOffers';
   
 
 
   constructor(private _http: HttpClient) { }
 
+
+  getCurrentSpecialOffers() : Observable<BoatReservationWithDateAsString[]> {
+    return this._http.get<BoatReservationWithDateAsString[]>(this._getCurrentSpecialOffers)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
 
   sendComplaint(complaint: BoatComplaint) : Observable<any> {
     const body=JSON.stringify(complaint);

@@ -23,6 +23,12 @@ export class CustomerService {
   private _editCustomer  = this._customerRegistration + '/edit';
   private _getCustomerByUsername  = this._customerRegistration + '/';
   private _deleteCustomer  = this._customerRegistration + '/delete';
+  private _subscribeWeekendHouse  = this._customerRegistration + '/subscribeWeekendHouse';
+  private _subscribeBoat  = this._customerRegistration + '/subscribeBoat';
+  private _subscribeFishingLesson  = this._customerRegistration + '/subscribeFishingLesson';
+  private _unsubscribeWeekendHouse  = this._customerRegistration + '/unsubscribeWeekendHouse';
+  private _unsubscribeBoat  = this._customerRegistration + '/unsubscribeBoat';
+  private _unsubscribeFishingLesson  = this._customerRegistration + '/unsubscribeFishingLesson';
   private _login = this._baseUrl + 'auth/login';  
   private _getAllUsernames = this._baseUrl + 'auth/getAllCustomerUsernames';
 
@@ -30,6 +36,37 @@ export class CustomerService {
   returnedCustomer!: Customer;
 
   constructor(private _http: HttpClient) { }
+
+
+  subscribeCustomerForWeekendHouse(username: string, id: number) : Observable<any> {
+    const body = JSON.stringify({ username, id });
+    return this._http.post(this._subscribeWeekendHouse, body)
+  }
+
+  subscribeCustomerForBoat(username: string, id: number) : Observable<any> {
+    const body = JSON.stringify({ username, id });
+    return this._http.post(this._subscribeBoat, body)
+  }
+
+  subscribeCustomerForFishingLesson(username: string, id: number) : Observable<any> {
+    const body = JSON.stringify({ username, id });
+    return this._http.post(this._subscribeFishingLesson, body)
+  }
+
+  unsubscribeHouse(username: string, id: number) : Observable<any> {
+    const body = JSON.stringify({ username, id });
+    return this._http.post(this._unsubscribeWeekendHouse, body)
+  }
+
+  unsubscribeBoat(username: string, id: number): Observable<any> {
+    const body = JSON.stringify({ username, id });
+    return this._http.post(this._unsubscribeBoat, body)
+  }
+
+  unsubscribeLesson(username: string, id: number): Observable<any> {
+    const body = JSON.stringify({ username, id });
+    return this._http.post(this._unsubscribeFishingLesson, body)
+  }
 
   createCustomer(customer: Customer) : Observable<any> {
     const headers = new HttpHeaders({

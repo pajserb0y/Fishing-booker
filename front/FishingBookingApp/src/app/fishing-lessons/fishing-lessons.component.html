@@ -85,6 +85,17 @@
 </mat-form-field>
 
 <div>
+  <mat-form-field style="width: 150px;" appearance="fill">
+  <mat-label style="padding-top: 20px;" for="terms">Choose start time</mat-label>
+    <mat-select [disabled]="!show || range.value.start == null" name="terms" [(ngModel)]="selectedTerm" >
+      <mat-option checkboxPosition="before" *ngFor="let term of terms" [value]="term" >
+          {{ term }}
+      </mat-option>
+    </mat-select> 
+  </mat-form-field>
+</div>
+
+<div>
   <mat-form-field appearance="fill" style="width: 150px;">
     <mat-label>Number of atendees</mat-label>
     <input matInput type="number" value="1" min="1" [max]='selectedFishingLessonInfo.maxNumberOfPeople' name="capacity" [(ngModel)]="fishingReservation.maxPeopleNumber" required
@@ -93,14 +104,14 @@
   </mat-form-field></div>
 
 <div>
-<mat-form-field style="width: 150px;" appearance="fill">
-<mat-label style="padding-top: 20px;" for="services">List of our services</mat-label>
-<mat-select [disabled]="!show || range.value.start == null" name="services" [(ngModel)]="fishingReservation.additionalServices" multiple>
-<mat-option checkboxPosition="before" *ngFor="let service of selectedFishingLessonInfo.additionalServices" [value]="service" (onSelectionChange)="calculateTotalPrice($event)">
-    {{ service.name }} - {{ service.price }}
-</mat-option>
-</mat-select> 
-</mat-form-field>
+  <mat-form-field style="width: 150px;" appearance="fill">
+  <mat-label style="padding-top: 20px;" for="services">List of our services</mat-label>
+    <mat-select [disabled]="!show || range.value.start == null" name="services" [(ngModel)]="fishingReservation.additionalServices" multiple>
+      <mat-option checkboxPosition="before" *ngFor="let service of selectedFishingLessonInfo.additionalServices" [value]="service" (onSelectionChange)="calculateTotalPrice($event)">
+          {{ service.name }} - {{ service.price }}
+      </mat-option>
+    </mat-select> 
+  </mat-form-field>
 </div>
 
 <div ><label><b>Total price: </b>  <span *ngIf="show && range.value.start != null">{{fishingReservation.price}}</span></label></div>                
@@ -118,7 +129,7 @@
 
 <!-- HOUSE INFO -->
 <mat-grid-tile  colspan="2">
-<div  *ngIf="show && role != 'ROLE_INSTRUCTOR'" style="margin-top: -25%; margin-right: -20%; font-size: larger; position: static;">
+<div  *ngIf="show && role != 'ROLE_INSTRUCTOR'" style="margin-top: -15%; margin-right: -20%; font-size: larger; position: static;">
 <h2>Fishing lesson informations</h2>
 <div class="infoDiv"><label><b>Name:</b>   {{selectedFishingLessonInfo.name}}</label></div>
 <div class="infoDiv"><label><b>Address:</b>   {{selectedFishingLessonInfo.address}}</label></div>
@@ -128,6 +139,7 @@
 <div class="infoDiv"><label><b>Cancel conditions:</b>   {{selectedFishingLessonInfo.cancelConditions}}</label></div>
 <div class="infoDiv"><label><b>Rules:</b>   {{selectedFishingLessonInfo.rules}}</label></div>
 <div class="infoDiv"><label><b>Price:</b>   {{selectedFishingLessonInfo.price}}</label></div>
+<div class="infoDiv"><button mat-raised-button color="accent" (click)="subscribe()" >Subscribe</button></div>
 </div>
 </mat-grid-tile>
 

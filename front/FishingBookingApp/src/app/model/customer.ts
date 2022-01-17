@@ -1,3 +1,7 @@
+import { Boat } from "./boat";
+import { FishingLesson } from "./fishing-lesson";
+import { WeekendHouse } from "./weekend-house";
+
 export interface Customer {
     id: number ;
     firstName: string ;
@@ -10,4 +14,7 @@ export interface Customer {
     country: string ;
     phone: string ;
     penals: number;
+    subscribedWeekendHouses: WeekendHouse[];
+    subscribedBoats: Boat[];
+    subscribedFishingLessons: FishingLesson[];
   }

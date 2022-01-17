@@ -8,7 +8,7 @@ export interface FishingLessonReservationWithDateAsString {
     endDateTime: string;
     maxPeopleNumber: number ;
     startSpecialOffer: string ;
-    endSpecialOffer: string | null;
+    endSpecialOffer: string;
     additionalServices: AdditionalService[];
     price: number;
     customer: Customer;

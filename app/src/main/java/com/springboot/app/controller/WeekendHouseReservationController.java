@@ -1,9 +1,6 @@
 package com.springboot.app.controller;
 
-import com.springboot.app.model.WeekendHouse;
-import com.springboot.app.model.WeekendHouseComplaint;
-import com.springboot.app.model.WeekendHouseFeedback;
-import com.springboot.app.model.WeekendHouseReservation;
+import com.springboot.app.model.*;
 import com.springboot.app.model.dto.*;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.WeekendHouseOwnerService;
@@ -43,11 +40,15 @@ public class WeekendHouseReservationController {
         if(reservationDto.getCustomer() != null)
             if(reservationDto.getStartSpecialOffer() != null && reservationDto.getEndSpecialOffer() != null)
             {
-               //nekako treba vratiti bad request -> vrati null, pa onda na frontu ako je null izbaci neko obavestenje sa porukom
+               //return null;   //NE MOZE ovde da ulazi i returnuje bilo sta jer posle ja necu moci da rezervisem tu akciju!!  //nekako treba vratiti bad request -> vrati null, pa onda na frontu ako je null izbaci neko obavestenje sa porukom
             }
         WeekendHouseReservation reservation = weekendHouseReservationService.reserve(new WeekendHouseReservation(reservationDto));
         if(reservation.getCustomer() != null)
             emailService.sendNotificationForWeekendHouseReservation(reservation);
+        else
+            for (Customer customer : reservation.getWeekendHouse().getSubscribedCustomers())
+                emailService.sendNotificationForSpecialOfferWeekendHouse(customer, reservation);
+
         List<WeekendHouseReservation> weekendHouseReservations = weekendHouseReservationService.findAllReservationsForWeekendHouse(reservation.getWeekendHouse());
         Set<WeekendHouseReservationDTO> resDtos = new HashSet<>();
         for (WeekendHouseReservation res : weekendHouseReservations)
@@ -109,5 +110,15 @@ public class WeekendHouseReservationController {
         for (WeekendHouseReservation res : weekendHouseReservations)
             weekendHouseReservationDTOs.add(new WeekendHouseReservationDTO(res));
         return weekendHouseReservationDTOs;
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @GetMapping(path = "/getCurrentSpecialOffers")
+    public Set<WeekendHouseReservationDTO> getCurrentSpecialOffers() {
+        Set<WeekendHouseReservationDTO> reservationsDto = new HashSet<>();
+        for (WeekendHouseReservation res : weekendHouseReservationService.getCurrentSpecialOffers())
+            reservationsDto.add(new WeekendHouseReservationDTO(res));
+
+        return reservationsDto;
     }
 }

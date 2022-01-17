@@ -27,17 +27,36 @@
   
   ul li {
     display: block;
-  }
-  
-  .mat-stepper-vertical {
-    margin-top: 8px;
-  }
-  
-  .mat-form-field {
-    margin-top: 16px;
-  }
+  } 
+
   
   .errorText {
     color: red;
     font-size: small;
   }
+
+  .mat-row:hover {
+    background-color: rgb(236, 234, 234);
+    cursor: pointer;
+  }
+
+.searchPosition {
+   /*  margin-left: 20%; */
+  }
+
+
+
+.tableViewNonCustomer {
+    
+}
+
+.tableView {
+    height: 400px;
+    width: 100%;
+    overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+

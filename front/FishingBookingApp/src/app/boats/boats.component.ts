@@ -5,6 +5,7 @@ import { Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { Boat } from '../model/boat';
 import { BoatReservation } from '../model/boat-reservation';
+import { Customer } from '../model/customer';
 import { BoatOwnerService } from '../service/boat-owner.service';
 import { CustomerService } from '../service/customer.service';
 
@@ -71,7 +72,10 @@ export class BoatsComponent implements OnInit {
       city: "",
       country: "",
       phone: "",
-      penals: 0
+      penals: 0,
+      subscribedWeekendHouses: [],
+      subscribedBoats: [],
+      subscribedFishingLessons: []
     },
     boat: this.selectedBoatInfo,
     cancelled: false
@@ -80,6 +84,7 @@ export class BoatsComponent implements OnInit {
   searchField: string = '';
   show: boolean = false;
   username: string|null = localStorage.getItem('username');
+  currentCustomer! : Customer;
 
     
   constructor(private _boatOwnerService: BoatOwnerService, private router: Router, private _snackBar: MatSnackBar, public _customerService: CustomerService) { }
@@ -94,6 +99,25 @@ export class BoatsComponent implements OnInit {
         this.getAllWeekendHousesForOwner(this.username) */   
     else
       this.getAllBoats();
+  }
+
+
+  subscribe() {
+    var exists = false;
+    for (var boat of this.currentCustomer.subscribedBoats)
+      if(boat.id == this.selectedBoatInfo.id) {
+        exists = true;
+        break;
+      }
+    if(!exists) {
+      this._customerService.subscribeCustomerForBoat(localStorage.getItem('username') || '', this.selectedBoatInfo.id)
+                .subscribe(data =>  {
+                  this._snackBar.open('You are succesfully subscribed for this boat', 'Close', {duration: 5000})
+                    window.location.reload();
+                  },
+                    error => this.errorMessage = <any>error); 
+    } else 
+        this._snackBar.open('You are already subscribed for this boat', 'Close', {duration: 5000});
   }
 
   getAllBoats() {
@@ -122,6 +146,7 @@ export class BoatsComponent implements OnInit {
     this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
               .subscribe(data => {
                 this.boatReservation.customer = data.customer
+                this.currentCustomer = data.customer
                 console.log('Dobio: ', data)},
               error => this.errorMessage = <any>error);  
   }

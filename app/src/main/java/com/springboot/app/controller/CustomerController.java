@@ -4,9 +4,9 @@ import com.springboot.app.model.Customer;
 import com.springboot.app.model.dto.CustomerDTO;
 import com.springboot.app.model.dto.CustomerLoyalty;
 import com.springboot.app.model.dto.DeleteDTO;
+import com.springboot.app.model.dto.EntityIdAndCustomerUsername;
 import com.springboot.app.service.CustomerService;
 import com.springboot.app.service.EmailService;
-import com.springboot.app.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,10 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Locale;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")  //sluzi za povezivanje sa frontom
@@ -91,6 +89,48 @@ public class CustomerController {
         customerService.setWantedToDelete(dto.id);
         emailService.sendNotificationForDeletingToAdmin(dto.note, dto.id);
 
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/subscribeWeekendHouse")
+    public ResponseEntity<?> subscribeWeekendHouse(@RequestBody EntityIdAndCustomerUsername dto) {
+        customerService.subscribeWeekendHouse(dto);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/subscribeBoat")
+    public ResponseEntity<?> subscribeBoat(@RequestBody EntityIdAndCustomerUsername dto) {
+        customerService.subscribeBoat(dto);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/subscribeFishingLesson")
+    public ResponseEntity<?> subscribeFishingLesson(@RequestBody EntityIdAndCustomerUsername dto) {
+        customerService.subscribeFishingLesson(dto);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/unsubscribeWeekendHouse")
+    public ResponseEntity<?> unsubscribeWeekendHouse(@RequestBody EntityIdAndCustomerUsername dto) {
+        customerService.unsubscribeWeekendHouse(dto);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/unsubscribeBoat")
+    public ResponseEntity<?> unsubscribeBoat(@RequestBody EntityIdAndCustomerUsername dto) {
+        customerService.unsubscribeBoat(dto);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping(path = "/unsubscribeFishingLesson")
+    public ResponseEntity<?> unsubscribeFishingLesson(@RequestBody EntityIdAndCustomerUsername dto) {
+        customerService.unsubscribeFishingLesson(dto);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

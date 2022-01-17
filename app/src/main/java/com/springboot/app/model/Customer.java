@@ -11,15 +11,13 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Customer extends SystemUser implements UserDetails {
     private String hashCode;
     private Integer penals;
+    private Date penalsResetingDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
@@ -31,14 +29,35 @@ public class Customer extends SystemUser implements UserDetails {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<BoatReservation> boatReservations = new HashSet<>();
 
-    public Customer(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String hashCode, Integer penals) {
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "customers_subscriptions_weekend_house",
+            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "weekend_house_id", referencedColumnName = "id"))
+    private Set<WeekendHouse> subscribedWeekendHouses = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "customers_subscriptions_boat",
+            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "boat_id", referencedColumnName = "id"))
+    private Set<Boat> subscribedBoats = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "customers_subscriptions_fishing_lessons",
+            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "fishing_lessons_id", referencedColumnName = "id"))
+    private Set<FishingLesson> subscribedFishingLessons = new HashSet<>();
+
+
+    public Customer(Integer id, String firstName, String lastName, String email, String username, String password, String address, String city, String country, String phone, boolean isDeleted, boolean isActivated, Role roles, String hashCode, Integer penals, Date penalsResetingDate) {
         super(id, firstName, lastName, email, username, password, address, city, country, phone, isDeleted, isActivated, roles);
         this.hashCode = hashCode;
         this.role = roles;
         this.penals = penals;
+        this.penalsResetingDate = penalsResetingDate;
     }
 
-    public Customer() { }
+    public Customer() {
+    }
 
     public Customer(CustomerDTO customerDto) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -55,6 +74,7 @@ public class Customer extends SystemUser implements UserDetails {
         this.phone = customerDto.getPhone();
         this.hashCode = generateHashCode(this.password);
         this.penals = customerDto.getPenals();
+        this.penalsResetingDate = new Date();
     }
 
     public Role getRole() {
@@ -73,7 +93,7 @@ public class Customer extends SystemUser implements UserDetails {
         this.hashCode = hashCode;
     }
 
-    public static String generateHashCode(String password){
+    public static String generateHashCode(String password) {
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-256");
@@ -90,7 +110,7 @@ public class Customer extends SystemUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList( this.role);
+        return Collections.singletonList(this.role);
     }
 
     @Override
@@ -137,7 +157,39 @@ public class Customer extends SystemUser implements UserDetails {
         this.boatReservations = boatReservations;
     }
 
-    public static Customer DtoToCustomerWithoutHashingPassword(CustomerDTO customerDto ) {
+    public Date getPenalsResetingDate() {
+        return penalsResetingDate;
+    }
+
+    public void setPenalsResetingDate(Date penalsResetingDate) {
+        this.penalsResetingDate = penalsResetingDate;
+    }
+
+    public Set<WeekendHouse> getSubscribedWeekendHouses() {
+        return subscribedWeekendHouses;
+    }
+
+    public void setSubscribedWeekendHouses(Set<WeekendHouse> subscribedWeekendHouses) {
+        this.subscribedWeekendHouses = subscribedWeekendHouses;
+    }
+
+    public Set<Boat> getSubscribedBoats() {
+        return subscribedBoats;
+    }
+
+    public void setSubscribedBoats(Set<Boat> subscribedBoats) {
+        this.subscribedBoats = subscribedBoats;
+    }
+
+    public Set<FishingLesson> getSubscribedFishingLessons() {
+        return subscribedFishingLessons;
+    }
+
+    public void setSubscribedFishingLessons(Set<FishingLesson> subscribedFishingLessons) {
+        this.subscribedFishingLessons = subscribedFishingLessons;
+    }
+
+    public static Customer DtoToCustomerWithoutHashingPassword(CustomerDTO customerDto) {
         Customer customer = new Customer();
 
         customer.setId(customerDto.getId());
@@ -155,5 +207,7 @@ public class Customer extends SystemUser implements UserDetails {
         return customer;
     }
 }
+
+
 
 

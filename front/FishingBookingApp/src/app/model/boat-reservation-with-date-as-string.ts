@@ -8,7 +8,7 @@ export interface BoatReservationWithDateAsString {
     endDateTime: string;
     capacity: number ;
     startSpecialOffer: string ;
-    endSpecialOffer: string | null;
+    endSpecialOffer: string;
     services: AdditionalService[];
     price: number;
     customer: Customer;

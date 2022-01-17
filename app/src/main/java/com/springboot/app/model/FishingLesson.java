@@ -51,6 +51,11 @@ public class FishingLesson {
             , cascade = CascadeType.ALL)
     private Set<FishingLessonReservation> fishingLessonReservations = new HashSet<>();
 
+    @ManyToMany(mappedBy="subscribedFishingLessons",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Customer> subscribedCustomers = new HashSet<>();
+
+
+
     public FishingLesson() {
 
     }
@@ -231,5 +236,13 @@ public class FishingLesson {
 
     public void setFishingLessonReservations(Set<FishingLessonReservation> fishingLessonReservations) {
         this.fishingLessonReservations = fishingLessonReservations;
+    }
+
+    public Set<Customer> getSubscribedCustomers() {
+        return subscribedCustomers;
+    }
+
+    public void setSubscribedCustomers(Set<Customer> subscribedCustomers) {
+        this.subscribedCustomers = subscribedCustomers;
     }
 }

@@ -12,13 +12,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -86,6 +79,39 @@ public class EmailServiceImpl implements EmailService {
         mail.setSubject("Successfully reservation");
         mail.setText("You have successfully reserved fishing lesson '" + reservation.getFishingLesson().getName() +
                 "' for period from " + reservation.getStartDateTime() + " to " + reservation.getEndDateTime());
+
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendNotificationForSpecialOfferWeekendHouse(Customer customer, WeekendHouseReservation reservation) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(customer.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("New special offer from weekend house '" + reservation.getWeekendHouse().getName() + "'");
+        mail.setText("Check your list of subscriptions");
+
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendNotificationForSpecialOfferBoat(Customer customer, BoatReservation reservation) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(customer.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("New special offer from boat '" + reservation.getBoat().getName() + "'");
+        mail.setText("Check your list of subscriptions");
+
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendNotificationForSpecialOfferFishingLesson(Customer customer, FishingLessonReservation reservation) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(customer.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("New special offer from fishing lesson '" + reservation.getFishingLesson().getName() + "'");
+        mail.setText("Check your list of subscriptions");
 
         javaMailSender.send(mail);
     }

@@ -21,4 +21,6 @@ public interface BoatReservationService {
     void sendFeedback(BoatFeedback boatFeedback);
 
     void sendComplaint(BoatComplaint boatComplaint);
+
+    List<BoatReservation> getCurrentSpecialOffers();
 }
