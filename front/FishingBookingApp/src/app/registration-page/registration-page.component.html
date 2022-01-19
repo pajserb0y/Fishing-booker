@@ -117,8 +117,10 @@
                     <input matInput type="text" name="motive" [(ngModel)]="nonCustomer.motive" required>
                   </mat-form-field>
                 </div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-raised-button color="accent" (click)="submit()" [disabled]="!(registerForm.valid && customer.password === repassword)" [routerLink]="['/']">Submit</button>
+                <div style="margin-top: 2%;">
+                  <button mat-button matStepperPrevious>Back</button>
+                  <button mat-raised-button color="accent" (click)="submit()" [disabled]="!(registerForm.valid && customer.password === repassword)" >Submit</button>
+                </div>
               </div>
             </mat-step>
       </mat-stepper>

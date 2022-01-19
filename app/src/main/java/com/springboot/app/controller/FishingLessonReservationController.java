@@ -1,10 +1,7 @@
 package com.springboot.app.controller;
 
 import com.springboot.app.model.*;
-import com.springboot.app.model.dto.FishingLessonComplaintDTO;
-import com.springboot.app.model.dto.FishingLessonFeedbackDTO;
-import com.springboot.app.model.dto.FishingLessonReservationDTO;
-import com.springboot.app.model.dto.WeekendHouseReservationDTO;
+import com.springboot.app.model.dto.*;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.FishingLessonReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -32,15 +30,23 @@ public class FishingLessonReservationController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping(path = "/reserve")
-    public ResponseEntity<?> reserve(@RequestBody FishingLessonReservationDTO reservationDto) {
+    public Set<FishingLessonReservationDTO> reserve(@RequestBody FishingLessonReservationDTO reservationDto) {
         FishingLessonReservation reservation = fishingLessonReservationService.reserve(new FishingLessonReservation(reservationDto));
+        if(reservation == null)     //neko je pre njega rezervisao u preklapajucem terminu i on ne moze
+            return null;
         if(reservation.getCustomer() != null)
             emailService.sendNotificationForFishingLessonReservation(reservation);
         else
             for (Customer customer : reservation.getFishingLesson().getSubscribedCustomers())
                 emailService.sendNotificationForSpecialOfferFishingLesson(customer, reservation);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        List<FishingLessonReservation> fishingLessonReservations = fishingLessonReservationService.findAllReservationsForFishingLesson(reservation.getFishingLesson());
+        Set<FishingLessonReservationDTO> resDtos = new HashSet<>();
+        for (FishingLessonReservation res : fishingLessonReservations)
+        {
+            resDtos.add(new FishingLessonReservationDTO(res));
+        }
+        return resDtos;
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")

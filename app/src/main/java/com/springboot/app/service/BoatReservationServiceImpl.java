@@ -3,11 +3,13 @@ package com.springboot.app.service;
 import com.springboot.app.model.*;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class BoatReservationServiceImpl implements BoatReservationService {
     private final BoatReservationRepository boatReservationRepository;
     private final BoatRepository boatRepository;
@@ -28,18 +30,27 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     @Override
     public BoatReservation reserve(BoatReservation boatReservation) {
         Optional<BoatReservation> resInDatabase = boatReservationRepository.findById(boatReservation.getId());
-        if (resInDatabase.isPresent()) {
+        if (resInDatabase.isPresent()) {        // rezervacija akcije
+            if(resInDatabase.get().getCustomer() != null || resInDatabase.get().isCancelled())
+                return null;
             resInDatabase.get().setCustomer(customerRepository.findById(boatReservation.getCustomer().getId()).get());
+            resInDatabase.get().setPrice(boatReservation.getPrice());
             boatReservationRepository.save(resInDatabase.get());
             return resInDatabase.get();
         }
         else {
             Optional<Boat> boat = boatRepository.findById(boatReservation.getBoat().getId());
-            Optional<Customer> customer = customerRepository.findById(boatReservation.getCustomer().getId());
-            if (boat.isPresent() && customer.isPresent()) {
-                boatReservation.setBoat(boat.get());
-                boatReservation.setCustomer(customer.get());
-                boatReservationRepository.save(boatReservation);
+            if (boatReservation.getCustomer() != null) {
+                Optional<Customer> customer = customerRepository.findById(boatReservation.getCustomer().getId());
+                if (boat.isPresent() && customer.isPresent()) {     // standard rezervacija - KONFLIKTNA
+                    if(boatReservationRepository.findAllForDateRange(boatReservation.getStartDateTime(), boatReservation.getEndDateTime()).contains(boat.get().getId()))
+                        return null;
+                    boatReservation.setBoat(boat.get());
+                    boatReservation.setCustomer(customer.get());
+                    boatReservationRepository.save(boatReservation);
+                    boatReservationRepository.cancellAllActionsForThisDateRangeForThisBoat(boatReservation.getStartDateTime(),
+                            boatReservation.getEndDateTime(), boat.get().getId());
+                }
             }
             return boatReservation;
         }
@@ -82,5 +93,10 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     @Override
     public List<BoatReservation> getCurrentSpecialOffers() {
         return boatReservationRepository.getCurrentSpecialOffers();
+    }
+
+    @Override
+    public List<BoatReservation> findAllReservationsForBoat(Boat boat) {
+        return boatReservationRepository.findByBoat(boat);
     }
 }

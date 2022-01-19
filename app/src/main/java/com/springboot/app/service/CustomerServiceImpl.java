@@ -10,6 +10,7 @@ import com.springboot.app.repository.WeekendHouseRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Transactional
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -35,6 +37,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Customer saveCustomer(Customer customer) {
+        if(customerRepository.findByUsername(customer.getUsername()) != null)
+            return null;
         List<Role> roles = roleService.findByName("ROLE_CUSTOMER");
         customer.setRole(roles.get(0));
         if (customer.getPenals() != 0)
@@ -50,13 +54,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findByUsername(String username) {
         Customer customer = customerRepository.findByUsername(username);
-       // if(customer.getPenals())
         return customer;
     }
 
     @Override
     public Customer changeCustomer(CustomerDTO customerDTO) {
         Customer customer = findByUsername(customerDTO.getUsername());
+        if(customer.getVersion() != customerDTO.getVersion())
+            return null;
 
         customer.setPhone(customerDTO.getPhone());
         customer.setCountry(customerDTO.getCountry());

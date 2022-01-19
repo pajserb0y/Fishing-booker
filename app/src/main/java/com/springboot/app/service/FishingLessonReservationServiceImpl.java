@@ -3,11 +3,13 @@ package com.springboot.app.service;
 import com.springboot.app.model.*;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class FishingLessonReservationServiceImpl implements FishingLessonReservationService {
 
     private final FishingLessonReservationRepository fishingLessonReservationRepository;
@@ -30,19 +32,27 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
     @Override
     public FishingLessonReservation reserve(FishingLessonReservation fishingLessonReservation) {
         Optional<FishingLessonReservation> resInDatabase = fishingLessonReservationRepository.findById(fishingLessonReservation.getId());
-        if (resInDatabase.isPresent()) {
+        if (resInDatabase.isPresent()) {        // rezervacija akcije
+            if(resInDatabase.get().getCustomer() != null || resInDatabase.get().isCancelled())
+                return null;
             resInDatabase.get().setCustomer(customerRepository.findById(fishingLessonReservation.getCustomer().getId()).get());
+            resInDatabase.get().setPrice(fishingLessonReservation.getPrice());
             fishingLessonReservationRepository.save(resInDatabase.get());
             return resInDatabase.get();
         }
         else {
             Optional<FishingLesson> fishingLesson = fishingLessonRepository.findById(fishingLessonReservation.getFishingLesson().getId());
-            Optional<Customer> customer = customerRepository.findById(fishingLessonReservation.getCustomer().getId());
-
-            if (fishingLesson.isPresent() && customer.isPresent()) {
-                fishingLessonReservation.setFishingLesson(fishingLesson.get());
-                fishingLessonReservation.setCustomer(customer.get());
-                fishingLessonReservationRepository.save(fishingLessonReservation);
+            if (fishingLessonReservation.getCustomer() != null) {
+                Optional<Customer> customer = customerRepository.findById(fishingLessonReservation.getCustomer().getId());
+                if (fishingLesson.isPresent() && customer.isPresent()) {
+                    if(fishingLessonReservationRepository.findAllForDateRange(fishingLessonReservation.getStartDateTime(), fishingLessonReservation.getEndDateTime()).contains(fishingLesson.get().getId()))
+                        return null;
+                    fishingLessonReservation.setFishingLesson(fishingLesson.get());
+                    fishingLessonReservation.setCustomer(customer.get());
+                    fishingLessonReservationRepository.save(fishingLessonReservation);
+                    fishingLessonReservationRepository.cancellAllActionsForThisDateRangeForThisFishingLesson(fishingLessonReservation.getStartDateTime(),
+                            fishingLessonReservation.getEndDateTime(), fishingLesson.get().getId());
+                }
             }
             return fishingLessonReservation;
         }
@@ -91,5 +101,10 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
     @Override
     public List<FishingLessonReservation> getCurrentSpecialOffers() {
         return fishingLessonReservationRepository.getCurrentSpecialOffers();
+    }
+
+    @Override
+    public List<FishingLessonReservation> findAllReservationsForFishingLesson(FishingLesson fishingLesson) {
+        return fishingLessonReservationRepository.findAllByFishingLesson(fishingLesson);
     }
 }

@@ -79,7 +79,11 @@ export class FishingLessonsComponent implements OnInit {
       penals: 0,
       subscribedWeekendHouses: [],
       subscribedBoats: [],
-      subscribedFishingLessons: []
+      subscribedFishingLessons: [],
+      category: '',
+      discount: 0,
+      points: 0,
+      version: 0
     },
     fishingLesson: this.selectedFishingLessonInfo,
     cancelled: false
@@ -141,8 +145,8 @@ export class FishingLessonsComponent implements OnInit {
   getCustomer() {
     this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
               .subscribe(data => {
-                this.fishingReservation.customer = data.customer
-                this.currentCustomer = data.customer
+                this.fishingReservation.customer = data
+                this.currentCustomer = data
                 console.log('Dobio: ', data)},
               error => this.errorMessage = <any>error);  
   }
@@ -156,7 +160,7 @@ export class FishingLessonsComponent implements OnInit {
     if(this.role != 'ROLE_INSTRUCTOR')
     {
       this.selectedFishingLessonInfo = fishingLesson
-      this.fishingReservation.price = this.selectedFishingLessonInfo.price
+      this.fishingReservation.price = this.selectedFishingLessonInfo.price * (100 - this.currentCustomer.discount)/100
       this.fishingReservation.maxPeopleNumber = 1
       if(this.role == 'ROLE_CUSTOMER')
         this.getAllFreeTerms();
@@ -180,17 +184,20 @@ export class FishingLessonsComponent implements OnInit {
         this.fishingReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
         this.fishingReservation.startDateTime.setHours(Number(this.selectedTerm.split(':')[0]), 0) 
         this.fishingReservation.endSpecialOffer = null
-        this.fishingReservation.price = this.selectedFishingLessonInfo.price
+        this.fishingReservation.price = this.selectedFishingLessonInfo.price * (100 - this.currentCustomer.discount)/100
         for (let service of this.fishingReservation.additionalServices) {
-          this.fishingReservation.price += service.price
+          this.fishingReservation.price += service.price * (100 - this.currentCustomer.discount)/100
         }
         this._instructorService.reserve(this.fishingReservation)
-              .subscribe(data =>  this.fishingLessons = data,
-                  error => this.errorMessage = <any>error); 
-
-        this.router.navigateByUrl('/').then(() => {
-                this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
-                });   
+              .subscribe(data => {
+                if(data == null)
+                  this._snackBar.open('Someone has reserved fishing lesson in selected term before you. Please select other term.', 'Close', {duration: 5000});
+                else {
+                  this.router.navigateByUrl('customer-future-fishing-lesson-reservations').then(() => {
+                  this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+                  }); 
+                }  
+              }, error => this.errorMessage = <any>error);  
     }            
   }
 
@@ -198,9 +205,9 @@ export class FishingLessonsComponent implements OnInit {
     let selectedService = ob.source.value;
     console.log(selectedService);
     if (ob.source._selected)
-      this.fishingReservation.price += selectedService.price
+      this.fishingReservation.price += selectedService.price * (100 - this.currentCustomer.discount)/100
     else
-      this.fishingReservation.price -= selectedService.price
+      this.fishingReservation.price -= selectedService.price * (100 - this.currentCustomer.discount)/100
   }
 
   getDateFromDatePickerRange(start: Date) {

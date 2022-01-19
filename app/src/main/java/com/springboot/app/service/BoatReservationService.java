@@ -1,5 +1,6 @@
 package com.springboot.app.service;
 
+import com.springboot.app.model.Boat;
 import com.springboot.app.model.BoatComplaint;
 import com.springboot.app.model.BoatFeedback;
 import com.springboot.app.model.BoatReservation;
@@ -23,4 +24,6 @@ public interface BoatReservationService {
     void sendComplaint(BoatComplaint boatComplaint);
 
     List<BoatReservation> getCurrentSpecialOffers();
+
+    List<BoatReservation> findAllReservationsForBoat(Boat boat);
 }

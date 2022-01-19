@@ -78,7 +78,11 @@ export class WeekendHousesComponent implements OnInit {
       penals: 0,
       subscribedWeekendHouses: [],
       subscribedBoats: [],
-      subscribedFishingLessons: []
+      subscribedFishingLessons: [],
+      category: '',
+      discount: 0,
+      points: 0,
+      version: 0
     },
     weekendHouse: this.selectedHouseInfo,
     cancelled: false
@@ -131,8 +135,8 @@ export class WeekendHousesComponent implements OnInit {
   getCustomer() {
     this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
               .subscribe(data => {
-                this.houseReservation.customer = data.customer
-                this.currentCustomer = data.customer
+                this.houseReservation.customer = data
+                this.currentCustomer = data
                 console.log('Dobio: ', data)},
               error => this.errorMessage = <any>error);  
   }
@@ -146,7 +150,7 @@ export class WeekendHousesComponent implements OnInit {
     if(this.role != 'ROLE_WEEKEND_HOUSE_OWNER')
     {
       this.selectedHouseInfo = house
-      this.houseReservation.price = this.selectedHouseInfo.price
+      this.houseReservation.price = this.selectedHouseInfo.price * (100 - this.currentCustomer.discount)/100
       this.houseReservation.peopleNumber = 1
       if(this.role == 'ROLE_CUSTOMER')
         this.getAllFreeTerms();
@@ -187,17 +191,21 @@ export class WeekendHousesComponent implements OnInit {
         this.houseReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
         this.houseReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
         this.houseReservation.endSpecialOffer = null
-        this.houseReservation.price = this.selectedHouseInfo.price
+        this.houseReservation.price = this.selectedHouseInfo.price * (100 - this.currentCustomer.discount)/100
         for (let service of this.houseReservation.services) {
-          this.houseReservation.price += service.price
+          this.houseReservation.price += service.price * (100 - this.currentCustomer.discount)/100
         }
         this._weekendHouseOwnerService.reserve(this.houseReservation)
-              .subscribe(data => {},
-                  error => this.errorMessage = <any>error); 
-
-        this.router.navigateByUrl('/').then(() => {
-                this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
-                });   
+              .subscribe(data => {
+                if(data == null)
+                  this._snackBar.open('Someone has reserved house in selected term before you. Please select other term.', 'Close', {duration: 5000});
+                else {
+                  this.router.navigateByUrl('customer-future-weekend-house-reservations').then(() => {
+                  this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+                  }); 
+                }  
+              },
+                  error => this.errorMessage = <any>error);   
     }            
   }
 
@@ -205,9 +213,9 @@ export class WeekendHousesComponent implements OnInit {
     let selectedService = ob.source.value;
     console.log(selectedService);
     if (ob.source._selected)
-      this.houseReservation.price += selectedService.price
+      this.houseReservation.price += selectedService.price * (100 - this.currentCustomer.discount)/100
     else
-      this.houseReservation.price -= selectedService.price
+      this.houseReservation.price -= selectedService.price * (100 - this.currentCustomer.discount)/100
   }
 
   getDateFromDatePickerRange(start: Date) {

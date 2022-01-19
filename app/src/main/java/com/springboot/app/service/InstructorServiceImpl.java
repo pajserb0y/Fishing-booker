@@ -7,6 +7,7 @@ import com.springboot.app.model.dto.InstructorDTO;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,5 +141,10 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public List<FishingLessonReservation> findAllReservationsForFishingLesson(Integer fishingLessonId) {
         return fishingLessonReservationRepository.findAllByFishingLessonId(fishingLessonId);
+    }
+
+    @Override
+    public Collection<String> findAllUsernames() {
+        return instructorRepository.findAllUsernames();
     }
 }

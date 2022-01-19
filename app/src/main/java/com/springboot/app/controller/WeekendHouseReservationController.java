@@ -37,12 +37,14 @@ public class WeekendHouseReservationController {
     @PreAuthorize("hasAnyRole('CUSTOMER','WEEKEND_HOUSE_OWNER')")
     @PostMapping(path = "/reserve")
     public Set<WeekendHouseReservationDTO> reserve(@RequestBody WeekendHouseReservationDTO reservationDto) {
-        if(reservationDto.getCustomer() != null)
-            if(reservationDto.getStartSpecialOffer() != null && reservationDto.getEndSpecialOffer() != null)
-            {
-               //return null;   //NE MOZE ovde da ulazi i returnuje bilo sta jer posle ja necu moci da rezervisem tu akciju!!  //nekako treba vratiti bad request -> vrati null, pa onda na frontu ako je null izbaci neko obavestenje sa porukom
-            }
+//        if(reservationDto.getCustomer() != null)
+//            if(reservationDto.getStartSpecialOffer() != null && reservationDto.getEndSpecialOffer() != null)
+//            {
+//               //return null;   //NE MOZE ovde da ulazi i returnuje bilo sta jer posle ja necu moci da rezervisem tu akciju!!  //nekako treba vratiti bad request -> vrati null, pa onda na frontu ako je null izbaci neko obavestenje sa porukom
+//            }
         WeekendHouseReservation reservation = weekendHouseReservationService.reserve(new WeekendHouseReservation(reservationDto));
+        if(reservation == null)     //neko je pre njega rezervisao u preklapajucem terminu i on ne moze
+            return null;
         if(reservation.getCustomer() != null)
             emailService.sendNotificationForWeekendHouseReservation(reservation);
         else

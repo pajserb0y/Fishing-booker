@@ -73,7 +73,11 @@ export class WeekendHouseProfileComponent implements OnInit {
       penals: 0,
       subscribedWeekendHouses: [],
       subscribedBoats: [],
-      subscribedFishingLessons: []
+      subscribedFishingLessons: [],
+      category: '',
+      discount: 0,
+      points: 0,
+      version: 0
     },
     weekendHouse: this.weekendHouse,
     cancelled: false

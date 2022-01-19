@@ -8,6 +8,7 @@ import { Instructor } from '../model/instructor';
 import { BoatOwnerService } from '../service/boat-owner.service';
 import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
 import { InstructorService } from '../service/instructor.service';
+import { Router } from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -41,7 +42,11 @@ export class RegistrationPageComponent implements OnInit {
     penals: 0,
     subscribedWeekendHouses: [],
       subscribedBoats: [],
-      subscribedFishingLessons: []
+      subscribedFishingLessons: [],
+      category: '',
+      discount: 0,
+      points: 0,
+      version: 0
   }
   errorMessage : string  = '';
   repassword: string = '';
@@ -63,12 +68,10 @@ export class RegistrationPageComponent implements OnInit {
 
 
   constructor(public _customerService: CustomerService, public _boatOwnerService: BoatOwnerService,public _weekendHouseOwnerService: WeekendHouseOwnerService,
-              public _instructorService: InstructorService, private _snackBar: MatSnackBar) { }
+              public _instructorService: InstructorService, private _snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
-    this.getAllCustomerUsernames();
-    this.getAllBoatOwnersUsernames();
-    this.getAllWeekendHouseOwnersUsernames();
+    this.getAllUsernames();
   }
 
   submit(): void {
@@ -77,12 +80,19 @@ export class RegistrationPageComponent implements OnInit {
       this.customer.penals = 1
       this._customerService.createCustomer(this.customer)
       .subscribe(
-        data => console.log('Success!', data),
+        data => {
+          if(data == null)
+            this._snackBar.open('User exists with same username.', 'Close', {duration: 5000});
+          else {
+            this.router.navigateByUrl('/').then(() => {
+              this._snackBar.open('Registration request successfully submited! An activation mail has been sent to your inbox.', 'Close', {duration: 5000});
+              }); 
+          }
+        },
         error => console.log('Error!', error)
       )
   
-      console.log(this.customer);
-      this._snackBar.open('Registration request successfully submited! An activation mail has been sent to your inbox.', 'Close', {duration: 5000});
+      
     }
     else{
         this.nonCustomer.id = this.customer.id;
@@ -132,19 +142,11 @@ export class RegistrationPageComponent implements OnInit {
       }
   }
 
-  getAllCustomerUsernames() {
+  getAllUsernames() {
     this._customerService.getAllUsernames()
-        .subscribe(data => this.usernames.concat(data),
-                    error => this.errorMessage = <any>error);
-  }
-  getAllBoatOwnersUsernames() {
-    this._boatOwnerService.getAllUsernames()
-        .subscribe(data => this.usernames.concat(data),
-                    error => this.errorMessage = <any>error);
-  }
-  getAllWeekendHouseOwnersUsernames() {
-    this._weekendHouseOwnerService.getAllUsernames()
-        .subscribe(data => this.usernames.concat(data),
+        .subscribe(data => {
+          this.usernames = data
+          console.log(this.usernames);},
                     error => this.errorMessage = <any>error);
   }
 }

@@ -55,7 +55,11 @@ export class SpecialOffersComponent implements OnInit {
       penals: 0,
       subscribedWeekendHouses: [],
       subscribedBoats: [],
-      subscribedFishingLessons: []
+      subscribedFishingLessons: [],
+      category: '',
+      discount: 0,
+      points: 0,
+      version: 0
     },
     weekendHouse: {
       id: 0,
@@ -109,7 +113,11 @@ export class SpecialOffersComponent implements OnInit {
       penals: 0,
       subscribedWeekendHouses: [],
       subscribedBoats: [],
-      subscribedFishingLessons: []
+      subscribedFishingLessons: [],
+      category: '',
+      discount: 0,
+      points: 0,
+      version: 0
     },
     boat: {
       id: 0,
@@ -164,7 +172,11 @@ export class SpecialOffersComponent implements OnInit {
       penals: 0,
       subscribedWeekendHouses: [],
       subscribedBoats: [],
-      subscribedFishingLessons: []
+      subscribedFishingLessons: [],
+      category: '',
+      discount: 0,
+      points: 0,
+      version: 0
     },
     fishingLesson: {
       id: 0,
@@ -212,7 +224,7 @@ export class SpecialOffersComponent implements OnInit {
   getCustomer() {
     this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
               .subscribe(data => {
-                this.customer = data.customer
+                this.customer = data
                 console.log('Dobio: ', data)},
               error => this.errorMessage = <any>error);  
   }
@@ -236,7 +248,7 @@ export class SpecialOffersComponent implements OnInit {
                             endSpecialOffer: res.endSpecialOffer,
                             services: res.additionalServices,
                             originalPrice: res.price,
-                            discountPrice: res.price * 0.8,
+                            discountPrice: res.price * 0.8 * (100 - this.customer.discount)/100,
                             customer: res.customer,
                             entity: res.fishingLesson,
                             entityType: 'Fishing lesson',
@@ -262,7 +274,7 @@ export class SpecialOffersComponent implements OnInit {
                                             endSpecialOffer: res.endSpecialOffer,
                                             services: res.services,
                                             originalPrice: res.price,
-                                            discountPrice: res.price * 0.8,
+                                            discountPrice: res.price * 0.8 * (100 - this.customer.discount)/100,
                                             customer: res.customer,
                                             entity: res.boat,
                                             entityType: 'Boat',
@@ -288,7 +300,7 @@ export class SpecialOffersComponent implements OnInit {
                                                                 endSpecialOffer: res.endSpecialOffer,
                                                                 services: res.services,
                                                                 originalPrice: res.price,
-                                                                discountPrice: res.price * 0.8,
+                                                                discountPrice: res.price * 0.8 * (100 - this.customer.discount)/100,
                                                                 customer: res.customer,
                                                                 entity: res.weekendHouse,
                                                                 entityType: 'Weekend house',
@@ -319,10 +331,16 @@ export class SpecialOffersComponent implements OnInit {
         this.houseReservation.customer = this.customer
 
         this._weekendHouseOwnerService.reserve(this.houseReservation)
-              .subscribe(data => {},
-                  error => this.errorMessage = <any>error); 
-
-        window.location.reload(); //pomeri iz tabele tu speical offer
+              .subscribe(data => {
+                if(data == null)
+                  this._snackBar.open('Someone has reserved house in selected term before you. Please select other term.', 'Close', {duration: 5000});
+                else {
+                  this.router.navigateByUrl('customer-future-weekend-house-reservations').then(() => {
+                    this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+                    window.location.reload(); //pomeri iz tabele tu speical offer
+                  }); 
+                }
+              },error => this.errorMessage = <any>error); 
     }    
     else if(specialOffer.entityType == 'Boat') {
       this.boatReservation.id = specialOffer.id
@@ -337,10 +355,15 @@ export class SpecialOffersComponent implements OnInit {
       this.boatReservation.customer = this.customer
 
       this._boatOwnerService.reserve(this.boatReservation)
-            .subscribe(data => {},
-                error => this.errorMessage = <any>error); 
-
-      window.location.reload(); //pomeri iz tabele tu speical offer
+            .subscribe(data => {if(data == null)
+              this._snackBar.open('Someone has reserved boat in selected term before you. Please select other term.', 'Close', {duration: 5000});
+            else {
+              this.router.navigateByUrl('customer-future-boat-reservations').then(() => {
+                this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+                window.location.reload(); //pomeri iz tabele tu speical offer
+              }); 
+            }
+          },error => this.errorMessage = <any>error);
     }
     else if(specialOffer.entityType == 'Fishing lesson') {
       this.fishingReservation.id = specialOffer.id
@@ -355,10 +378,15 @@ export class SpecialOffersComponent implements OnInit {
       this.fishingReservation.customer = this.customer
 
       this._instructorService.reserve(this.fishingReservation)
-            .subscribe(data => {},
-                error => this.errorMessage = <any>error); 
-
-      window.location.reload(); //pomeri iz tabele tu speical offer
+            .subscribe(data => {if(data == null)
+              this._snackBar.open('Someone has reserved fishing lesson in selected term before you. Please select other term.', 'Close', {duration: 5000});
+            else {
+              this.router.navigateByUrl('customer-future-fishing-lesson-reservations').then(() => {
+                this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+                window.location.reload(); //pomeri iz tabele tu speical offer
+              }); 
+            }
+          },error => this.errorMessage = <any>error); 
     }  
   }
 

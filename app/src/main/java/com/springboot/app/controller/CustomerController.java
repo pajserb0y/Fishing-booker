@@ -2,7 +2,6 @@ package com.springboot.app.controller;
 
 import com.springboot.app.model.Customer;
 import com.springboot.app.model.dto.CustomerDTO;
-import com.springboot.app.model.dto.CustomerLoyalty;
 import com.springboot.app.model.dto.DeleteDTO;
 import com.springboot.app.model.dto.EntityIdAndCustomerUsername;
 import com.springboot.app.service.CustomerService;
@@ -32,14 +31,16 @@ public class CustomerController {
     }
 
     @PostMapping(path = "/create")
-    public ResponseEntity<?> createCustomer(@RequestBody @Valid CustomerDTO customerDto, BindingResult result) throws Exception {
+    public CustomerDTO createCustomer(@RequestBody @Valid CustomerDTO customerDto, BindingResult result) throws Exception {
         if(result.hasErrors()){
-            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            return null;
         }
         Customer newCustomer = customerService.saveCustomer(new Customer(customerDto));
-        emailService.sendActivationMailAsync(newCustomer);
+        if(newCustomer == null)     // gledam da li je neko u medjuvremenu napravio nalog sa istim usernamemom
+            return null;
 
-        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
+        emailService.sendActivationMailAsync(newCustomer);
+        return new CustomerDTO(newCustomer);
     }
 
     @GetMapping(path = "/activate")
@@ -59,9 +60,9 @@ public class CustomerController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping(path = "/{username}")
-    public CustomerLoyalty getCustomerByUsername(@PathVariable String username) {
+    public CustomerDTO getCustomerByUsername(@PathVariable String username) {
         Customer customer = customerService.findByUsername(username);
-        return new CustomerLoyalty(customer);
+        return new CustomerDTO(customer);
     }
 
 //    @PreAuthorize("hasRole('CUSTOMER')")
@@ -77,6 +78,9 @@ public class CustomerController {
         if(result.hasErrors())
             return null;
         Customer editedCustomer = customerService.changeCustomer(customerDto);
+        if(editedCustomer == null)
+            return null;
+
         return new CustomerDTO(editedCustomer);
     }
 

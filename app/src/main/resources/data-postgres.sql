@@ -6,10 +6,10 @@ insert into role (name) values ('ROLE_INSTRUCTOR');
 insert into role (name) values ('ROLE_WEEKEND_HOUSE_OWNER');
 
 
-insert into customer (penals_reseting_date, address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, hash_code, penals, role_id)
-    values ('03.01.2022 14:00:00', 'Presernova 3', 'Bled', 'Slovenia', 'health.care.clinic.psw+milica@gmail.com', 'Milica', true, false, 'Antic', '$2a$10$hd.PcSgRocME1rIrpLhXWOO/uKacPl4oyjf3k5DGHaBhesm6wC3SK', '0651234432', 'milica', false, '', 2, 1);
-insert into customer (penals_reseting_date, address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, hash_code, penals, role_id)
-    values ('03.01.2021 14:00:00', 'Masarikova 23', 'Novi Sad', 'Serbia', 'health.care.clinic.psw+predrag@gmail.com', 'Predrag', true, false, 'Miric', '$2a$10$l.fpbmzdA7ooTKv5nb5vheG7fX5lN2jxVQMUdsANPpVpGR4q7fDvy', '0656544432', 'predrag', false, '', 4, 1);
+insert into customer (category, discount, points, version, penals_reseting_date, address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, hash_code, penals, role_id)
+    values ('Silver', 10, 45, 0, '03.01.2022 14:00:00', 'Presernova 3', 'Bled', 'Slovenia', 'health.care.clinic.psw+milica@gmail.com', 'Milica', true, false, 'Antic', '$2a$10$hd.PcSgRocME1rIrpLhXWOO/uKacPl4oyjf3k5DGHaBhesm6wC3SK', '0651234432', 'milica', false, '', 2, 1);
+insert into customer (category, discount, points, version, penals_reseting_date, address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, hash_code, penals, role_id)
+    values ('Bronze', 0, 25, 0, '03.01.2021 14:00:00', 'Masarikova 23', 'Novi Sad', 'Serbia', 'health.care.clinic.psw+predrag@gmail.com', 'Predrag', true, false, 'Miric', '$2a$10$l.fpbmzdA7ooTKv5nb5vheG7fX5lN2jxVQMUdsANPpVpGR4q7fDvy', '0656544432', 'predrag', false, '', 4, 1);
 
 --------- WEEKEND HOUSE
 insert into weekend_house_owner (address, city, country, email, first_name, is_activated, is_deleted, last_name, password, phone, username, want_deleting, motive, role_id)

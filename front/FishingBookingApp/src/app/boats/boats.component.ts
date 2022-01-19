@@ -75,7 +75,11 @@ export class BoatsComponent implements OnInit {
       penals: 0,
       subscribedWeekendHouses: [],
       subscribedBoats: [],
-      subscribedFishingLessons: []
+      subscribedFishingLessons: [],
+      category: '',
+      discount: 0,
+      points: 0,
+      version: 0
     },
     boat: this.selectedBoatInfo,
     cancelled: false
@@ -145,8 +149,8 @@ export class BoatsComponent implements OnInit {
   getCustomer() {
     this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
               .subscribe(data => {
-                this.boatReservation.customer = data.customer
-                this.currentCustomer = data.customer
+                this.boatReservation.customer = data
+                this.currentCustomer = data
                 console.log('Dobio: ', data)},
               error => this.errorMessage = <any>error);  
   }
@@ -160,7 +164,7 @@ export class BoatsComponent implements OnInit {
     if(this.role != 'ROLE_BOAT_OWNER')
     {
       this.selectedBoatInfo = boat
-      this.boatReservation.price = this.selectedBoatInfo.price
+      this.boatReservation.price = this.selectedBoatInfo.price * (100 - this.currentCustomer.discount)/100
       this.boatReservation.capacity = 1
       if(this.role == 'ROLE_CUSTOMER')
         this.getAllFreeTerms();
@@ -183,17 +187,20 @@ export class BoatsComponent implements OnInit {
         this.boatReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
         this.boatReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
         this.boatReservation.endSpecialOffer = null
-        this.boatReservation.price = this.selectedBoatInfo.price
+        this.boatReservation.price = this.selectedBoatInfo.price * (100 - this.currentCustomer.discount)/100
         for (let service of this.boatReservation.services) {
-          this.boatReservation.price += service.price
+          this.boatReservation.price += service.price * (100 - this.currentCustomer.discount)/100
         }
         this._boatOwnerService.reserve(this.boatReservation)
-              .subscribe(data =>  this.boats = data,
-                  error => this.errorMessage = <any>error); 
-
-        this.router.navigateByUrl('/').then(() => {
-                this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
-                });   
+              .subscribe(data => {
+                if(data == null)
+                  this._snackBar.open('Someone has reserved boat in selected term before you. Please select other term.', 'Close', {duration: 5000});
+                else {
+                  this.router.navigateByUrl('customer-future-boat-reservations').then(() => {
+                  this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+                  }); 
+                }  
+              }, error => this.errorMessage = <any>error);   
     }            
   }
 
@@ -201,9 +208,9 @@ export class BoatsComponent implements OnInit {
     let selectedService = ob.source.value;
     console.log(selectedService);
     if (ob.source._selected)
-      this.boatReservation.price += selectedService.price
+      this.boatReservation.price += selectedService.price * (100 - this.currentCustomer.discount)/100
     else
-      this.boatReservation.price -= selectedService.price
+      this.boatReservation.price -= selectedService.price * (100 - this.currentCustomer.discount)/100
   }
 
   getDateFromDatePickerRange(start: Date) {

@@ -3,11 +3,13 @@ package com.springboot.app.service;
 import com.springboot.app.model.*;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class WeekendHouseReservationServiceImpl implements WeekendHouseReservationService {
     private final WeekendHouseReservationRepository weekendHouseReservationRepository;
     private final WeekendHouseRepository weekendHouseRepository;
@@ -29,8 +31,11 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     @Override
     public WeekendHouseReservation reserve(WeekendHouseReservation weekendHouseReservation) {
         Optional<WeekendHouseReservation> resInDatabase = weekendHouseReservationRepository.findById(weekendHouseReservation.getId());
-        if (resInDatabase.isPresent()) {
+        if (resInDatabase.isPresent()) {         // rezervacija akcije
+            if(resInDatabase.get().getCustomer() != null || resInDatabase.get().isCancelled())
+                return null;
             resInDatabase.get().setCustomer(customerRepository.findById(weekendHouseReservation.getCustomer().getId()).get());
+            resInDatabase.get().setPrice(weekendHouseReservation.getPrice());
             weekendHouseReservationRepository.save(resInDatabase.get());
             return resInDatabase.get();
         }
@@ -38,13 +43,17 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
             Optional<WeekendHouse> house = weekendHouseRepository.findById(weekendHouseReservation.getWeekendHouse().getId());
             if (weekendHouseReservation.getCustomer() != null) {
                 Optional<Customer> customer = customerRepository.findById(weekendHouseReservation.getCustomer().getId());
-                if (house.isPresent() && customer.isPresent()) {
+                if (house.isPresent() && customer.isPresent()) {        // standard rezervacija - KONFLIKTNA
+                    if(weekendHouseReservationRepository.findAllForDateRange(weekendHouseReservation.getStartDateTime(), weekendHouseReservation.getEndDateTime()).contains(house.get().getId()))
+                        return null;
                     weekendHouseReservation.setWeekendHouse(house.get());
                     weekendHouseReservation.setCustomer(customer.get());
                     weekendHouseReservationRepository.save(weekendHouseReservation);
+                    weekendHouseReservationRepository.cancellAllActionsForThisDateRangeForThisWeekendHouse(weekendHouseReservation.getStartDateTime(),
+                                                                                                            weekendHouseReservation.getEndDateTime(), house.get().getId());
                 }
             } else {
-                if (house.isPresent()) {
+                if (house.isPresent()) {        //pravljenje akcije, nije konfliktno jer samo house owner to moze da radi
                     weekendHouseReservation.setWeekendHouse(house.get());
                     weekendHouseReservation.setCustomer(null);
                     weekendHouseReservationRepository.save(weekendHouseReservation);

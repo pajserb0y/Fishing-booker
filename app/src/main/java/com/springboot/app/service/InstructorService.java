@@ -5,6 +5,7 @@ import com.springboot.app.model.dto.DateTimeRangeDTO;
 import com.springboot.app.model.dto.FishingLessonDTO;
 import com.springboot.app.model.dto.InstructorDTO;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface InstructorService {
@@ -35,4 +36,6 @@ public interface InstructorService {
     List<TermFishingLesson> findFreeTermsForFishingLesson(FishingLesson fishingLesson);
 
     List<FishingLessonReservation> findAllReservationsForFishingLesson(Integer fishingLessonId);
+
+    Collection<String> findAllUsernames();
 }

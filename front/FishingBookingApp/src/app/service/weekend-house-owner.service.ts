@@ -93,11 +93,6 @@ export class WeekendHouseOwnerService {
                                 catchError(this.handleError)); 
   }
 
-  getAllUsernames(): Observable<string[]> { 
-    return this._http.get<string[]>(this._getAllUsernames)
-                          .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
-                            catchError(this.handleError)); 
-  }
 
   getAllWeekendHouses(): Observable<WeekendHouseWithAvgGrade[]> {
     return this._http.get<WeekendHouseWithAvgGrade[]>(this._allWeekendHouses)

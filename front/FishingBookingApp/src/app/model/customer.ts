@@ -17,4 +17,8 @@ export interface Customer {
     subscribedWeekendHouses: WeekendHouse[];
     subscribedBoats: Boat[];
     subscribedFishingLessons: FishingLesson[];
+    points: number ;
+    category: string ;
+    discount: number;
+    version: number;
   }

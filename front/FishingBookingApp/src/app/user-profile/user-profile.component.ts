@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { subscribeTo } from 'rxjs/internal-compatibility';
 import { Boat } from '../model/boat';
 import { Customer } from '../model/customer';
-import { CustomerLoyalty } from '../model/customer-loyalty';
 import { DeleteDto } from '../model/deleteDto';
 import { FishingLesson } from '../model/fishing-lesson';
 import { Instructor } from '../model/instructor';
@@ -21,8 +20,7 @@ import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service
 export class UserProfileComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'address', 'description', 'owner', 'price'];
-  customer: CustomerLoyalty = {
-    customer : {
+  customer: Customer = {
       id: 0,
       firstName: "",
       lastName: "",
@@ -36,10 +34,11 @@ export class UserProfileComponent implements OnInit {
       penals: 0,
       subscribedWeekendHouses: [],
       subscribedBoats: [],
-      subscribedFishingLessons: []
-    },
-    points: 0,
-    category: ""
+      subscribedFishingLessons: [],
+      category: '',
+      discount: 0,
+      points: 0,
+      version: 0
   };
   subscriptions : (WeekendHouse | Boat | FishingLesson)[] = [];
   subscriptionsHouse : WeekendHouse[] = [];
@@ -67,13 +66,13 @@ export class UserProfileComponent implements OnInit {
   edit() {
     if(this.role == 'ROLE_CUSTOMER') 
     {
-      this._customerService.edit(this.customer.customer)
+      this._customerService.edit(this.customer)
           .subscribe(data => {
             console.log('Dobio: ', data)
             if(data == null)
-              this._snackBar.open('Incorrect filling of form! Check and send again edit request', 'Close', {duration: 5000});
+              this._snackBar.open('Incorrect filling of form or someone edited before you! Check and send again edit request', 'Close', {duration: 5000});
             else
-              this.customer.customer = data
+              this.customer = data
             },
           error => this.errorMessage = <any>error); 
 
@@ -137,16 +136,16 @@ export class UserProfileComponent implements OnInit {
       this._customerService.getCustomerByUsername(localStorage.getItem('username') || '')
       .subscribe(data => {
                   this.customer = data
-                  this.customer.customer.password = ''
+                  this.customer.password = data.password
                   this.repassword = ''
-                  this.repassword = this.customer.customer.password;
-                  this.oldCustomer = data.customer
-                  this.deleteDto.id = this.customer.customer.id
+                  this.repassword = this.customer.password;
+                  this.oldCustomer = data
+                  this.deleteDto.id = this.customer.id
 
                   this.subscriptions = []
-                  this.subscriptionsHouse = data.customer.subscribedWeekendHouses
-                  this.subscriptionsBoat = data.customer.subscribedBoats
-                  this.subscriptionsLesson = data.customer.subscribedFishingLessons
+                  this.subscriptionsHouse = data.subscribedWeekendHouses
+                  this.subscriptionsBoat = data.subscribedBoats
+                  this.subscriptionsLesson = data.subscribedFishingLessons
                   console.log('Dobio: ', data)},
                 error => this.errorMessage = <any>error);  
     }
@@ -160,9 +159,9 @@ export class UserProfileComponent implements OnInit {
       .subscribe(data => {
                   this.nonCustomer = data
                   this.nonCustomerToCustomer()//porebaci nonCustomer-a u customera zbog lakseg prikaza
-                  this.repassword = this.customer.customer.password;
+                  this.repassword = this.customer.password;
                   //this.oldCustomer = data
-                  this.deleteDto.id = this.customer.customer.id
+                  this.deleteDto.id = this.customer.id
                   console.log('Dobio: ', data)},
                 error => this.errorMessage = <any>error);   
     }
@@ -172,9 +171,9 @@ export class UserProfileComponent implements OnInit {
       .subscribe(data => {
                   this.nonCustomer = data
                   this.nonCustomerToCustomer()//porebaci nonCustomer-a u customera zbog lakseg prikaza
-                  this.repassword = this.customer.customer.password;
+                  this.repassword = this.customer.password;
                   //this.oldCustomer = data
-                  this.deleteDto.id = this.customer.customer.id
+                  this.deleteDto.id = this.customer.id
                   console.log('Dobio: ', data)},
                 error => this.errorMessage = <any>error);
     }
@@ -185,7 +184,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   unsubscribeHouse(entity : WeekendHouse) {
-    this._customerService.unsubscribeHouse(this.customer.customer.username, entity.id)
+    this._customerService.unsubscribeHouse(this.customer.username, entity.id)
       .subscribe(data => {
                   const index = this.subscriptionsHouse.indexOf(entity);
                   this.subscriptionsHouse.splice(index, 1);},
@@ -193,7 +192,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   unsubscribeBoat(entity : Boat) {
-    this._customerService.unsubscribeBoat(this.customer.customer.username, entity.id)
+    this._customerService.unsubscribeBoat(this.customer.username, entity.id)
       .subscribe(data => {
                   const index = this.subscriptionsBoat.indexOf(entity);
                   this.subscriptionsBoat.splice(index, 1);},
@@ -201,7 +200,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   unsubscribeLesson(entity : FishingLesson) {
-    this._customerService.unsubscribeLesson(this.customer.customer.username, entity.id)
+    this._customerService.unsubscribeLesson(this.customer.username, entity.id)
       .subscribe(data => {
                   const index = this.subscriptionsLesson.indexOf(entity);
                   this.subscriptionsLesson.splice(index, 1);},
@@ -220,16 +219,15 @@ export class UserProfileComponent implements OnInit {
 
   nonCustomerToCustomer()
   {
-    this.customer.customer.id = this.nonCustomer.id;
-    this.customer.customer.firstName= this.nonCustomer.firstName;
-    this.customer.customer.lastName= this.nonCustomer.lastName;
-    this.customer.customer.email= this.nonCustomer.email;
-    this.customer.customer.username= this.nonCustomer.username;
-    this.customer.customer.password= this.nonCustomer.password;
-    this.customer.customer.address= this.nonCustomer.address;
-    this.customer.customer.city= this.nonCustomer.city;
-    this.customer.customer.country= this.nonCustomer.country;
-    this.customer.customer.phone= this.nonCustomer.phone;
+    this.customer.id = this.nonCustomer.id;
+    this.customer.firstName= this.nonCustomer.firstName;
+    this.customer.lastName= this.nonCustomer.lastName;
+    this.customer.email= this.nonCustomer.email;
+    this.customer.username= this.nonCustomer.username;
+    this.customer.password= this.nonCustomer.password;
+    this.customer.city= this.nonCustomer.city;
+    this.customer.country= this.nonCustomer.country;
+    this.customer.phone= this.nonCustomer.phone;
   }
 
 /*customerToNonCustomer()

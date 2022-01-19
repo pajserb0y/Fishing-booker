@@ -33,6 +33,10 @@ public class CustomerDTO {
     @NotEmpty(message = "Please fill out phone")
     private String phone;
     private Integer penals;
+    private String category;
+    private Integer points;
+    private Integer discount;
+    private Integer version;
 
     private Set<WeekendHouseDTO> subscribedWeekendHouses;
     private Set<BoatDTO> subscribedBoats;
@@ -67,6 +71,10 @@ public class CustomerDTO {
         this.country = customer.getCountry();
         this.phone = customer.getPhone();
         this.penals = customer.getPenals();
+        this.category = customer.getCategory();
+        this.points = customer.getPoints();
+        this.discount = customer.getDiscount();
+        this.version = customer.getVersion();
 
         Set<WeekendHouseDTO> houses = new HashSet<>();
         for (WeekendHouse w : customer.getSubscribedWeekendHouses())
@@ -194,5 +202,37 @@ public class CustomerDTO {
 
     public void setSubscribedFishingLessons(Set<FishingLessonDTO> subscribedFishingLessons) {
         this.subscribedFishingLessons = subscribedFishingLessons;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

@@ -18,6 +18,12 @@ public class Customer extends SystemUser implements UserDetails {
     private String hashCode;
     private Integer penals;
     private Date penalsResetingDate;
+    private String category;
+    private Integer points;
+    private Integer discount;
+    @Version
+    private Integer version;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
@@ -75,6 +81,10 @@ public class Customer extends SystemUser implements UserDetails {
         this.hashCode = generateHashCode(this.password);
         this.penals = customerDto.getPenals();
         this.penalsResetingDate = new Date();
+        this.category = customerDto.getCategory();
+        this.points = customerDto.getPoints();
+        this.discount = customerDto.getDiscount();
+        this.version = customerDto.getVersion();
     }
 
     public Role getRole() {
@@ -187,6 +197,38 @@ public class Customer extends SystemUser implements UserDetails {
 
     public void setSubscribedFishingLessons(Set<FishingLesson> subscribedFishingLessons) {
         this.subscribedFishingLessons = subscribedFishingLessons;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public static Customer DtoToCustomerWithoutHashingPassword(CustomerDTO customerDto) {

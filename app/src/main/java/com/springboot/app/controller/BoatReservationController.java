@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,15 +31,23 @@ public class BoatReservationController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping(path = "/reserve")
-    public ResponseEntity<?> reserve(@RequestBody BoatReservationDTO reservationDto) {
+    public Set<BoatReservationDTO> reserve(@RequestBody BoatReservationDTO reservationDto) {
         BoatReservation reservation = boatReservationService.reserve(new BoatReservation(reservationDto));
+        if(reservation == null)     //neko je pre njega rezervisao u preklapajucem terminu i on ne moze
+            return null;
         if(reservation.getCustomer() != null)
             emailService.sendNotificationForBoatReservation(reservation);
         else
             for (Customer customer : reservation.getBoat().getSubscribedCustomers())
                 emailService.sendNotificationForSpecialOfferBoat(customer, reservation);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        List<BoatReservation> boatReservations = boatReservationService.findAllReservationsForBoat(reservation.getBoat());
+        Set<BoatReservationDTO> resDtos = new HashSet<>();
+        for (BoatReservation res : boatReservations)
+        {
+            resDtos.add(new BoatReservationDTO(res));
+        }
+        return resDtos;
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")

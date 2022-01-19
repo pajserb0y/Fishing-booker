@@ -111,11 +111,6 @@ export class BoatOwnerService {
                                 catchError(this.handleError)); 
   }
   
-  getAllUsernames(): Observable<string[]> { 
-    return this._http.get<string[]>(this._getAllUsernames)
-                          .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
-                            catchError(this.handleError)); 
-  }
 
   private handleError(err : HttpErrorResponse) {
     console.log(err.message);

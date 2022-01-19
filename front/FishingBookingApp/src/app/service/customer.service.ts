@@ -7,8 +7,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 /* import { do } from "rxjs/operators"; */
 import { of } from 'rxjs';
 import 'rxjs/add/operator/catch';
-import { DeleteDto } from '../model/deleteDto';
-import { CustomerLoyalty } from '../model/customer-loyalty';   
+import { DeleteDto } from '../model/deleteDto';  
 
 const headers = { 'content-type': 'application/json'} 
 
@@ -30,7 +29,7 @@ export class CustomerService {
   private _unsubscribeBoat  = this._customerRegistration + '/unsubscribeBoat';
   private _unsubscribeFishingLesson  = this._customerRegistration + '/unsubscribeFishingLesson';
   private _login = this._baseUrl + 'auth/login';  
-  private _getAllUsernames = this._baseUrl + 'auth/getAllCustomerUsernames';
+  private _getAllUsernames = this._baseUrl + 'auth/getAllUsernames';
 
 
   returnedCustomer!: Customer;
@@ -97,8 +96,8 @@ export class CustomerService {
     return this._http.post(this._editCustomer, body)
   }
 
-  getCustomerByUsername(username: string): Observable<CustomerLoyalty> {
-    return this._http.get<CustomerLoyalty>(this._getCustomerByUsername + username)
+  getCustomerByUsername(username: string): Observable<Customer> {
+    return this._http.get<Customer>(this._getCustomerByUsername + username)
                            .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
                                 catchError(this.handleError)); 
   }
