@@ -1,6 +1,7 @@
 package com.springboot.app.repository;
 
 import com.springboot.app.model.BoatReservation;
+import com.springboot.app.model.FishingLessonReservation;
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,6 +32,10 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     @Query("SELECT a FROM BoatReservation a WHERE a.customer = null AND a.endSpecialOffer != null AND a.startSpecialOffer <= cast(NOW() as timestamp)" +
             "AND a.endSpecialOffer >= cast(NOW() as timestamp)")
     List<BoatReservation> getCurrentSpecialOffers();
+
+    @Query("SELECT res FROM BoatReservation res WHERE res.boat.boatOwner.id = :id")
+    List<BoatReservation> findAllReservationsForInstructor(@Param("id") Integer boatOwnerId);
+
 //
 //    List<WeekendHouseReservation> findByWeekendHouse(WeekendHouse weekendHouse);
 }

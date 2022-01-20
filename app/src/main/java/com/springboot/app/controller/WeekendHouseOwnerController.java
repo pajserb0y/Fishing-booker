@@ -92,6 +92,15 @@ public class WeekendHouseOwnerController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
+    @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
+    @PostMapping(path = "/removeWeekendHouse/{id}")
+    public ResponseEntity<?> removeWeekendHouse(@PathVariable Integer id) {
+        if (weekendHouseOwnerService.removeWeekendHouse(id))
+            return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping(path = "/allWeekendHouses")
     public Set<WeekendHouseWithAvgGradeDTO> getAllWeekendHouses() {
         List<WeekendHouse> weekendHouses = weekendHouseOwnerService.findAllWeekendHouses();

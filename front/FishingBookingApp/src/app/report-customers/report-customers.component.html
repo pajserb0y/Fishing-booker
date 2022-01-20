@@ -1,0 +1,40 @@
+<h2>Reservations history</h2>    
+    <div  class="tableView">
+    <table id="myTable" mat-table [dataSource]="reservations" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='name'> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+          </ng-container>
+        
+        <ng-container matColumnDef="startDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='startDate' > Start date </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.startDateTime|date}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="endDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='endDate'> End date </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.endDateTime|date}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="cancelled">
+            <mat-header-cell *matHeaderCellDef> Cancelled </mat-header-cell>
+            <mat-cell *matCellDef="let element"> 
+              <ng-container *ngIf="element.cancelled " ><i>cancelled</i></ng-container>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="customer">
+            <mat-header-cell *matHeaderCellDef mat-sort-header='customer'> Customer </mat-header-cell>
+                <mat-cell *matCellDef="let element" >
+                  <ng-container >{{element.customer}}</ng-container>
+                    </mat-cell>
+          </ng-container>
+    
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showReportCustomer(row)" [class.selected]="row.selected"></mat-row>
+      </table>
+    </div>

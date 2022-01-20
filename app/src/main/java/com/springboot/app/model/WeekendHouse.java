@@ -44,7 +44,7 @@ public class WeekendHouse {
     private Float price;
 
     //@NotEmpty(message = "Please fill out services")
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "weekend_house_services",
             joinColumns = @JoinColumn(name = "weekend_house_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))

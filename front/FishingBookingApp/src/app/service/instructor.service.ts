@@ -10,6 +10,7 @@ import { TermFishingLesson } from '../model/term-fishing-lesson';
 import { FishingLessonReservationWithDateAsString } from '../model/fishing-lesson-reservation-with-date-as-string';
 import { FishingLessonFeedback } from '../model/fishing-lesson-feedback';
 import { FishingLessonComplaint } from '../model/fishing-lesson-complaint';
+import { CustomerReport } from '../model/customer-report';
 
 
 @Injectable({
@@ -31,6 +32,8 @@ export class InstructorService {
   private _sendFeedback = this._fishingLessonReservationController + '/sendFeedback';
   private _sendComplaint = this._fishingLessonReservationController + '/sendComplaint';
   private _getCurrentSpecialOffers = this._fishingLessonReservationController + '/getCurrentSpecialOffers';
+  private _getAllFishingLessonReservationsForInstructor = this._fishingLessonReservationController + '/getAllForInstructor/'
+  private _submitReport = this._fishingLessonReservationController + '/reportCustomer'
 
 
   constructor(private _http: HttpClient) { }
@@ -99,6 +102,18 @@ export class InstructorService {
                       .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
                       catchError(this.handleError)); 
   }
+
+  getAllReservationsForInstructor(username : string) : Observable<FishingLessonReservationWithDateAsString[]> {
+    return this._http.get<FishingLessonReservationWithDateAsString[]>(this._getAllFishingLessonReservationsForInstructor + username)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
+
+  submitReport(report : CustomerReport): Observable<any> {
+    const body = JSON.stringify(report)
+    return this._http.post(this._submitReport, body)
+  }
+
 
 
 

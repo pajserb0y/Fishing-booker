@@ -1,12 +1,10 @@
 package com.springboot.app.controller;
 
 import com.springboot.app.model.*;
-import com.springboot.app.model.dto.FishingLessonComplaintDTO;
-import com.springboot.app.model.dto.FishingLessonFeedbackDTO;
-import com.springboot.app.model.dto.FishingLessonReservationDTO;
-import com.springboot.app.model.dto.WeekendHouseReservationDTO;
+import com.springboot.app.model.dto.*;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.FishingLessonReservationService;
+import com.springboot.app.service.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -84,6 +83,12 @@ public class FishingLessonReservationController {
         Optional<FishingLessonReservation> res = fishingLessonReservationService.findById(complaintDTO.getFishingLessonReservationId());
         fishingLessonReservationService.sendComplaint(new FishingLessonComplaint(complaintDTO, res.get()));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @GetMapping(path = "/getAllForInstructor/{username}")
+    public Set<FishingLessonReservationDTO> getAllForInstructor(@PathVariable String username) {
+        return fishingLessonReservationService.getAllReservationsForInstructor(username);
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")

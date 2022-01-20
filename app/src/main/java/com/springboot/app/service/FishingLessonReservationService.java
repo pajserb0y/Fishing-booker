@@ -1,9 +1,11 @@
 package com.springboot.app.service;
 
 import com.springboot.app.model.*;
+import com.springboot.app.model.dto.FishingLessonReservationDTO;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 public interface FishingLessonReservationService {
@@ -25,4 +27,6 @@ public interface FishingLessonReservationService {
     void sendComplaint(FishingLessonComplaint fishingLessonComplaint);
 
     List<FishingLessonReservation> getCurrentSpecialOffers();
+
+    Set<FishingLessonReservationDTO> getAllReservationsForInstructor(String username);
 }

@@ -16,6 +16,7 @@ import { CustomerFutureBoatReservationsComponent } from './customer-future-boat-
 import { CustomerPastBoatReservationsComponent } from './customer-past-boat-reservations/customer-past-boat-reservations.component';
 import { CustomerPastFishingLessonReservationsComponent } from './customer-past-fishing-lesson-reservations/customer-past-fishing-lesson-reservations.component';
 import { CustomerFutureFishingLessonReservationsComponent } from './customer-future-fishing-lesson-reservations/customer-future-fishing-lesson-reservations.component';
+import { ReportCustomersComponent } from './report-customers/report-customers.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -33,9 +34,8 @@ const routes: Routes = [
   { path: 'customer-future-boat-reservations', component: CustomerFutureBoatReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
   { path: 'customer-past-boat-reservations', component: CustomerPastBoatReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} }, 
   { path: 'customer-future-fishing-lesson-reservations', component: CustomerFutureFishingLessonReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
-  { path: 'customer-past-fishing-lesson-reservations', component: CustomerPastFishingLessonReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} }
-
-  
+  { path: 'customer-past-fishing-lesson-reservations', component: CustomerPastFishingLessonReservationsComponent, canActivate:[AuthGuard], data:{role : 'ROLE_CUSTOMER'} },
+  { path: 'report-customers', component: ReportCustomersComponent, canActivate: [AuthGuard], data: {role: ['ROLE_INSTRUCTOR', 'ROLE_WEEKEND_HOUSE_OWNER','ROLE_BOAT_OWNER']} }
 ];
 
 @NgModule({

@@ -16,6 +16,7 @@ import { WeekendHouseReservationWithDateAsString } from '../model/weekend-house-
 import { HouseFeedback } from '../model/house-feedback';
 import { WeekendHouseWithAvgGrade } from '../model/weekend-house-with-avg-grade';
 import { ComplaintWeekendHouse } from '../model/complaint-weekend-house';
+import { CustomerReport } from '../model/customer-report';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,9 @@ export class WeekendHouseOwnerService {
   private _getAllFreeTermsForWeekendHouse = this._weekendHouseOwnerRegistration + '/getAllFreeTermsForWeekendHouse/';
   private _getAllReservationsForWeekendHouse = this._weekendHouseReservationController + '/getAllReservationsForWeekendHouse/';
   private _getCurrentSpecialOffers = this._weekendHouseReservationController + '/getCurrentSpecialOffers/';
+  private _removeWeekendHouse = this._weekendHouseOwnerRegistration + '/removeWeekendHouse/';
+  private _getAllHouseReservationsForHouseOwner = this._weekendHouseReservationController + '/getAllForWeekendHouseOwner/';
+  private _submitReport = this._weekendHouseReservationController + '/reportCustomer';
 
 
   weekendHouse !: WeekendHouse;
@@ -163,6 +167,21 @@ export class WeekendHouseOwnerService {
     return this._http.get<WeekendHouseReservation[]>(this._getAllReservationsForWeekendHouse + weekendHouse.id)
                           .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
                             catchError(this.handleError)); 
+  }
+
+  removeWeekendHouse(weekendHouseId : number) : Observable<any> {
+    return this._http.post(this._removeWeekendHouse + weekendHouseId, {})
+  }
+
+  getAllReservationsForHouseOwner(username : string) {
+    return this._http.get<WeekendHouseReservationWithDateAsString[]>(this._getAllHouseReservationsForHouseOwner + username)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
+
+  submitReport(report : CustomerReport): Observable<any> {
+    const body = JSON.stringify(report)
+    return this._http.post(this._submitReport, body)
   }
 
   private handleError(err : HttpErrorResponse) {

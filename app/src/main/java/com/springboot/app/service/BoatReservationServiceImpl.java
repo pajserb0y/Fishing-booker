@@ -1,11 +1,15 @@
 package com.springboot.app.service;
 
 import com.springboot.app.model.*;
+import com.springboot.app.model.dto.BoatReservationDTO;
+import com.springboot.app.model.dto.FishingLessonReservationDTO;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BoatReservationServiceImpl implements BoatReservationService {
@@ -14,15 +18,17 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     private final CustomerRepository customerRepository;
     private final BoatFeedbackRepository boatFeedbackRepository;
     private final BoatComplaintRepository boatComplaintRepository;
+    private final BoatOwnerRepository boatOwnerRepository;
 
     public BoatReservationServiceImpl( BoatReservationRepository boatReservationRepository, CustomerRepository customerRepository,
                                        BoatRepository boatRepository,BoatFeedbackRepository boatFeedbackRepository,
-                                       BoatComplaintRepository boatComplaintRepository     ) {
+                                       BoatComplaintRepository boatComplaintRepository, BoatOwnerRepository boatOwnerRepository     ) {
         this.boatReservationRepository = boatReservationRepository;
         this.boatRepository = boatRepository;
         this.customerRepository = customerRepository;
         this.boatFeedbackRepository = boatFeedbackRepository;
         this.boatComplaintRepository = boatComplaintRepository;
+        this.boatOwnerRepository = boatOwnerRepository;
     }
 
     @Override
@@ -82,5 +88,18 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     @Override
     public List<BoatReservation> getCurrentSpecialOffers() {
         return boatReservationRepository.getCurrentSpecialOffers();
+    }
+
+    @Override
+    public Set<BoatReservationDTO> getAllReservationsForBoatOwner(String username) {
+        Integer id = boatOwnerRepository.findByUsername(username).getId();
+        List<BoatReservation> boatReservations = boatReservationRepository.findAllReservationsForInstructor(id);
+        Set<BoatReservationDTO> boatReservationDTOs = new HashSet<>();
+        for (BoatReservation res : boatReservations) {
+            BoatReservationDTO dto = new BoatReservationDTO(res);
+            boatReservationDTOs.add(dto);
+        }
+
+        return boatReservationDTOs;
     }
 }

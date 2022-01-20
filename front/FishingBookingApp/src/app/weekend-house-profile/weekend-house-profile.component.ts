@@ -8,6 +8,7 @@ import { Customer } from '../model/customer'
 import { FormControl, FormGroup } from '@angular/forms';
 import { Term } from '../model/term';
 import { isNull } from '@angular/compiler/src/output/output_ast';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-weekend-house-profile',
   templateUrl: './weekend-house-profile.component.html',
@@ -122,7 +123,7 @@ specialOffer  : WeekendHouseReservation = {
 
   displayedColumns: string[] = ['startDateTime', 'endDateTime', 'price', 'customer', 'weekendHouse'];
 
-  constructor(private _weekendHouseownerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar) { 
+  constructor(private _weekendHouseownerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar, private router: Router) { 
     
   }
 
@@ -266,6 +267,16 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
                       this.allReservationsForWeekendHouse = this.allReservationsForWeekendHouse.filter(res => res.customer !== null)},
                   error => this.errorMessage = <any>error); 
 
+  }
+
+  removeWeekendHouse() {
+    this._weekendHouseownerService.removeWeekendHouse(this.weekendHouse.id)
+      .subscribe(data =>  { this.allFreeTerms = data,
+                            this.router.navigateByUrl('weekend-houses');  
+      },
+                  error => this.errorMessage = <any>error); 
+
+    
   }
  
 }

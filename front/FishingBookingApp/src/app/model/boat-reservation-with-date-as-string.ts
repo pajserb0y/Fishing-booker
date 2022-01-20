@@ -2,6 +2,15 @@ import { AdditionalService } from "./additional-service";
 import { Boat } from "./boat";
 import { Customer } from "./customer";
 
+export interface Reservation {
+    id : number;
+    name : string;
+    startDateTime: string ;
+    endDateTime: string;
+    cancelled : boolean;
+    customer : string;
+}
+
 export interface BoatReservationWithDateAsString {
     id: number ;
     startDateTime: string ;

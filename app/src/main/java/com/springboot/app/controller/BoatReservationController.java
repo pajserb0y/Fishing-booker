@@ -84,6 +84,12 @@ public class BoatReservationController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping(path = "/getAllForBoatOwner/{username}")
+    public Set<BoatReservationDTO> getAllForBoatOwner(@PathVariable String username) {
+        return boatReservationService.getAllReservationsForBoatOwner(username);
+    }
+
     @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping(path = "/getCurrentSpecialOffers")
     public Set<BoatReservationDTO> getCurrentSpecialOffers() {
