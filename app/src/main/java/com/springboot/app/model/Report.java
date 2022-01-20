@@ -36,6 +36,10 @@ public class Report {
     @NotEmpty(message = "Please fill out username")
     protected String type; //boat/house/fishing
 
+    public Report() {
+
+    }
+
     public Report(Integer id, Integer ownerId, Integer customerId, Integer propertyId, String comment, boolean deservesPenalty, boolean didntShowUp, String type) {
         this.id = id;
         this.ownerId = ownerId;

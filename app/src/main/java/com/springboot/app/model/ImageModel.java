@@ -22,5 +22,17 @@ public class ImageModel {
     @Column(name = "picBase64")
     private String picBase64;
 
+    public ImageModel() {
 
+    }
+
+    public ImageModel(Integer id, String name, Integer propertyId, String type, String picBase64) {
+        this.id = id;
+        this.name = name;
+        this.propertyId = propertyId;
+        this.type = type;
+        this.picBase64 = picBase64;
+    }
+
+    
 }
