@@ -1,5 +1,6 @@
 package com.springboot.app.repository;
 
+import com.springboot.app.model.BoatReservation;
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,4 +42,6 @@ public interface WeekendHouseReservationRepository extends JpaRepository<Weekend
                                                                             "OR (r.startDateTime BETWEEN cast(:start as timestamp) AND cast(:end as timestamp)) " +
                                                                             "OR (r.endDateTime BETWEEN cast(:start as timestamp) AND cast(:end as timestamp)))")
     void cancellAllActionsForThisDateRangeForThisWeekendHouse(@Param("start") Date start, @Param("end") Date end, @Param("houseId") Integer weekendHouseId);
+    @Query("SELECT res FROM WeekendHouseReservation res WHERE res.weekendHouse.weekendHouseOwner.id = :id")
+    List<WeekendHouseReservation> findAllReservationsForInstructor(@Param("id") Integer weekendHouseOwnerId);
 }

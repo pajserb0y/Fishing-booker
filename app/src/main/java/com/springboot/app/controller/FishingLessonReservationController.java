@@ -4,6 +4,7 @@ import com.springboot.app.model.*;
 import com.springboot.app.model.dto.*;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.FishingLessonReservationService;
+import com.springboot.app.service.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,6 +91,12 @@ public class FishingLessonReservationController {
         Optional<FishingLessonReservation> res = fishingLessonReservationService.findById(complaintDTO.getFishingLessonReservationId());
         fishingLessonReservationService.sendComplaint(new FishingLessonComplaint(complaintDTO, res.get()));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @GetMapping(path = "/getAllForInstructor/{username}")
+    public Set<FishingLessonReservationDTO> getAllForInstructor(@PathVariable String username) {
+        return fishingLessonReservationService.getAllReservationsForInstructor(username);
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")

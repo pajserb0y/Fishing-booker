@@ -63,6 +63,7 @@ import { InstructorService } from './service/instructor.service';
 import { CustomerFutureFishingLessonReservationsComponent } from './customer-future-fishing-lesson-reservations/customer-future-fishing-lesson-reservations.component';
 import { CustomerPastFishingLessonReservationsComponent } from './customer-past-fishing-lesson-reservations/customer-past-fishing-lesson-reservations.component';
 import { BoatProfileComponent } from './boat-profile/boat-profile.component';
+import { ReportCustomersComponent } from './report-customers/report-customers.component';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -112,7 +113,8 @@ const MaterialComponents = [
     CustomerPastBoatReservationsComponent,
     CustomerFutureFishingLessonReservationsComponent,
     CustomerPastFishingLessonReservationsComponent,
-    BoatProfileComponent
+    BoatProfileComponent,
+    ReportCustomersComponent
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,9 @@ package com.springboot.app.repository;
 
 import com.springboot.app.model.Boat;
 import com.springboot.app.model.BoatReservation;
+import com.springboot.app.model.FishingLessonReservation;
+import com.springboot.app.model.WeekendHouse;
+import com.springboot.app.model.WeekendHouseReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -42,4 +45,9 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     void cancellAllActionsForThisDateRangeForThisBoat(@Param("start") Date start, @Param("end") Date end, @Param("boatId") Integer boatId);
 
     List<BoatReservation> findByBoat(Boat boat);
+    @Query("SELECT res FROM BoatReservation res WHERE res.boat.boatOwner.id = :id")
+    List<BoatReservation> findAllReservationsForBoatOwner(@Param("id") Integer boatOwnerId);
+
+//
+//    List<WeekendHouseReservation> findByWeekendHouse(WeekendHouse weekendHouse);
 }

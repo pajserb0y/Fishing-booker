@@ -125,14 +125,14 @@ specialOffer  : WeekendHouseReservation = {
 
   displayedColumns: string[] = ['startDateTime', 'endDateTime', 'price', 'customer', 'weekendHouse'];
 
-  constructor(private _weekendHouseownerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar, private _router : Router) { 
+  constructor(private _weekendHouseownerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar, private router: Router) { 
     
   }
 
   ngOnInit(): void {
       this.weekendHouse = this._weekendHouseownerService.weekendHouse;
       if(this.weekendHouse == null)
-        this._router.navigateByUrl('weekend-houses');
+        this.router.navigateByUrl('weekend-houses');
       this.getAllReservationsForWeekendHouse();
       this.weekendHouseReservation.price = this.weekendHouse.price;
       this.specialOffer.price = this.weekendHouse.price
@@ -286,6 +286,16 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
                       this.allReservationsForWeekendHouse = this.allReservationsForWeekendHouse.filter(res => res.customer !== null)},
                   error => this.errorMessage = <any>error); 
 
+  }
+
+  removeWeekendHouse() {
+    this._weekendHouseownerService.removeWeekendHouse(this.weekendHouse.id)
+      .subscribe(data =>  { this.allFreeTerms = data,
+                            this.router.navigateByUrl('weekend-houses');  
+      },
+                  error => this.errorMessage = <any>error); 
+
+    
   }
  
 }

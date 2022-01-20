@@ -4,9 +4,11 @@ import com.springboot.app.model.Boat;
 import com.springboot.app.model.BoatComplaint;
 import com.springboot.app.model.BoatFeedback;
 import com.springboot.app.model.BoatReservation;
+import com.springboot.app.model.dto.BoatReservationDTO;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface BoatReservationService {
     BoatReservation reserve(BoatReservation boatReservation);
@@ -26,4 +28,5 @@ public interface BoatReservationService {
     List<BoatReservation> getCurrentSpecialOffers();
 
     List<BoatReservation> findAllReservationsForBoat(Boat boat);
+    Set<BoatReservationDTO> getAllReservationsForBoatOwner(String username);
 }

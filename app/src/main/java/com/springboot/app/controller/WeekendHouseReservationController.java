@@ -109,6 +109,12 @@ public class WeekendHouseReservationController {
         return weekendHouseReservationDTOs;
     }
 
+    @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
+    @GetMapping(path = "/getAllForWeekendHouseOwner/{username}")
+    public Set<WeekendHouseReservationDTO> getAllForWeekendHouseOwner(@PathVariable String username) {
+        return weekendHouseReservationService.getAllReservationsForWeekendHouseOwner(username);
+    }
+
     @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping(path = "/getCurrentSpecialOffers")
     public Set<WeekendHouseReservationDTO> getCurrentSpecialOffers() {

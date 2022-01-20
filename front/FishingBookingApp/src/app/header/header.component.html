@@ -6,6 +6,8 @@
              mat-button [routerLink]="['boats']">Boats</button>
     <button *ngIf="role != 'ROLE_ADMIN' && role != 'ROLE_BOAT_OWNER' && role != 'ROLE_WEEKEND_HOUSE_OWNER' && role != 'ROLE_INSTRUCTOR'"
              mat-button [routerLink]="['fishing-lessons']">Fishing lessons</button>
+    <button *ngIf="role == 'ROLE_WEEKEND_HOUSE_OWNER' || role == 'ROLE_BOAT_OWNER' || role == 'ROLE_INSTRUCTOR'"
+             mat-button [routerLink]="['report-customers']">Report customers</button>
 
     <button *ngIf="role == 'ROLE_CUSTOMER'" mat-button [matMenuTriggerFor]="menu">Reservations history</button>
         <mat-menu #menu="matMenu">

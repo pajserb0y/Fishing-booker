@@ -4,9 +4,12 @@ import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseComplaint;
 import com.springboot.app.model.WeekendHouseFeedback;
 import com.springboot.app.model.WeekendHouseReservation;
+import com.springboot.app.model.dto.BoatReservationDTO;
+import com.springboot.app.model.dto.WeekendHouseReservationDTO;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface WeekendHouseReservationService {
 
@@ -26,4 +29,6 @@ public interface WeekendHouseReservationService {
     void sendComplaint(WeekendHouseComplaint weekendHouseComplaint);
 
     List<WeekendHouseReservation> getCurrentSpecialOffers();
+
+    Set<WeekendHouseReservationDTO> getAllReservationsForWeekendHouseOwner(String username);
 }

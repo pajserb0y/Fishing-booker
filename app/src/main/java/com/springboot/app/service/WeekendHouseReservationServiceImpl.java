@@ -1,12 +1,16 @@
 package com.springboot.app.service;
 
 import com.springboot.app.model.*;
+import com.springboot.app.model.dto.BoatReservationDTO;
+import com.springboot.app.model.dto.WeekendHouseReservationDTO;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -16,15 +20,17 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     private final CustomerRepository customerRepository;
     private final WeekendHouseFeedbackRepository weekendHouseFeedbackRepository;
     private final WeekendHouseComplaintRepository weekendHouseComplaintRepository;
+    private final WeekendHouseOwnerRepository weekendHouseOwnerRepository;
 
     public WeekendHouseReservationServiceImpl(WeekendHouseReservationRepository weekendHouseReservationRepository, CustomerRepository customerRepository,
                                               WeekendHouseRepository weekendHouseRepository, WeekendHouseFeedbackRepository weekendHouseFeedbackRepository,
-                                              WeekendHouseComplaintRepository weekendHouseComplaintRepository) {
+                                              WeekendHouseComplaintRepository weekendHouseComplaintRepository, WeekendHouseOwnerRepository weekendHouseOwnerRepository) {
         this.weekendHouseReservationRepository = weekendHouseReservationRepository;
         this.weekendHouseRepository = weekendHouseRepository;
         this.customerRepository = customerRepository;
         this.weekendHouseFeedbackRepository = weekendHouseFeedbackRepository;
         this.weekendHouseComplaintRepository = weekendHouseComplaintRepository;
+        this.weekendHouseOwnerRepository = weekendHouseOwnerRepository;
     }
 
 
@@ -100,6 +106,19 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     @Override
     public List<WeekendHouseReservation> getCurrentSpecialOffers() {
         return weekendHouseReservationRepository.getCurrentSpecialOffers();
+    }
+
+    @Override
+    public Set<WeekendHouseReservationDTO> getAllReservationsForWeekendHouseOwner(String username) {
+        Integer id = weekendHouseOwnerRepository.findByUsername(username).getId();
+        List<WeekendHouseReservation> weekendHouseReservations = weekendHouseReservationRepository.findAllReservationsForInstructor(id);
+        Set<WeekendHouseReservationDTO> weekendHouseReservationsDTOs = new HashSet<>();
+        for (WeekendHouseReservation res : weekendHouseReservations) {
+            WeekendHouseReservationDTO dto = new WeekendHouseReservationDTO(res);
+            weekendHouseReservationsDTOs.add(dto);
+        }
+
+        return weekendHouseReservationsDTOs;
     }
 
     @Override

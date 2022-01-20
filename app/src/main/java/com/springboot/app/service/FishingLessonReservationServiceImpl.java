@@ -1,12 +1,12 @@
 package com.springboot.app.service;
 
 import com.springboot.app.model.*;
+import com.springboot.app.model.dto.FishingLessonReservationDTO;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -106,5 +106,17 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
     @Override
     public List<FishingLessonReservation> findAllReservationsForFishingLesson(FishingLesson fishingLesson) {
         return fishingLessonReservationRepository.findAllByFishingLesson(fishingLesson);
+    }
+    
+    public Set<FishingLessonReservationDTO> getAllReservationsForInstructor(String username) {
+        Integer id = instructorRepository.findByUsername(username).getId();
+        List<FishingLessonReservation> fishingLessonReservations = fishingLessonReservationRepository.findAllReservationsForInstructor(id);
+        Set<FishingLessonReservationDTO> fishingLessonReservationsDTOs = new HashSet<>();
+        for (FishingLessonReservation fl : fishingLessonReservations) {
+            FishingLessonReservationDTO dto = new FishingLessonReservationDTO(fl);
+            fishingLessonReservationsDTOs.add(dto);
+        }
+
+        return fishingLessonReservationsDTOs;
     }
 }

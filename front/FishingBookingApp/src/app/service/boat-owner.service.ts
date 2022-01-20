@@ -10,6 +10,7 @@ import { BoatReservation } from '../model/boat-reservation';
 import { BoatReservationWithDateAsString } from '../model/boat-reservation-with-date-as-string';
 import { BoatFeedback } from '../model/boat-feedback';
 import { BoatComplaint } from '../model/boat-complaint';
+import { CustomerReport } from '../model/customer-report';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,6 +40,10 @@ export class BoatOwnerService {
   private _addFreeTerm = this._boatOwnerRegistration + '/addFreeTerm';
   private _makeReservationOrSpecialOffer = this._boatsReservationController + '/makeReservationOrSpecialOffer';
   private _editBoat = this._boatOwnerRegistration + '/editBoat';
+  private _getAllBoatReservationsForBoatOwner = this._boatsReservationController + '/getAllForBoatOwner/';
+  private _submitReport = this._boatsReservationController + '/reportCustomer';
+  
+
 
   boat !: Boat;
   constructor(private _http: HttpClient) { }
@@ -144,6 +149,17 @@ export class BoatOwnerService {
     return this._http.post(this._editBoat, body)
   }
   
+
+  getAllReservationsForBoatOwner(username: string) {
+    return this._http.get<BoatReservationWithDateAsString[]>(this._getAllBoatReservationsForBoatOwner + username)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
+
+  submitReport(report : CustomerReport): Observable<any> {
+    const body = JSON.stringify(report)
+    return this._http.post(this._submitReport, body)
+  }
 
   private handleError(err : HttpErrorResponse) {
     console.log(err.message);
