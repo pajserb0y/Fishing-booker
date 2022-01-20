@@ -13,7 +13,7 @@ public class ImageModel {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "name")
+    @Column(name = "propertyID")
     private Integer propertyId;
 
     @Column(name = "type")
