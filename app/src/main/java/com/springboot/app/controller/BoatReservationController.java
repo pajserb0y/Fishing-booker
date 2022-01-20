@@ -2,6 +2,7 @@ package com.springboot.app.controller;
 
 import com.springboot.app.model.*;
 import com.springboot.app.model.dto.*;
+import com.springboot.app.service.BoatOwnerService;
 import com.springboot.app.service.BoatReservationService;
 import com.springboot.app.service.EmailService;
 import com.springboot.app.service.WeekendHouseReservationService;
@@ -20,16 +21,18 @@ import java.util.Set;
 @RequestMapping("/api/boatReservations")
 public class BoatReservationController {
     private final BoatReservationService boatReservationService;
+    private final BoatOwnerService boatOwnerService;
     private final EmailService emailService;
 
     @Autowired
-    public BoatReservationController(BoatReservationService boatReservationService, EmailService emailService) {
+    public BoatReservationController(BoatReservationService boatReservationService,BoatOwnerService boatOwnerService, EmailService emailService) {
         this.boatReservationService = boatReservationService;
         this.emailService = emailService;
+        this.boatOwnerService = boatOwnerService;
     }
 
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','BOAT_OWNER')")
     @PostMapping(path = "/reserve")
     public Set<BoatReservationDTO> reserve(@RequestBody BoatReservationDTO reservationDto) {
         BoatReservation reservation = boatReservationService.reserve(new BoatReservation(reservationDto));
@@ -107,5 +110,16 @@ public class BoatReservationController {
             reservationsDto.add(new BoatReservationDTO(res));
 
         return reservationsDto;
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping(path = "/getAllReservationsForBoat/{id}")
+    public Set<BoatReservationDTO> getAllReservationsForBoat(@PathVariable Integer id) {
+        Boat boat = boatOwnerService.findBoatById(id);
+        List<BoatReservation> boatReservations = boatReservationService.findAllReservationsForBoat(boat);
+        Set<BoatReservationDTO> boatReservationDTOS = new HashSet<>();
+        for (BoatReservation res : boatReservations)
+            boatReservationDTOS.add(new BoatReservationDTO(res));
+        return boatReservationDTOS;
     }
 }

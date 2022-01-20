@@ -22,7 +22,6 @@ public class BoatDTO {
     @NotEmpty(message = "Please fill out type")
     private String type;
 
-
     @NotEmpty(message = "Please fill out adress")
     private String adress;
 
@@ -78,7 +77,7 @@ public class BoatDTO {
         this.description = boat.getDescription();
         this.rules = boat.getRules();
         this.capacity = boat.getCapacity();
-        this.adress = boat.getAdress();
+        this.adress = boat.getAddress();
 //        Set<TermDto> terms = new HashSet<>();
 //        for (Term term : house.getFreeTerms())
 //            terms.add(new TermDto(term));
@@ -132,7 +131,7 @@ public class BoatDTO {
         return engineNumber;
     }
 
-    public String getAdress() {
+    public String getAddress() {
         return adress;
     }
 

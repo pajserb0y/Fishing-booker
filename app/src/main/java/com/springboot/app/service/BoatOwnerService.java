@@ -3,6 +3,8 @@ package com.springboot.app.service;
 import com.springboot.app.model.Boat;
 import com.springboot.app.model.BoatOwner;
 import com.springboot.app.model.TermBoat;
+import com.springboot.app.model.WeekendHouse;
+import com.springboot.app.model.dto.BoatDTO;
 import com.springboot.app.model.dto.BoatOwnerDTO;
 import com.springboot.app.model.dto.DateTimeRangeDTO;
 
@@ -36,4 +38,8 @@ public interface BoatOwnerService {
     List<TermBoat> findAllFreeTermsForBoat(Boat boat);
 
     List<Boat> findAllBoatForOwner(BoatOwner boatOwner);
+
+    TermBoat addFreeTerm(TermBoat term);
+
+    Boat changeBoat(BoatDTO boatDTO);
 }

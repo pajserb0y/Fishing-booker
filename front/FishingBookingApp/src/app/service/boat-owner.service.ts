@@ -38,7 +38,7 @@ export class BoatOwnerService {
   private _allBoatsForOwner = this._boatOwnerRegistration + '/allBoatsForOwner/';
   private _getAllReservationsForBoat = this._boatsReservationController + '/getAllReservationsForBoat/';
   private _addFreeTerm = this._boatOwnerRegistration + '/addFreeTerm';
-  private _makeReservationOrSpecialOffer = this._boatsReservationController + '/makeReservationOrSpecialOffer';
+  private _makeReservationOrSpecialOffer = this._boatsReservationController + '/reserve';
   private _editBoat = this._boatOwnerRegistration + '/editBoat';
   private _getAllBoatReservationsForBoatOwner = this._boatsReservationController + '/getAllForBoatOwner/';
   private _submitReport = this._boatsReservationController + '/reportCustomer';
@@ -153,6 +153,7 @@ export class BoatOwnerService {
   removeBoat(boatId : number) : Observable<any> {
     return this._http.post(this._removeBoat + boatId, {})
   }
+  //dovde
   
   getAllReservationsForBoatOwner(username: string) {
     return this._http.get<BoatReservationWithDateAsString[]>(this._getAllBoatReservationsForBoatOwner + username)

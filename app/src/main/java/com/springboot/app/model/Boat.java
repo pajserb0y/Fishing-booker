@@ -3,7 +3,6 @@ package com.springboot.app.model;
 import com.springboot.app.model.dto.AdditionalServiceDTO;
 import com.springboot.app.model.dto.BoatDTO;
 import com.springboot.app.model.dto.TermBoatDTO;
-import com.springboot.app.model.dto.TermDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -23,7 +22,7 @@ public class Boat {
     private String type;
 
     @NotEmpty(message = "Please fill out adress")
-    private String adress;
+    private String address;
 
     @NotEmpty(message = "Please fill out length")
     private Double length;
@@ -88,7 +87,7 @@ public class Boat {
         this.maxSpeed = dto.getMaxSpeed();
         this.description = dto.getDescription();
         this.imagePath = dto.getImagePath();
-        this.adress = dto.getAdress();
+        this.address = dto.getAddress();
         Set<TermBoat> terms = new HashSet<>();
         for (TermBoatDTO termDto : dto.getFreeTerms())
             terms.add(new TermBoat(termDto));
@@ -126,12 +125,12 @@ public class Boat {
         return description;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setDescription(String description) {

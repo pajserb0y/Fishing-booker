@@ -263,10 +263,14 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
     if(this.newFreeTerm.startDateTime < this.newFreeTerm.endDateTime)
         if(this.newFreeTerm.startDateTime >= new Date()) //OVDE CE VEROVATNO TREBATI DODATI NEW FREE TERM I PRE SUBSCRIBA DA BI BILO ODMAH VIDLJIVO
           this._weekendHouseownerService.addFreeTerm(this.newFreeTerm)
-          .subscribe(data =>  this.allFreeTerms = data,
+          .subscribe(data =>{
+            if(data == null)
+              this._snackBar.open('Someone has reserved house in selected term. Please select other term.', 'Close', {duration: 5000});
+            else {
+              this.allFreeTerms = data,
+              this._snackBar.open('Free term created successfuly', 'Close', {duration: 5000});
+            }},
             error => this.errorMessage = <any>error); 
-    
-   this._snackBar.open('Free term created successfuly', 'Close', {duration: 5000});
     this.rangeTerm.value.startTerm = null;
     this.rangeTerm.value.endTerm = null;          
   }

@@ -85,7 +85,10 @@ public class FishingLessonReservation {
         this.startSpecialOffer = res.getStartSpecialOffer();
         this.endSpecialOffer = res.getEndSpecialOffer();
         this.price = res.getPrice();
-        this.customer =  new Customer(res.getCustomer());
+        if(res.getCustomer() != null)
+            this.customer =  new Customer(res.getCustomer());
+        else
+            this.customer = null;
         this.fishingLesson = new FishingLesson(res.getFishingLesson());
         this.isCancelled = res.isCancelled();
     }

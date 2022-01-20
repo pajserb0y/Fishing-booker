@@ -1,14 +1,11 @@
 package com.springboot.app.service;
 
 import com.springboot.app.model.*;
-import com.springboot.app.model.dto.BoatOwnerDTO;
-import com.springboot.app.model.dto.DateTimeRangeDTO;
+import com.springboot.app.model.dto.*;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BoatOwnerServiceImpl implements BoatOwnerService{
@@ -126,5 +123,54 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
     @Override
     public List<Boat> findAllBoatForOwner(BoatOwner boatOwner) {
         return boatRepository.findByBoatOwner(boatOwner);
+    }
+
+    @Override
+    public TermBoat addFreeTerm(TermBoat term) {
+        List<BoatReservation> boatReservations = boatReservationRepository.findByBoat(term.getBoat());
+        for(BoatReservation res : boatReservations)
+        {
+            if((term.getStartDateTime().after(res.getStartDateTime()) && term.getStartDateTime().before(res.getEndDateTime())) || (term.getEndDateTime().after(res.getStartDateTime()) && term.getEndDateTime().before(res.getEndDateTime())))
+                return null;
+        }
+        termBoatRepository.save(term);
+        return term;
+    }
+
+    @Override
+    public Boat changeBoat(BoatDTO boatDTO) {
+        Optional<Boat> boat = boatRepository.findById(boatDTO.getId());
+        boat.get().setName(boatDTO.getName());
+        boat.get().setAddress(boatDTO.getAddress());
+        boat.get().setEngineNumber(boatDTO.getEngineNumber());
+        boat.get().setHorsePower(boatDTO.getHorsePower());
+        boat.get().setMaxSpeed(boatDTO.getMaxSpeed());
+        boat.get().setLength(boatDTO.getLength());
+        boat.get().setImagePath(boatDTO.getImagePath());
+        boat.get().setDescription(boatDTO.getDescription());
+        boat.get().setCapacity(boatDTO.getCapacity());
+        Set<TermBoat> terms = new HashSet<>();
+        for (TermBoatDTO termDto : boatDTO.getFreeTerms())
+            terms.add(new TermBoat(termDto));
+        boat.get().setFreeTerms(terms);
+        boat.get().setRules(boatDTO.getRules());
+        boat.get().setPrice(boatDTO.getPrice());
+        Set<BoatReservation> reservations = new HashSet<>();
+        for (BoatReservationDTO res : boatDTO.getBoatReservations())
+            reservations.add(new BoatReservation(res));
+        boat.get().setBoatReservations(reservations);
+        Set<AdditionalService> services = new HashSet<>();
+        for (AdditionalServiceDTO service : boatDTO.getAdditionalServices())
+            services.add(new AdditionalService(service));
+        boat.get().setAdditionalServices(services);
+        boat.get().setBoatOwner(new BoatOwner(boatDTO.getBoatOwner()));
+        saveBoat(boat.get());
+
+        return boat.get();
+
+    }
+
+    public void saveBoat(Boat boat) {
+        boatRepository.save(boat);
     }
 }

@@ -38,7 +38,7 @@ public interface WeekendHouseOwnerService {
 
     Integer findAvgGradeForHouseId(Integer id);
 
-    void addFreeTerm(Term term);
+    Term addFreeTerm(Term term);
 
     boolean removeWeekendHouse(Integer weekendHouseId);
 }

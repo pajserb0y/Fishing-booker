@@ -114,4 +114,28 @@ public class BoatOwnerController {
 
         return termDtos;
     }
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping(path = "/removeBoat/{id}")
+    public ResponseEntity<?> removeBoat(@PathVariable Integer id) {
+        if (boatOwnerService.removeBoat(id))
+            return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping(path = "/addFreeTerm")
+    public Set<TermBoatDTO> addFreeTerm(@RequestBody TermBoatDTO termDto){
+        TermBoat term = new TermBoat(termDto);
+        if(boatOwnerService.addFreeTerm(term).equals(null))
+            return null;
+        return this.getAllFreeTermsForBoat(term.getBoat().getId());
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping(path = "/editBoat")
+    public BoatDTO editBoat(@RequestBody BoatDTO boatDTO) {
+        Boat editedBoat = boatOwnerService.changeBoat(boatDTO);
+        return new BoatDTO(editedBoat);
+    }
 }

@@ -122,6 +122,7 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
         weekendHouse.get().setAddress(weekendHouseDTO.getAddress());
         weekendHouse.get().setDescription(weekendHouseDTO.getDescription());
         weekendHouse.get().setBedNumber(weekendHouseDTO.getBedNumber());
+        weekendHouse.get().setImagePath(weekendHouseDTO.getImagePath());
         Set<Term> terms = new HashSet<>();
         for (TermDto termDto : weekendHouseDTO.getFreeTerms())
             terms.add(new Term(termDto));
@@ -158,7 +159,14 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     }
 
     @Override
-    public void addFreeTerm(Term term) {
+    public Term addFreeTerm(Term term) {
+        List<WeekendHouseReservation> weekendHouseReservations = weekendHouseReservationRepository.findByWeekendHouse(term.getWeekendHouse());
+        for(WeekendHouseReservation res : weekendHouseReservations)
+        {
+            if((term.getStartDateTime().after(res.getStartDateTime()) && term.getStartDateTime().before(res.getEndDateTime())) || (term.getEndDateTime().after(res.getStartDateTime()) && term.getEndDateTime().before(res.getEndDateTime())))
+                return null;
+        }
         termRepository.save(term);
+        return term;
     }
 }
