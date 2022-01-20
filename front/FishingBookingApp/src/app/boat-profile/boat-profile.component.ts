@@ -297,6 +297,12 @@ specialOffer  : BoatReservation = {
 
   removeBoat()
   {
+    this._boatOwnerService.removeBoat(this.boat.id)
+      .subscribe(data =>  { this.allFreeTerms = data,
+                            this._router.navigateByUrl('boats');  
+      },
+                  error => this.errorMessage = <any>error); 
 
+    
   }
 }

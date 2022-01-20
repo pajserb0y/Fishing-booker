@@ -42,6 +42,7 @@ export class BoatOwnerService {
   private _editBoat = this._boatOwnerRegistration + '/editBoat';
   private _getAllBoatReservationsForBoatOwner = this._boatsReservationController + '/getAllForBoatOwner/';
   private _submitReport = this._boatsReservationController + '/reportCustomer';
+  private _removeBoat = this._boatOwnerRegistration + '/removeBoat/';
   
 
 
@@ -148,8 +149,11 @@ export class BoatOwnerService {
     const body = JSON.stringify(boat);
     return this._http.post(this._editBoat, body)
   }
-  
 
+  removeBoat(boatId : number) : Observable<any> {
+    return this._http.post(this._removeBoat + boatId, {})
+  }
+  
   getAllReservationsForBoatOwner(username: string) {
     return this._http.get<BoatReservationWithDateAsString[]>(this._getAllBoatReservationsForBoatOwner + username)
                       .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
