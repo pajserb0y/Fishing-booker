@@ -9,11 +9,11 @@ export interface BoatReservation {
     startDateTime: Date ;
     endDateTime: Date;
     capacity: number ;
-    startSpecialOffer: Date ;
+    startSpecialOffer: Date | null;
     endSpecialOffer: Date | null;
     services: AdditionalService[];
     price: number;
-    customer: Customer;
+    customer: Customer | null;
     boat: Boat|WeekendHouse|FishingLesson;
     cancelled: boolean;
   }

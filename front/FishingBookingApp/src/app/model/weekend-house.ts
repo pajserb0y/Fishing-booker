@@ -1,5 +1,5 @@
 import { AdditionalService } from "./additional-service";
-import { Term } from "./term";
+import { WeekendHouseTerm } from "./term-weekend-house";
 import { WeekendHouseOwner } from "./weekend-house-owner";
 import { WeekendHouseReservation } from "./weekend-house-reservation";
 
@@ -11,7 +11,7 @@ export interface WeekendHouse {
     /* grade: number ;   ovo se dobavlja iz tabele svih ocena*/
     imagePath : string;
     bedNumber: number ;
-    freeTerms: Term[];
+    freeTerms: WeekendHouseTerm[];
     rules: string;
     price: number;
     additionalServices: AdditionalService[];

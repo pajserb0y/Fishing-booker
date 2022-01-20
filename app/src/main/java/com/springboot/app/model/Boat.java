@@ -19,8 +19,23 @@ public class Boat {
     @NotEmpty(message = "Please fill out name")
     private String name;
 
+    @NotEmpty(message = "Please fill out type")
+    private String type;
+
     @NotEmpty(message = "Please fill out adress")
-    private String address;
+    private String adress;
+
+    @NotEmpty(message = "Please fill out length")
+    private Double length;
+
+    @NotEmpty(message = "Please fill out engine number")
+    private Double engineNumber;
+
+    @NotEmpty(message = "Please fill out horse power")
+    private Double horsePower;
+
+    @NotEmpty(message = "Please fill out max speed")
+    private Double maxSpeed;
 
     @NotEmpty(message = "Please fill out description")
     private String description;
@@ -66,10 +81,14 @@ public class Boat {
     public Boat(BoatDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
-        this.address = dto.getAddress();
+        this.type = dto.getType();
+        this.horsePower = dto.getHorsePower();
+        this.engineNumber = dto.getEngineNumber();
+        this.length = dto.getLength();
+        this.maxSpeed = dto.getMaxSpeed();
         this.description = dto.getDescription();
         this.imagePath = dto.getImagePath();
-
+        this.adress = dto.getAdress();
         Set<TermBoat> terms = new HashSet<>();
         for (TermBoatDTO termDto : dto.getFreeTerms())
             terms.add(new TermBoat(termDto));
@@ -102,16 +121,17 @@ public class Boat {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getDescription() {
         return description;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
     }
 
     public void setDescription(String description) {
@@ -148,6 +168,46 @@ public class Boat {
 
     public void setAdditionalServices(Set<AdditionalService> additionalServices) {
         this.additionalServices = additionalServices;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
+    }
+
+    public Double getEngineNumber() {
+        return engineNumber;
+    }
+
+    public void setEngineNumber(Double engineNumber) {
+        this.engineNumber = engineNumber;
+    }
+
+    public Double getHorsePower() {
+        return horsePower;
+    }
+
+    public void setHorsePower(Double horsePower) {
+        this.horsePower = horsePower;
+    }
+
+    public Double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public void setMaxSpeed(Double maxSpeed) {
+        this.maxSpeed = maxSpeed;
     }
 
     public BoatOwner getBoatOwner() {

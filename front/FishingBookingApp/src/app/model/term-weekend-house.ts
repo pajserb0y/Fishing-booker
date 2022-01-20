@@ -1,6 +1,6 @@
 import { WeekendHouse } from "./weekend-house";
 
-export interface Term {
+export interface WeekendHouseTerm {
     startDateTime: Date;
     endDateTime: Date;
     id: number ;

@@ -13,14 +13,31 @@ public class BoatDTO {
     @NotEmpty(message = "Please fill out name")
     private String name;
 
-    @NotEmpty(message = "Please fill out adress")
-    private String address;
-
     @NotEmpty(message = "Please fill out description")
     private String description;
 
     //@NotEmpty(message = "Please fill out first name")
     private String imagePath;
+
+    @NotEmpty(message = "Please fill out type")
+    private String type;
+
+
+    @NotEmpty(message = "Please fill out adress")
+    private String adress;
+
+    @NotEmpty(message = "Please fill out length")
+    private Double length;
+
+    @NotEmpty(message = "Please fill out engine number")
+    private Double engineNumber;
+
+    @NotEmpty(message = "Please fill out horse power")
+    private Double horsePower;
+
+    @NotEmpty(message = "Please fill out max speed")
+    private Double maxSpeed;
+
 
     private Set<TermBoatDTO> freeTerms = new HashSet<>();
 
@@ -53,11 +70,15 @@ public class BoatDTO {
         for (AdditionalService service : boat.getAdditionalServices())
             services.add(new AdditionalServiceDTO(service));
         this.additionalServices = services;
-        this.address = boat.getAddress();
+        this.type = boat.getType();
+        this.horsePower = boat.getHorsePower();
+        this.maxSpeed = boat.getMaxSpeed();
+        this.engineNumber = boat.getEngineNumber();
+        this.length = boat.getLength();
         this.description = boat.getDescription();
         this.rules = boat.getRules();
         this.capacity = boat.getCapacity();
-
+        this.adress = boat.getAdress();
 //        Set<TermDto> terms = new HashSet<>();
 //        for (Term term : house.getFreeTerms())
 //            terms.add(new TermDto(term));
@@ -91,12 +112,52 @@ public class BoatDTO {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public String getType() {
+        return type;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
+    }
+
+    public Double getEngineNumber() {
+        return engineNumber;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+    public void setEngineNumber(Double engineNumber) {
+        this.engineNumber = engineNumber;
+    }
+
+    public Double getHorsePower() {
+        return horsePower;
+    }
+
+    public void setHorsePower(Double horsePower) {
+        this.horsePower = horsePower;
+    }
+
+    public Double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public void setMaxSpeed(Double maxSpeed) {
+        this.maxSpeed = maxSpeed;
     }
 
     public String getDescription() {

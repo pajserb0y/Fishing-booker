@@ -11,7 +11,7 @@ import { of } from 'rxjs';
 import 'rxjs/add/operator/catch';
 import { FormGroup } from '@angular/forms';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
-import { Term } from '../model/term';
+import { WeekendHouseTerm } from '../model/term-weekend-house';
 import { WeekendHouseReservationWithDateAsString } from '../model/weekend-house-reservation-with-date-as-string';
 import { HouseFeedback } from '../model/house-feedback';
 import { WeekendHouseWithAvgGrade } from '../model/weekend-house-with-avg-grade';
@@ -39,7 +39,7 @@ export class WeekendHouseOwnerService {
   private _cancelReservation = this._weekendHouseReservationController + '/cancel/';
   private _sendFeedback = this._weekendHouseReservationController + '/sendFeedback';
   private _sendComplaint = this._weekendHouseReservationController + '/sendComplaint';
-  private _addFreeTerm = this._weekendHouseOwnerRegistration + '/_addFreeTerm/';      //greska?
+  private _addFreeTerm = this._weekendHouseOwnerRegistration + '/addFreeTerm';      //greska?
 
   private _makeReservationOrSpecialOffer = this._weekendHouseReservationController + '/reserve';   //gadja isti endpoint kao _makeReservation??
 
@@ -143,13 +143,13 @@ export class WeekendHouseOwnerService {
                       catchError(this.handleError)); 
   }
 
-  addFreeTerm(newFreeTerm :Term): Observable<any> {
+  addFreeTerm(newFreeTerm :WeekendHouseTerm): Observable<any> {
     const body = JSON.stringify(newFreeTerm);
     return this._http.post(this._addFreeTerm, body)
   }
 
-  getAllFreeTermsForWeekendHouse(weekendHouse : WeekendHouse) :Observable<Term[]> {
-    return this._http.get<Term[]>(this._getAllFreeTermsForWeekendHouse + weekendHouse.id)
+  getAllFreeTermsForWeekendHouse(weekendHouse : WeekendHouse) :Observable<WeekendHouseTerm[]> {
+    return this._http.get<WeekendHouseTerm[]>(this._getAllFreeTermsForWeekendHouse + weekendHouse.id)
                           .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
                             catchError(this.handleError)); 
   }

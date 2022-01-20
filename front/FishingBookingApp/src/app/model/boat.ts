@@ -8,6 +8,11 @@ export interface Boat {
     name: string ;
     address: string ;
     description: string ;
+    type: string;
+    length : number;
+    engineNumber : number;
+    horsePower : number;
+    maxSpeed: number;
     imagePath : string;
     freeTerms: TermBoat[];
     price: number; 

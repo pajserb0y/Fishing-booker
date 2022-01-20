@@ -62,6 +62,7 @@ import { WeekendHouseOwnerService } from './service/weekend-house-owner.service'
 import { InstructorService } from './service/instructor.service';
 import { CustomerFutureFishingLessonReservationsComponent } from './customer-future-fishing-lesson-reservations/customer-future-fishing-lesson-reservations.component';
 import { CustomerPastFishingLessonReservationsComponent } from './customer-past-fishing-lesson-reservations/customer-past-fishing-lesson-reservations.component';
+import { BoatProfileComponent } from './boat-profile/boat-profile.component';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -110,7 +111,8 @@ const MaterialComponents = [
     CustomerFutureBoatReservationsComponent,
     CustomerPastBoatReservationsComponent,
     CustomerFutureFishingLessonReservationsComponent,
-    CustomerPastFishingLessonReservationsComponent
+    CustomerPastFishingLessonReservationsComponent,
+    BoatProfileComponent
   ],
   imports: [
     BrowserModule,

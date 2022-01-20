@@ -9,14 +9,14 @@
         <ng-container matColumnDef="startDateTime">
             <mat-header-cell *matHeaderCellDef> Start Date and Time </mat-header-cell>
                 <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.startDateTime}}</ng-container>
+                  <ng-container >{{element.startDateTime | date : 'short' }}</ng-container>
                     </mat-cell>
           </ng-container>
     
           <ng-container matColumnDef="endDateTime">
             <mat-header-cell *matHeaderCellDef> End Date and Time </mat-header-cell>
                 <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.endDateTime}}</ng-container>
+                  <ng-container >{{element.endDateTime | date : 'short'}}</ng-container>
                     </mat-cell>
           </ng-container>
     
@@ -245,7 +245,7 @@
     
           <mat-form-field appearance="fill" style="margin-right: 2%;">
             <mat-label>Price</mat-label>
-            <input matInput  name="password" id="price" name="price" [(ngModel)]="weekendHouse.price" required>
+            <input matInput  id="price" name="price" [(ngModel)]="weekendHouse.price" required>
           </mat-form-field>
     
           <div>

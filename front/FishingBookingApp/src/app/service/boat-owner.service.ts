@@ -14,6 +14,8 @@ import { BoatComplaint } from '../model/boat-complaint';
   providedIn: 'root'
 })
 export class BoatOwnerService {
+ 
+
   
   private _baseUrl = 'http://localhost:8080';  
   private _boatOwnerRegistration = this._baseUrl + '/api/boatowners';
@@ -32,9 +34,13 @@ export class BoatOwnerService {
   private _sendFeedback = this._boatsReservationController + '/sendFeedback';
   private _sendComplaint = this._boatsReservationController + '/sendComplaint';
   private _getCurrentSpecialOffers = this._boatsReservationController + '/getCurrentSpecialOffers';
-  
+  private _allBoatsForOwner = this._boatOwnerRegistration + '/allBoatsForOwner/';
+  private _getAllReservationsForBoat = this._boatsReservationController + '/getAllReservationsForBoat/';
+  private _addFreeTerm = this._boatOwnerRegistration + '/addFreeTerm';
+  private _makeReservationOrSpecialOffer = this._boatsReservationController + '/makeReservationOrSpecialOffer';
+  private _editBoat = this._boatOwnerRegistration + '/editBoat';
 
-
+  boat !: Boat;
   constructor(private _http: HttpClient) { }
 
 
@@ -95,6 +101,12 @@ export class BoatOwnerService {
                       catchError(this.handleError)); 
   }
 
+  getAllBoatsForOwner(username: String | null): Observable<Boat[]> {
+    return this._http.get<Boat[]>(this._allBoatsForOwner + username)
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
+                      catchError(this.handleError)); 
+  }
+
   createBoatOwner(boatOwner: BoatOwner) : Observable<any> {
     const body=JSON.stringify(boatOwner);
     console.log(body)
@@ -109,6 +121,27 @@ export class BoatOwnerService {
     return this._http.get<BoatOwner>(this._getBoatOwnerByUsername + username)
                            .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
                                 catchError(this.handleError)); 
+  }
+
+  //za ovo treba napraviti end point-e
+  getAllReservationsForBoat(boat: Boat) :Observable<BoatReservation[]> {
+    return this._http.get<BoatReservation[]>(this._getAllReservationsForBoat + boat.id)
+                          .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
+                            catchError(this.handleError)); 
+  }
+  addFreeTerm(newFreeTerm: TermBoat): Observable<any> {
+    const body = JSON.stringify(newFreeTerm);
+    return this._http.post(this._addFreeTerm, body)
+  }
+  makeSpecialOffer(specialOffer: BoatReservation): Observable<any> {
+    const body=JSON.stringify(specialOffer);
+    console.log(body)
+    return this._http.post(this._makeReservationOrSpecialOffer, body)
+  }
+  editBoat(boat: Boat) :Observable<any>
+  {
+    const body = JSON.stringify(boat);
+    return this._http.post(this._editBoat, body)
   }
   
 

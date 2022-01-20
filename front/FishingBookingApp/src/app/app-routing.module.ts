@@ -16,6 +16,7 @@ import { CustomerFutureBoatReservationsComponent } from './customer-future-boat-
 import { CustomerPastBoatReservationsComponent } from './customer-past-boat-reservations/customer-past-boat-reservations.component';
 import { CustomerPastFishingLessonReservationsComponent } from './customer-past-fishing-lesson-reservations/customer-past-fishing-lesson-reservations.component';
 import { CustomerFutureFishingLessonReservationsComponent } from './customer-future-fishing-lesson-reservations/customer-future-fishing-lesson-reservations.component';
+import { BoatProfileComponent } from './boat-profile/boat-profile.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'weekend-houses', component: WeekendHousesComponent },
   { path: 'fishing-lessons', component: FishingLessonsComponent },
   { path: 'boats', component: BoatsComponent },
+  { path: 'boat-profile', component: BoatProfileComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard], 
                               data: { role: ['ROLE_CUSTOMER', 'ROLE_INSTRUCTOR','ROLE_WEEKEND_HOUSE_OWNER','ROLE_BOAT_OWNER','ROLE_ADMIN']} },

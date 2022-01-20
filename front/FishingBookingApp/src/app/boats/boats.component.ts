@@ -26,22 +26,22 @@ export class BoatsComponent implements OnInit {
   errorMessage : string  = '';
   selectedBoatInfo: Boat = {
     id: 0,
-    name: '' ,
-    address: '' ,
-    description: '' ,
-        /* grade: number ;   ovo se dobavlja iz tabele svih ocena*/
-    imagePath : '' ,
+    name: '',
+    address: '',
+    description: '',
+    /* grade: number ;   ovo se dobavlja iz tabele svih ocena*/
+    imagePath: '',
     capacity: 0,
     freeTerms: [],
-    rules: '' ,
-    price: 0 ,
+    rules: '',
+    price: 0,
     additionalServices: [],
     boatOwner: {
       id: 0,
       firstName: "",
       lastName: "",
       email: "",
-      username:  "",
+      username: "",
       password: "",
       address: "",
       city: "",
@@ -50,7 +50,12 @@ export class BoatsComponent implements OnInit {
       motive: ""
     },
     boatReservations: [],
-    avgGrade: 0
+    avgGrade: 0,
+    type: '',
+    length: 0,
+    engineNumber: 0,
+    horsePower: 0,
+    maxSpeed: 0
   }
   boatReservation : BoatReservation = {
     id: 0,
@@ -99,8 +104,8 @@ export class BoatsComponent implements OnInit {
       this.getCustomer();
       this.getAllBoats();
     }    
-    /* else if(this.role == 'ROLE_BOAT_OWNER')
-        this.getAllWeekendHousesForOwner(this.username) */   
+    else if(this.role == 'ROLE_BOAT_OWNER')
+        this.getAllBoatsForOwner(this.username);  
     else
       this.getAllBoats();
   }
@@ -133,12 +138,12 @@ export class BoatsComponent implements OnInit {
                    error => this.errorMessage = <any>error);   
   }
 
- /*  getAllBoatsForOwner(username :String|null)
+  getAllBoatsForOwner(username :String|null)
   {
     this._boatOwnerService.getAllBoatsForOwner(username)
-        .subscribe(data =>  this.weekendHouses = data,
+        .subscribe(data =>  this.boats = data,
                    error => this.errorMessage = <any>error); 
-  } */
+  } 
 
   getAllFreeTerms() {
        this._boatOwnerService.getAllFreeTermsForBoat(this.selectedBoatInfo)
@@ -156,11 +161,11 @@ export class BoatsComponent implements OnInit {
   }
 
   showInfo(boat: Boat) {
-    /* if(this.role == 'ROLE_WEEKEND_HOUSE_OWNER')
+    if(this.role == 'ROLE_BOAT_OWNER')
     {
-      this._weekendHouseOwnerService.weekendHouse = boat;
-      this.router.navigateByUrl("weekend-house-profile")
-    } */
+      this._boatOwnerService.boat = boat;
+      this.router.navigateByUrl("boat-profile")
+    } 
     if(this.role != 'ROLE_BOAT_OWNER')
     {
       this.selectedBoatInfo = boat
@@ -180,7 +185,7 @@ export class BoatsComponent implements OnInit {
   }
 
   reserve() {
-    if (this.boatReservation.customer.penals > 2)
+    if (this.boatReservation.customer != null && this.boatReservation.customer.penals > 2)
         this._snackBar.open('You can not make any reservations because you are banned for the end of the month!', 'Close', {duration: 5000});
     else {
         this.boatReservation.boat = this.selectedBoatInfo

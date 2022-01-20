@@ -88,6 +88,21 @@ public class BoatOwnerController {
         return boatDTOS;
     }
 
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping(path = "/allBoatsForOwner/{username}")
+    public Set<BoatDTO> allBoatsForOwner(@PathVariable String username) {
+        BoatOwner boatOwner = boatOwnerService.findByUsername(username);
+        List<Boat> boats = boatOwnerService.findAllBoatForOwner(boatOwner);
+        Set<BoatDTO> boatDTOs = new HashSet<>();
+        for (Boat boat : boats) {
+            BoatDTO dto = new BoatDTO();
+            dto = (new BoatDTO(boat));
+            boatDTOs.add(dto);
+        }
+
+        return boatDTOs;
+    }
+
     @PreAuthorize("hasAnyRole('BOAT_OWNER', 'CUSTOMER')")
     @GetMapping(path = "/getAllFreeTermsForBoat/{id}")
     public Set<TermBoatDTO> getAllFreeTermsForBoat(@PathVariable Integer id) {

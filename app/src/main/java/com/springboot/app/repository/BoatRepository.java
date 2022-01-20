@@ -11,4 +11,6 @@ import java.util.List;
 public interface BoatRepository extends JpaRepository<Boat,Integer> {
 
     List<Boat> findAllByIdNotIn(Collection<Integer> ids);
+
+    List<Boat> findByBoatOwner(BoatOwner boatOwner);
 }

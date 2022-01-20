@@ -34,4 +34,6 @@ public interface BoatOwnerService {
     Boat findBoatById(Integer id);
 
     List<TermBoat> findAllFreeTermsForBoat(Boat boat);
+
+    List<Boat> findAllBoatForOwner(BoatOwner boatOwner);
 }

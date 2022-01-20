@@ -125,6 +125,11 @@ export class SpecialOffersComponent implements OnInit {
       address: '' ,
       description: '' ,
           /* grade: number ;   ovo se dobavlja iz tabele svih ocena*/
+      type: '',
+      length : 0,
+      engineNumber : 0,
+      horsePower : 0,
+      maxSpeed: 0,
       imagePath : '' ,
       capacity: 0,
       freeTerms: [],

@@ -4,10 +4,9 @@ import { WeekendHouse } from '../model/weekend-house';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
 import { WeekendHouseOwnerService } from '../service/weekend-house-owner.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Customer } from '../model/customer'
 import { FormControl, FormGroup } from '@angular/forms';
-import { Term } from '../model/term';
-import { isNull } from '@angular/compiler/src/output/output_ast';
+import { WeekendHouseTerm } from '../model/term-weekend-house';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-weekend-house-profile',
   templateUrl: './weekend-house-profile.component.html',
@@ -115,23 +114,25 @@ specialOffer  : WeekendHouseReservation = {
     startTerm: new FormControl(),
     endTerm: new FormControl(),
   });
-  newFreeTerm : Term = {
+  newFreeTerm : WeekendHouseTerm = {
     startDateTime: new Date(), 
     endDateTime: new Date(),
     id: 0,
     weekendHouse : this.weekendHouse
   }
 
-  allFreeTerms : Term[] = [];
+  allFreeTerms : WeekendHouseTerm[] = [];
 
   displayedColumns: string[] = ['startDateTime', 'endDateTime', 'price', 'customer', 'weekendHouse'];
 
-  constructor(private _weekendHouseownerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar) { 
+  constructor(private _weekendHouseownerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar, private _router : Router) { 
     
   }
 
   ngOnInit(): void {
       this.weekendHouse = this._weekendHouseownerService.weekendHouse;
+      if(this.weekendHouse == null)
+        this._router.navigateByUrl('weekend-houses');
       this.getAllReservationsForWeekendHouse();
       this.weekendHouseReservation.price = this.weekendHouse.price;
       this.specialOffer.price = this.weekendHouse.price
@@ -181,21 +182,31 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
     this.weekendHouseReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
     this.weekendHouseReservation.endSpecialOffer = null
     this.weekendHouseReservation.price = this.weekendHouse.price
-    for (let service of this.weekendHouseReservation.services) {
-      this.weekendHouseReservation.price += service.price
+    let currentDate = new Date();
+    if(this.weekendHouseReservation.endDateTime.getTime() < currentDate.getTime()){
+        for (let service of this.weekendHouseReservation.services) {
+          this.weekendHouseReservation.price += service.price
+        }
+        this._weekendHouseownerService.reserve(this.weekendHouseReservation)
+              .subscribe(data => {
+                if(data == null)
+                  this._snackBar.open('Someone has reserved house in selected term before you. Please select other term.', 'Close', {duration: 5000});
+                else {
+                  this.allReservationsForWeekendHouse = data,
+                  this.allReservationsForWeekendHouse.filter(res => res.customer != null),
+                  this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+                }}
+                ,error => this.errorMessage = <any>error); 
+        this.weekendHouseReservation.customer = null;
+        this.range.value.start = null;
+        this.range.value.end = null;
+        this.weekendHouseReservation.services = [];
+        this.weekendHouseReservation.price = 0;
     }
-    this._weekendHouseownerService.reserve(this.weekendHouseReservation)
-          .subscribe(data =>  this.allReservationsForWeekendHouse = data,
-              error => this.errorMessage = <any>error); 
-    this.allReservationsForWeekendHouse.filter(res => res.customer != null)
-    this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
-    this.weekendHouseReservation.customer = null;
-    this.range.value.start = null;
-    this.range.value.end = null;
-    this.weekendHouseReservation.services = [];
-    this.weekendHouseReservation.price = 0;
-   
+    else
+        this._snackBar.open('Reservation is not possible to make if current reservation has expired!', 'Close', {duration: 5000});   
   }
+
   makeSpecialOffer()
   {
     this.specialOffer.weekendHouse = this.weekendHouse;
@@ -208,11 +219,16 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
     }
     this._weekendHouseownerService.makeSpecialOffer(this.specialOffer)
           .subscribe(data =>  {
-                              this.specialOffers = data,     
-                              this.specialOffers = this.specialOffers.filter(offer => offer.customer == null)},
-              error => this.errorMessage = <any>error); 
+            if(data == null)
+              this._snackBar.open('Someone has reserved house in selected term. Please select other term.', 'Close', {duration: 5000});
+            else {
+              this.specialOffers = data,     
+              this.specialOffers = this.specialOffers.filter(offer => offer.customer == null),
+              this._snackBar.open('Special offer created successfuly', 'Close', {duration: 5000});
+            }},
+           error => this.errorMessage = <any>error); 
 
-    this._snackBar.open('Special offer created successfuly', 'Close', {duration: 5000});
+    
     this.specialOffer.customer = null;
     this.rangeOffer.value.startOffer = null;
     this.rangeOffer.value.endOffer = null;
@@ -222,7 +238,7 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
     this.specialOffer.price = 0;
   }
 
-  getDateFromDatePickerRange(start: Date) {
+  getDateFromDatePickerRange(start: Date) : Date{
     return new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours(), start.getMinutes()));
   }
 

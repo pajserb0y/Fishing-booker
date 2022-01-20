@@ -122,4 +122,9 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
     public List<TermBoat> findAllFreeTermsForBoat(Boat boat) {
         return termBoatRepository.findByBoat(boat);
     }
+
+    @Override
+    public List<Boat> findAllBoatForOwner(BoatOwner boatOwner) {
+        return boatRepository.findByBoatOwner(boatOwner);
+    }
 }
