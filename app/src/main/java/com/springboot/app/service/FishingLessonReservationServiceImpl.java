@@ -18,15 +18,17 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
     private final InstructorRepository instructorRepository;
     private final FishingLessonFeedbackRepository fishingLessonFeedbackRepository;
     private final FishingLessonComplaintRepository fishingLessonComplaintRepository;
+    private final ReportRepository reportRepository;
 
     public FishingLessonReservationServiceImpl(FishingLessonReservationRepository fishingLessonReservationRepository, FishingLessonRepository fishingLessonRepository, FishingLessonComplaintRepository fishingLessonComplaintRepository,
-                                               CustomerRepository customerRepository, InstructorRepository instructorRepository, FishingLessonFeedbackRepository fishingLessonFeedbackRepository) {
+                                               CustomerRepository customerRepository, InstructorRepository instructorRepository, FishingLessonFeedbackRepository fishingLessonFeedbackRepository, ReportRepository reportRepository) {
         this.fishingLessonReservationRepository = fishingLessonReservationRepository;
         this.fishingLessonRepository = fishingLessonRepository;
         this.customerRepository = customerRepository;
         this.instructorRepository = instructorRepository;
         this.fishingLessonFeedbackRepository = fishingLessonFeedbackRepository;
         this.fishingLessonComplaintRepository = fishingLessonComplaintRepository;
+        this.reportRepository = reportRepository;
     }
 
     @Override
@@ -96,6 +98,11 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
     @Override
     public void sendComplaint(FishingLessonComplaint fishingLessonComplaint) {
         fishingLessonComplaintRepository.save(fishingLessonComplaint);
+    }
+
+    @Override
+    public void sendReport(Report report) {
+        reportRepository.save(report);
     }
 
     @Override

@@ -94,6 +94,19 @@ public class FishingLessonReservationController {
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PostMapping(path = "/reportCustomer")
+    public ResponseEntity<?> reportCustomer(@RequestBody ReportDTO reportDTO) {
+        Optional<FishingLessonReservation> reservation = fishingLessonReservationService.findById(reportDTO.getReservationId());
+
+        if (!reservation.isPresent())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Report report = new Report(reportDTO, reservation.get().getFishingLesson().getInstructor().getId(), reservation.get().getCustomer().getId(), reservation.get().getFishingLesson().getId(), "fishing");
+        fishingLessonReservationService.sendReport(report);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     @GetMapping(path = "/getAllForInstructor/{username}")
     public Set<FishingLessonReservationDTO> getAllForInstructor(@PathVariable String username) {
         return fishingLessonReservationService.getAllReservationsForInstructor(username);

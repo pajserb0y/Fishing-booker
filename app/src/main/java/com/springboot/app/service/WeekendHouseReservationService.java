@@ -1,9 +1,6 @@
 package com.springboot.app.service;
 
-import com.springboot.app.model.WeekendHouse;
-import com.springboot.app.model.WeekendHouseComplaint;
-import com.springboot.app.model.WeekendHouseFeedback;
-import com.springboot.app.model.WeekendHouseReservation;
+import com.springboot.app.model.*;
 import com.springboot.app.model.dto.BoatReservationDTO;
 import com.springboot.app.model.dto.WeekendHouseReservationDTO;
 
@@ -21,12 +18,15 @@ public interface WeekendHouseReservationService {
 
     void cancel(Integer id);
 
-    void sendFeedback(WeekendHouseFeedback weekendHouseFeedback);
     List<WeekendHouseReservation> findAllReservationsForWeekendHouse(WeekendHouse weekendHouse);
 
     Optional<WeekendHouseReservation> findById(Integer weekendHouseReservationId);
 
+    void sendFeedback(WeekendHouseFeedback weekendHouseFeedback);
+
     void sendComplaint(WeekendHouseComplaint weekendHouseComplaint);
+
+    void sendReport(Report report);
 
     List<WeekendHouseReservation> getCurrentSpecialOffers();
 

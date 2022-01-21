@@ -1,7 +1,9 @@
 import { keyframes } from '@angular/animations';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
+import { Router } from '@angular/router';
 import { BoatReservationWithDateAsString, Reservation } from '../model/boat-reservation-with-date-as-string';
 import { CustomerReport } from '../model/customer-report';
 import { FishingLessonReservationWithDateAsString } from '../model/fishing-lesson-reservation-with-date-as-string';
@@ -44,7 +46,7 @@ export class ReportCustomersComponent implements OnInit {
   }
 
 
-  constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService, private _boatOwnerService: BoatOwnerService, private _instructorService : InstructorService) { }
+  constructor(private _weekendHouseOwnerService: WeekendHouseOwnerService, private _snackBar: MatSnackBar, private _boatOwnerService: BoatOwnerService, private _instructorService : InstructorService, private router: Router) { }
 
   ngOnInit(): void {
     if(this.role == 'ROLE_INSTRUCTOR')
@@ -80,6 +82,8 @@ export class ReportCustomersComponent implements OnInit {
   }
 
   convertHouseToReservation() { 
+    this.reservations = []
+
     for (let res of this.weekendHouseReservations) {
 
       this.reservation.id = res.id;
@@ -96,6 +100,8 @@ export class ReportCustomersComponent implements OnInit {
   }
 
   convertBoatToReservation() { 
+    this.reservations = []
+
     for (let res of this.boatRreservations) {
       
       this.reservation.id = res.id;
@@ -112,6 +118,8 @@ export class ReportCustomersComponent implements OnInit {
   }
 
   convertLessonToReservation() { 
+    this.reservations = []
+    
     for (let res of this.fishingLessonReservations) {
       
       this.reservation.id = res.id;
@@ -128,7 +136,31 @@ export class ReportCustomersComponent implements OnInit {
   }
 
   showReportCustomer(res : Reservation) {
+    this.report.reservationId = res.id
+
     this.show = true;
+  }
+
+  sendReport() {
+    if(this.role == 'ROLE_INSTRUCTOR') {
+      this._instructorService.submitReport(this.report)
+          .subscribe(() =>  {},
+                      error => this.errorMessage = <any>error); 
+    } else if (this.role == 'ROLE_BOAT_OWNER') {
+      this._boatOwnerService.submitReport(this.report)
+          .subscribe(() =>  {},
+                      error => this.errorMessage = <any>error); 
+    } else if (this.role == 'ROLE_WEEKEND_HOUSE_OWNER') {
+      this._weekendHouseOwnerService.submitReport(this.report)
+          .subscribe(() =>  {},
+                      error => this.errorMessage = <any>error); 
+    }
+     
+    console.log(this.report)
+    this.show = false;
+    this.router.navigateByUrl('/').then(() => {
+      this._snackBar.open('Your complaint has been sent successfully!', 'Close', {duration: 5000});
+    })
   }
 
   sortData(sort: Sort) {

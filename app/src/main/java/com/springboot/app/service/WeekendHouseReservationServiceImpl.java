@@ -21,16 +21,19 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     private final WeekendHouseFeedbackRepository weekendHouseFeedbackRepository;
     private final WeekendHouseComplaintRepository weekendHouseComplaintRepository;
     private final WeekendHouseOwnerRepository weekendHouseOwnerRepository;
+    private final ReportRepository reportRepository;
 
     public WeekendHouseReservationServiceImpl(WeekendHouseReservationRepository weekendHouseReservationRepository, CustomerRepository customerRepository,
                                               WeekendHouseRepository weekendHouseRepository, WeekendHouseFeedbackRepository weekendHouseFeedbackRepository,
-                                              WeekendHouseComplaintRepository weekendHouseComplaintRepository, WeekendHouseOwnerRepository weekendHouseOwnerRepository) {
+                                              WeekendHouseComplaintRepository weekendHouseComplaintRepository, WeekendHouseOwnerRepository weekendHouseOwnerRepository,
+                                              ReportRepository reportRepository) {
         this.weekendHouseReservationRepository = weekendHouseReservationRepository;
         this.weekendHouseRepository = weekendHouseRepository;
         this.customerRepository = customerRepository;
         this.weekendHouseFeedbackRepository = weekendHouseFeedbackRepository;
         this.weekendHouseComplaintRepository = weekendHouseComplaintRepository;
         this.weekendHouseOwnerRepository = weekendHouseOwnerRepository;
+        this.reportRepository = reportRepository;
     }
 
 
@@ -89,18 +92,23 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     }
 
     @Override
-    public void sendFeedback(WeekendHouseFeedback weekendHouseFeedback) {
-        weekendHouseFeedbackRepository.save(weekendHouseFeedback);
-    }
-
-    @Override
     public Optional<WeekendHouseReservation> findById(Integer weekendHouseReservationId) {
         return weekendHouseReservationRepository.findById(weekendHouseReservationId);
     }
 
     @Override
+    public void sendFeedback(WeekendHouseFeedback weekendHouseFeedback) {
+        weekendHouseFeedbackRepository.save(weekendHouseFeedback);
+    }
+
+    @Override
     public void sendComplaint(WeekendHouseComplaint weekendHouseComplaint) {
         weekendHouseComplaintRepository.save(weekendHouseComplaint);
+    }
+
+    @Override
+    public void sendReport(Report report) {
+        reportRepository.save(report);
     }
 
     @Override

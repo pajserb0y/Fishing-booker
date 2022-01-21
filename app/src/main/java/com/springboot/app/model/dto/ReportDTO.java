@@ -6,20 +6,24 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class ReportDTO {
-    private int id;
+    private Integer id;
     @NotEmpty(message = "Please fill out first name")
     private Integer reservationId;
     @NotEmpty(message = "Please fill out commnet")
-    private String commnet;
+    private String comment;
     @NotBlank(message = "Please fill out deservesPenalty")
     private boolean deservesPenalty;
     @NotEmpty(message = "Please fill out didntShowUp")
     private boolean didntShowUp;
 
-    public ReportDTO(int id, Integer reservationId, String commnet, boolean deservesPenalty, boolean didntShowUp) {
+    public ReportDTO() {
+
+    }
+
+    public ReportDTO(int id, Integer reservationId, String comment, boolean deservesPenalty, boolean didntShowUp) {
         this.id = id;
         this.reservationId = reservationId;
-        this.commnet = commnet;
+        this.comment = comment;
         this.deservesPenalty = deservesPenalty;
         this.didntShowUp = didntShowUp;
     }
@@ -40,12 +44,12 @@ public class ReportDTO {
         this.reservationId = reservationId;
     }
 
-    public String getCommnet() {
-        return commnet;
+    public String getComment() {
+        return comment;
     }
 
-    public void setCommnet(String commnet) {
-        this.commnet = commnet;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public boolean isDeservesPenalty() {
