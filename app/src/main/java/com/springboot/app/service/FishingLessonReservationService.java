@@ -26,6 +26,8 @@ public interface FishingLessonReservationService {
 
     void sendComplaint(FishingLessonComplaint fishingLessonComplaint);
 
+    void sendReport(Report report);
+
     List<FishingLessonReservation> getCurrentSpecialOffers();
 
     List<FishingLessonReservation> findAllReservationsForFishingLesson(FishingLesson fishingLesson);

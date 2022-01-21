@@ -114,9 +114,6 @@ export class InstructorService {
     return this._http.post(this._submitReport, body)
   }
 
-
-
-
   private handleError(err : HttpErrorResponse) {
     console.log(err.message);
     return Observable.throw(err.message);

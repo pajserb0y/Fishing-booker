@@ -3,6 +3,7 @@ package com.springboot.app.service;
 import com.springboot.app.model.*;
 import com.springboot.app.model.dto.BoatReservationDTO;
 import com.springboot.app.model.dto.FishingLessonReservationDTO;
+import com.springboot.app.model.dto.ReportDTO;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,16 +22,20 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     private final BoatFeedbackRepository boatFeedbackRepository;
     private final BoatComplaintRepository boatComplaintRepository;
     private final BoatOwnerRepository boatOwnerRepository;
+    private final ReportRepository reportRepository;
 
     public BoatReservationServiceImpl( BoatReservationRepository boatReservationRepository, CustomerRepository customerRepository,
                                        BoatRepository boatRepository,BoatFeedbackRepository boatFeedbackRepository,
-                                       BoatComplaintRepository boatComplaintRepository, BoatOwnerRepository boatOwnerRepository     ) {
+                                       BoatComplaintRepository boatComplaintRepository, BoatOwnerRepository boatOwnerRepository,
+                                       ReportRepository reportRepository  ) {
+
         this.boatReservationRepository = boatReservationRepository;
         this.boatRepository = boatRepository;
         this.customerRepository = customerRepository;
         this.boatFeedbackRepository = boatFeedbackRepository;
         this.boatComplaintRepository = boatComplaintRepository;
         this.boatOwnerRepository = boatOwnerRepository;
+        this.reportRepository = reportRepository;
     }
 
     @Override
@@ -94,6 +99,11 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     @Override
     public void sendComplaint(BoatComplaint boatComplaint) {
         boatComplaintRepository.save(boatComplaint);
+    }
+
+    @Override
+    public void sendReport(Report report) {
+        reportRepository.save(report);
     }
 
     @Override

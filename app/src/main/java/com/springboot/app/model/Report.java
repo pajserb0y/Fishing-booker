@@ -1,5 +1,7 @@
 package com.springboot.app.model;
 
+import com.springboot.app.model.dto.ReportDTO;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,30 +16,32 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-    @NotEmpty(message = "Please fill out comment")
     protected Integer ownerId;
 
-    @NotEmpty(message = "Please fill out comment")
     protected Integer customerId;
 
-    @NotEmpty(message = "Please fill out comment")
     protected Integer propertyId;
 
-    @NotEmpty(message = "Please fill out comment")
     protected String comment;
 
-    @NotEmpty(message = "Please fill out last name")
     protected boolean deservesPenalty;
 
-    @Email(message = "Email is in wrong format")
-    @NotBlank(message = "Please fill out email")
     protected boolean didntShowUp;
 
-    @NotEmpty(message = "Please fill out username")
     protected String type; //boat/house/fishing
 
     public Report() {
 
+    }
+
+    public Report(ReportDTO dto, Integer ownerId, Integer customerId, Integer propertyId, String type) {
+        this.ownerId = ownerId;
+        this.customerId = customerId;
+        this.propertyId = propertyId;
+        this.comment = dto.getComment();
+        this.deservesPenalty = dto.isDeservesPenalty();
+        this.didntShowUp = dto.isDidntShowUp();
+        this.type = type;
     }
 
     public Report(Integer id, Integer ownerId, Integer customerId, Integer propertyId, String comment, boolean deservesPenalty, boolean didntShowUp, String type) {

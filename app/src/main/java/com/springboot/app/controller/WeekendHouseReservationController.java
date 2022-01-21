@@ -99,6 +99,19 @@ public class WeekendHouseReservationController {
     }
 
     @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
+    @PostMapping(path = "/reportCustomer")
+    public ResponseEntity<?> reportCustomer(@RequestBody ReportDTO reportDTO) {
+        Optional<WeekendHouseReservation> reservation = weekendHouseReservationService.findById(reportDTO.getReservationId());
+
+        if (!reservation.isPresent())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Report report = new Report(reportDTO, reservation.get().getWeekendHouse().getWeekendHouseOwner().getId(), reservation.get().getCustomer().getId(), reservation.get().getWeekendHouse().getId(), "fishing");
+        weekendHouseReservationService.sendReport(report);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
     @GetMapping(path = "/getAllReservationsForWeekendHouse/{id}")
     public Set<WeekendHouseReservationDTO> getAllReservationsForWeekendHouse(@PathVariable Integer id) {
         WeekendHouse weekendHouse = weekendHouseOwnerService.findWeekendHouseById(id);

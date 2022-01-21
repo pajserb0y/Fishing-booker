@@ -1,40 +1,61 @@
-<h2>Reservations history</h2>    
-    <div  class="tableView">
-    <table id="myTable" mat-table [dataSource]="reservations" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
-        <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef mat-sort-header='name'> Name </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-          </ng-container>
-        
-        <ng-container matColumnDef="startDate">
-            <mat-header-cell *matHeaderCellDef mat-sort-header='startDate' > Start date </mat-header-cell>
-                <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.startDateTime|date}}</ng-container>
-                    </mat-cell>
-          </ng-container>
     
-          <ng-container matColumnDef="endDate">
-            <mat-header-cell *matHeaderCellDef mat-sort-header='endDate'> End date </mat-header-cell>
-                <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.endDateTime|date}}</ng-container>
-                    </mat-cell>
-          </ng-container>
+<div  class="tableView">
+  <h2>Reservations history</h2>
+<table id="myTable" mat-table [dataSource]="reservations" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
+    <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header='name'> Name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
     
-          <ng-container matColumnDef="cancelled">
-            <mat-header-cell *matHeaderCellDef> Cancelled </mat-header-cell>
-            <mat-cell *matCellDef="let element"> 
-              <ng-container *ngIf="element.cancelled " ><i>cancelled</i></ng-container>
-            </mat-cell>
-          </ng-container>
+    <ng-container matColumnDef="startDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header='startDate' > Start date </mat-header-cell>
+            <mat-cell *matCellDef="let element" >
+              <ng-container >{{element.startDateTime|date}}</ng-container>
+                </mat-cell>
+      </ng-container>
 
-          <ng-container matColumnDef="customer">
-            <mat-header-cell *matHeaderCellDef mat-sort-header='customer'> Customer </mat-header-cell>
-                <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.customer}}</ng-container>
-                    </mat-cell>
-          </ng-container>
-    
-          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showReportCustomer(row)" [class.selected]="row.selected"></mat-row>
-      </table>
-    </div>
+      <ng-container matColumnDef="endDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header='endDate'> End date </mat-header-cell>
+            <mat-cell *matCellDef="let element" >
+              <ng-container >{{element.endDateTime|date}}</ng-container>
+                </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cancelled">
+        <mat-header-cell *matHeaderCellDef> Cancelled </mat-header-cell>
+        <mat-cell *matCellDef="let element"> 
+          <ng-container *ngIf="element.cancelled " ><i>cancelled</i></ng-container>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="customer">
+        <mat-header-cell *matHeaderCellDef mat-sort-header='customer'> Customer </mat-header-cell>
+            <mat-cell *matCellDef="let element" >
+              <ng-container >{{element.customer}}</ng-container>
+                </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showReportCustomer(row)" [class.selected]="row.selected"></mat-row>
+  </table>
+</div>
+
+
+<div *ngIf="show" style="margin-left: 10%; margin-top: 3%;">
+  <h2> Report/commend customer</h2>            
+  <div><mat-form-field style="width: 600px; height: 200px;" appearance="fill">
+    <textarea required matInput placeholder="Write your comment on customer" [(ngModel)]="report.comment"  rows="15" cols="40" ></textarea>
+  </mat-form-field></div>
+
+  <div>
+    <br>
+    <section>
+      <mat-checkbox name="deservesPenalty" [(ngModel)]="report.deservesPenalty" >Deserves penalty</mat-checkbox>
+      <mat-checkbox name="didntShowUp" [(ngModel)]="report.didntShowUp" style="margin-left: 2%;">Didnt't show up</mat-checkbox>
+    </section>
+  </div>
+
+  <div style="margin-top: 2%;">
+    <button mat-raised-button color="accent" (click)="sendReport()" [disabled]="report.comment === ''" >Send</button>
+  </div>  
+</div>
