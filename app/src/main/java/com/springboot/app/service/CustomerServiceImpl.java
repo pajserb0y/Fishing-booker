@@ -9,9 +9,11 @@ import com.springboot.app.repository.FishingLessonRepository;
 import com.springboot.app.repository.WeekendHouseRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockTimeoutException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -37,14 +39,22 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Customer saveCustomer(Customer customer) {
-        if(customerRepository.findByUsername(customer.getUsername()) != null)
+        try {
+            if (customerRepository.findOneByUsername(customer.getUsername()) != null)
+                return null;
+            List<Role> roles = roleService.findByName("ROLE_CUSTOMER");
+            customer.setRole(roles.get(0));
+            if (customer.getPenals() != 0)
+                customer.setPenals((int) (Math.random() * 5));
+            try {
+                customerRepository.save(customer);
+            } catch (ObjectOptimisticLockingFailureException e) {
+                return null;
+            }
+            return customer;
+        } catch (LockTimeoutException e) {
             return null;
-        List<Role> roles = roleService.findByName("ROLE_CUSTOMER");
-        customer.setRole(roles.get(0));
-        if (customer.getPenals() != 0)
-            customer.setPenals((int)(Math.random()*5));
-        customerRepository.save(customer);
-        return customer;
+        }
     }
 
     public Customer findByHashCode(String hashCode) {
@@ -70,7 +80,11 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setLastName(customerDTO.getLastName());
         customer.setFirstName(customerDTO.getFirstName());
 
-        customerRepository.save(customer);
+        try {
+            customerRepository.save(customer);
+        } catch(ObjectOptimisticLockingFailureException e) {
+            return null;
+        }
         return customer;
     }
 

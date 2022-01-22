@@ -1,15 +1,15 @@
 package com.springboot.app.repository;
 
-import com.springboot.app.model.BoatReservation;
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseReservation;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface WeekendHouseReservationRepository extends JpaRepository<WeekendHouseReservation,Integer> {
 
@@ -42,6 +42,13 @@ public interface WeekendHouseReservationRepository extends JpaRepository<Weekend
                                                                             "OR (r.startDateTime BETWEEN cast(:start as timestamp) AND cast(:end as timestamp)) " +
                                                                             "OR (r.endDateTime BETWEEN cast(:start as timestamp) AND cast(:end as timestamp)))")
     void cancellAllActionsForThisDateRangeForThisWeekendHouse(@Param("start") Date start, @Param("end") Date end, @Param("houseId") Integer weekendHouseId);
+
     @Query("SELECT res FROM WeekendHouseReservation res WHERE res.weekendHouse.weekendHouseOwner.id = :id")
-    List<WeekendHouseReservation> findAllReservationsForInstructor(@Param("id") Integer weekendHouseOwnerId);
+    List<WeekendHouseReservation> findAllReservationsForWeekendHouseOwner(@Param("id") Integer weekendHouseOwnerId);
+
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from WeekendHouseReservation p where p.id = :id")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
+    Optional<WeekendHouseReservation> findOneById(@Param("id") Integer id);
 }
