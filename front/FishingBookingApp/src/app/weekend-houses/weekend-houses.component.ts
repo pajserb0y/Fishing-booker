@@ -150,10 +150,11 @@ export class WeekendHousesComponent implements OnInit {
     if(this.role != 'ROLE_WEEKEND_HOUSE_OWNER')
     {
       this.selectedHouseInfo = house
-      this.houseReservation.price = this.selectedHouseInfo.price * (100 - this.currentCustomer.discount)/100
-      this.houseReservation.peopleNumber = 1
-      if(this.role == 'ROLE_CUSTOMER')
+      if(this.role == 'ROLE_CUSTOMER') {
+        this.houseReservation.price = this.selectedHouseInfo.price * (100 - this.currentCustomer.discount)/100
+        this.houseReservation.peopleNumber = 1     
         this.getAllFreeTerms();
+      }
     }    
     this.show = true;
   }
@@ -198,7 +199,7 @@ export class WeekendHousesComponent implements OnInit {
         this._weekendHouseOwnerService.reserve(this.houseReservation)
               .subscribe(data => {
                 if(data == null)
-                  this._snackBar.open('Someone has reserved house in selected term before you. Please select other term.', 'Close', {duration: 5000});
+                  this._snackBar.open('Someone has reserved house in selected term before you or someone tried to access resources in the same time as you. Please select other term or try again.', 'Close', {duration: 10000});
                 else {
                   this.router.navigateByUrl('customer-future-weekend-house-reservations').then(() => {
                   this._snackBar.open('Reservation successful', 'Close', {duration: 5000});

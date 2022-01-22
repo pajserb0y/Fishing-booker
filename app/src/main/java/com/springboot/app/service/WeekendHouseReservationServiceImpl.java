@@ -1,12 +1,12 @@
 package com.springboot.app.service;
 
 import com.springboot.app.model.*;
-import com.springboot.app.model.dto.BoatReservationDTO;
 import com.springboot.app.model.dto.WeekendHouseReservationDTO;
 import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockTimeoutException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -39,37 +39,40 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
 
     @Override
     public WeekendHouseReservation reserve(WeekendHouseReservation weekendHouseReservation) {
-        Optional<WeekendHouseReservation> resInDatabase = weekendHouseReservationRepository.findById(weekendHouseReservation.getId());
-        if (resInDatabase.isPresent()) {         // rezervacija akcije
-            if(resInDatabase.get().getCustomer() != null || resInDatabase.get().isCancelled())
-                return null;
-            resInDatabase.get().setCustomer(customerRepository.findById(weekendHouseReservation.getCustomer().getId()).get());
-            resInDatabase.get().setPrice(weekendHouseReservation.getPrice());
-            weekendHouseReservationRepository.save(resInDatabase.get());
-            return resInDatabase.get();
-        }
-        else {
-            Optional<WeekendHouse> house = weekendHouseRepository.findById(weekendHouseReservation.getWeekendHouse().getId());
-            if (weekendHouseReservation.getCustomer() != null) {
-                Optional<Customer> customer = customerRepository.findById(weekendHouseReservation.getCustomer().getId());
-                if (house.isPresent() && customer.isPresent()) {        // standard rezervacija - KONFLIKTNA
-                    if(weekendHouseReservationRepository.findAllForDateRange(weekendHouseReservation.getStartDateTime(), weekendHouseReservation.getEndDateTime()).contains(house.get().getId()))
-                        return null;
-                    weekendHouseReservation.setWeekendHouse(house.get());
-                    weekendHouseReservation.setCustomer(customer.get());
-                    weekendHouseReservationRepository.save(weekendHouseReservation);
-                    weekendHouseReservationRepository.cancellAllActionsForThisDateRangeForThisWeekendHouse(weekendHouseReservation.getStartDateTime(),
-                                                                                                            weekendHouseReservation.getEndDateTime(), house.get().getId());
-                }
-            } else {
-                if (house.isPresent()) {        //pravljenje akcije, nije konfliktno jer samo house owner to moze da radi
-                    weekendHouseReservation.setWeekendHouse(house.get());
-                    weekendHouseReservation.setCustomer(null);
-                    weekendHouseReservationRepository.save(weekendHouseReservation);
-                }
+        try {
+            Optional<WeekendHouseReservation> resInDatabase = weekendHouseReservationRepository.findOneById(weekendHouseReservation.getId());
+
+            if (resInDatabase.isPresent()) {         // rezervacija akcije - KONFLIKTNA
+                if(resInDatabase.get().getCustomer() != null || resInDatabase.get().isCancelled())
+                    return null;
+                resInDatabase.get().setCustomer(customerRepository.findById(weekendHouseReservation.getCustomer().getId()).get());
+                resInDatabase.get().setPrice(weekendHouseReservation.getPrice());
+                weekendHouseReservationRepository.save(resInDatabase.get());
+                return resInDatabase.get();
             }
-            return weekendHouseReservation;
-        }
+            else {
+                Optional<WeekendHouse> house = weekendHouseRepository.findById(weekendHouseReservation.getWeekendHouse().getId());
+                if (weekendHouseReservation.getCustomer() != null) {
+                    Optional<Customer> customer = customerRepository.findById(weekendHouseReservation.getCustomer().getId());
+                    if (house.isPresent() && customer.isPresent()) {        // standard rezervacija - KONFLIKTNA
+                        if (weekendHouseReservationRepository.findAllForDateRange(weekendHouseReservation.getStartDateTime(), weekendHouseReservation.getEndDateTime()).contains(house.get().getId()))
+                            return null;
+                        weekendHouseReservation.setWeekendHouse(house.get());
+                        weekendHouseReservation.setCustomer(customer.get());
+                        weekendHouseReservationRepository.save(weekendHouseReservation);
+                        weekendHouseReservationRepository.cancellAllActionsForThisDateRangeForThisWeekendHouse(weekendHouseReservation.getStartDateTime(),
+                                weekendHouseReservation.getEndDateTime(), house.get().getId());
+                    }
+                } else {
+                    if (house.isPresent()) {        //pravljenje akcije, nije konfliktno jer samo house owner to moze da radi
+                        weekendHouseReservation.setWeekendHouse(house.get());
+                        weekendHouseReservation.setCustomer(null);
+                        weekendHouseReservationRepository.save(weekendHouseReservation);
+                    }
+                }
+                return weekendHouseReservation;
+            }
+        } catch (LockTimeoutException e) { return null; }
     }
 
     @Override
@@ -119,7 +122,7 @@ public class WeekendHouseReservationServiceImpl implements WeekendHouseReservati
     @Override
     public Set<WeekendHouseReservationDTO> getAllReservationsForWeekendHouseOwner(String username) {
         Integer id = weekendHouseOwnerRepository.findByUsername(username).getId();
-        List<WeekendHouseReservation> weekendHouseReservations = weekendHouseReservationRepository.findAllReservationsForInstructor(id);
+        List<WeekendHouseReservation> weekendHouseReservations = weekendHouseReservationRepository.findAllReservationsForWeekendHouseOwner(id);
         Set<WeekendHouseReservationDTO> weekendHouseReservationsDTOs = new HashSet<>();
         for (WeekendHouseReservation res : weekendHouseReservations) {
             WeekendHouseReservationDTO dto = new WeekendHouseReservationDTO(res);

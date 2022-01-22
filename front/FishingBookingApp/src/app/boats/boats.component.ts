@@ -169,10 +169,11 @@ export class BoatsComponent implements OnInit {
     if(this.role != 'ROLE_BOAT_OWNER')
     {
       this.selectedBoatInfo = boat
-      this.boatReservation.price = this.selectedBoatInfo.price * (100 - this.currentCustomer.discount)/100
-      this.boatReservation.capacity = 1
-      if(this.role == 'ROLE_CUSTOMER')
+      if(this.role == 'ROLE_CUSTOMER') {
+        this.boatReservation.price = this.selectedBoatInfo.price * (100 - this.currentCustomer.discount)/100
+        this.boatReservation.capacity = 1
         this.getAllFreeTerms();
+      }
     }    
     this.show = true;
   }

@@ -4,13 +4,14 @@ import com.springboot.app.model.Customer;
 import com.springboot.app.model.FishingLesson;
 import com.springboot.app.model.FishingLessonReservation;
 import com.springboot.app.model.Instructor;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface FishingLessonReservationRepository extends JpaRepository<FishingLessonReservation, Integer> {
 
@@ -55,4 +56,9 @@ public interface FishingLessonReservationRepository extends JpaRepository<Fishin
             "OR (r.startDateTime BETWEEN cast(:start as timestamp) AND cast(:end as timestamp)) " +
             "OR (r.endDateTime BETWEEN cast(:start as timestamp) AND cast(:end as timestamp)))")
     void cancellAllActionsForThisDateRangeForThisFishingLesson(@Param("start") Date start, @Param("end") Date end, @Param("fishingLessonId") Integer id);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from FishingLessonReservation p where p.id = :id")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
+    Optional<FishingLessonReservation> findOneById(@Param("id") Integer id);
 }

@@ -5,13 +5,14 @@ import com.springboot.app.model.BoatReservation;
 import com.springboot.app.model.FishingLessonReservation;
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseReservation;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface BoatReservationRepository extends JpaRepository<BoatReservation,Integer> {
 
@@ -47,6 +48,11 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     List<BoatReservation> findByBoat(Boat boat);
     @Query("SELECT res FROM BoatReservation res WHERE res.boat.boatOwner.id = :id")
     List<BoatReservation> findAllReservationsForBoatOwner(@Param("id") Integer boatOwnerId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from BoatReservation p where p.id = :id")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
+    Optional<BoatReservation> findOneById(@Param("id") Integer id);
 
 //
 //    List<WeekendHouseReservation> findByWeekendHouse(WeekendHouse weekendHouse);

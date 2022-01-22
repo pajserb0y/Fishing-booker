@@ -158,12 +158,13 @@ export class FishingLessonsComponent implements OnInit {
       this.router.navigateByUrl("weekend-house-profile")
     } */
     if(this.role != 'ROLE_INSTRUCTOR')
-    {
+    {      
       this.selectedFishingLessonInfo = fishingLesson
-      this.fishingReservation.price = this.selectedFishingLessonInfo.price * (100 - this.currentCustomer.discount)/100
-      this.fishingReservation.maxPeopleNumber = 1
-      if(this.role == 'ROLE_CUSTOMER')
+      if(this.role == 'ROLE_CUSTOMER') {
+        this.fishingReservation.price = this.selectedFishingLessonInfo.price * (100 - this.currentCustomer.discount)/100
+        this.fishingReservation.maxPeopleNumber = 1
         this.getAllFreeTerms();
+      }
     }    
     this.show = true;
   }

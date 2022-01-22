@@ -6,6 +6,7 @@ import com.springboot.app.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockTimeoutException;
 import java.util.*;
 
 @Service
@@ -33,31 +34,32 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
 
     @Override
     public FishingLessonReservation reserve(FishingLessonReservation fishingLessonReservation) {
-        Optional<FishingLessonReservation> resInDatabase = fishingLessonReservationRepository.findById(fishingLessonReservation.getId());
-        if (resInDatabase.isPresent()) {        // rezervacija akcije
-            if(resInDatabase.get().getCustomer() != null || resInDatabase.get().isCancelled())
-                return null;
-            resInDatabase.get().setCustomer(customerRepository.findById(fishingLessonReservation.getCustomer().getId()).get());
-            resInDatabase.get().setPrice(fishingLessonReservation.getPrice());
-            fishingLessonReservationRepository.save(resInDatabase.get());
-            return resInDatabase.get();
-        }
-        else {
-            Optional<FishingLesson> fishingLesson = fishingLessonRepository.findById(fishingLessonReservation.getFishingLesson().getId());
-            if (fishingLessonReservation.getCustomer() != null) {
-                Optional<Customer> customer = customerRepository.findById(fishingLessonReservation.getCustomer().getId());
-                if (fishingLesson.isPresent() && customer.isPresent()) {
-                    if(fishingLessonReservationRepository.findAllForDateRange(fishingLessonReservation.getStartDateTime(), fishingLessonReservation.getEndDateTime()).contains(fishingLesson.get().getId()))
-                        return null;
-                    fishingLessonReservation.setFishingLesson(fishingLesson.get());
-                    fishingLessonReservation.setCustomer(customer.get());
-                    fishingLessonReservationRepository.save(fishingLessonReservation);
-                    fishingLessonReservationRepository.cancellAllActionsForThisDateRangeForThisFishingLesson(fishingLessonReservation.getStartDateTime(),
-                            fishingLessonReservation.getEndDateTime(), fishingLesson.get().getId());
+        try {
+            Optional<FishingLessonReservation> resInDatabase = fishingLessonReservationRepository.findOneById(fishingLessonReservation.getId());
+            if (resInDatabase.isPresent()) {        // rezervacija akcije
+                if (resInDatabase.get().getCustomer() != null || resInDatabase.get().isCancelled())
+                    return null;
+                resInDatabase.get().setCustomer(customerRepository.findById(fishingLessonReservation.getCustomer().getId()).get());
+                resInDatabase.get().setPrice(fishingLessonReservation.getPrice());
+                fishingLessonReservationRepository.save(resInDatabase.get());
+                return resInDatabase.get();
+            } else {
+                Optional<FishingLesson> fishingLesson = fishingLessonRepository.findById(fishingLessonReservation.getFishingLesson().getId());
+                if (fishingLessonReservation.getCustomer() != null) {
+                    Optional<Customer> customer = customerRepository.findById(fishingLessonReservation.getCustomer().getId());
+                    if (fishingLesson.isPresent() && customer.isPresent()) {
+                        if (fishingLessonReservationRepository.findAllForDateRange(fishingLessonReservation.getStartDateTime(), fishingLessonReservation.getEndDateTime()).contains(fishingLesson.get().getId()))
+                            return null;
+                        fishingLessonReservation.setFishingLesson(fishingLesson.get());
+                        fishingLessonReservation.setCustomer(customer.get());
+                        fishingLessonReservationRepository.save(fishingLessonReservation);
+                        fishingLessonReservationRepository.cancellAllActionsForThisDateRangeForThisFishingLesson(fishingLessonReservation.getStartDateTime(),
+                                fishingLessonReservation.getEndDateTime(), fishingLesson.get().getId());
+                    }
                 }
+                return fishingLessonReservation;
             }
-            return fishingLessonReservation;
-        }
+        } catch (LockTimeoutException e) { return null; }
     }
 
 

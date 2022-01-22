@@ -139,7 +139,7 @@
 <div class="infoDiv"><label><b>Cancel conditions:</b>   {{selectedFishingLessonInfo.cancelConditions}}</label></div>
 <div class="infoDiv"><label><b>Rules:</b>   {{selectedFishingLessonInfo.rules}}</label></div>
 <div class="infoDiv"><label><b>Price:</b>   {{selectedFishingLessonInfo.price}}</label></div>
-<div class="infoDiv"><button mat-raised-button color="accent" (click)="subscribe()" >Subscribe</button></div>
+<div *ngIf="role == 'ROLE_CUSTOMER'" class="infoDiv"><button mat-raised-button color="accent" (click)="subscribe()" >Subscribe</button></div>
 </div>
 </mat-grid-tile>
 
