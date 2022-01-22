@@ -58,8 +58,8 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
     }
 
     @Override
-    public void saveWeekendHouse(WeekendHouse weekendHouse) {
-        weekendHouseRepository.save(weekendHouse);
+    public WeekendHouse saveWeekendHouse(WeekendHouse weekendHouse) {
+        return weekendHouseRepository.save(weekendHouse);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
         weekendHouse.get().setAddress(weekendHouseDTO.getAddress());
         weekendHouse.get().setDescription(weekendHouseDTO.getDescription());
         weekendHouse.get().setBedNumber(weekendHouseDTO.getBedNumber());
-        weekendHouse.get().setImagePath(weekendHouseDTO.getImagePath());
+        weekendHouse.get().setImagePath("");
         Set<Term> terms = new HashSet<>();
         for (TermDto termDto : weekendHouseDTO.getFreeTerms())
             terms.add(new Term(termDto));

@@ -20,7 +20,7 @@ export class WeekendHouseProfileComponent implements OnInit {
     name: "",
     address: "",
     description: "",
-    imagePath: "",
+    imagePath: [],
     bedNumber: 0,
     freeTerms: [],
     rules: "",

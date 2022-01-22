@@ -21,9 +21,9 @@ public class WeekendHouseDTO {
     private String description;
 
     //@NotEmpty(message = "Please fill out first name")
-    private String imagePath;
+    private Set<String> imagePath = new HashSet<>();
 
-    @NotEmpty(message = "Please fill out number of beds in weekend house")
+    //@NotEmpty(message = "Please fill out number of beds in weekend house")
     private Integer bedNumber;
 
     private Set<TermDto> freeTerms = new HashSet<>();
@@ -31,7 +31,7 @@ public class WeekendHouseDTO {
     @NotEmpty(message = "Please fill out rules")
     private String rules;
 
-    @NotEmpty(message = "Please fill out price lists")
+    //@NotEmpty(message = "Please fill out price lists")
     private Float price;
 
     //@NotEmpty(message = "Please fill out services")
@@ -61,7 +61,7 @@ public class WeekendHouseDTO {
 //        this.freeTerms = terms;
 
         this.name = house.getName();
-        this.imagePath = house.getImagePath();
+        this.imagePath = new HashSet<>();
         this.price = house.getPrice();
         this.rules = house.getRules();
         this.weekendHouseOwner = new WeekendHouseOwnerDTO(house.getWeekendHouseOwner());
@@ -105,11 +105,11 @@ public class WeekendHouseDTO {
         this.description = description;
     }
 
-    public String getImagePath() {
+    public Set<String> getImagePath() {
         return imagePath;
     }
 
-    public void setImagePath(String imagePath) {
+    public void setImagePath(Set<String> imagePath) {
         this.imagePath = imagePath;
     }
 

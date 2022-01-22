@@ -9,7 +9,7 @@ export interface WeekendHouse {
     address: string ;
     description: string ;
     /* grade: number ;   ovo se dobavlja iz tabele svih ocena*/
-    imagePath : string;
+    imagePath : string[];
     bedNumber: number ;
     freeTerms: WeekendHouseTerm[];
     rules: string;

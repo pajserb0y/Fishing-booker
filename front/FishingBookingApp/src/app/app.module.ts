@@ -64,6 +64,9 @@ import { CustomerFutureFishingLessonReservationsComponent } from './customer-fut
 import { CustomerPastFishingLessonReservationsComponent } from './customer-past-fishing-lesson-reservations/customer-past-fishing-lesson-reservations.component';
 import { BoatProfileComponent } from './boat-profile/boat-profile.component';
 import { ReportCustomersComponent } from './report-customers/report-customers.component';
+import { CreateFishingLessonComponent } from './create-fishing-lesson/create-fishing-lesson.component';
+import { CreateBoatComponent } from './create-boat/create-boat.component';
+import { CreateWeekendHouseComponent } from './create-weekend-house/create-weekend-house.component';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -114,7 +117,10 @@ const MaterialComponents = [
     CustomerFutureFishingLessonReservationsComponent,
     CustomerPastFishingLessonReservationsComponent,
     BoatProfileComponent,
-    ReportCustomersComponent
+    ReportCustomersComponent,
+    CreateFishingLessonComponent,
+    CreateBoatComponent,
+    CreateWeekendHouseComponent
   ],
   imports: [
     BrowserModule,

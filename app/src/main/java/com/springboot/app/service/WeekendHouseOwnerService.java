@@ -17,7 +17,7 @@ public interface WeekendHouseOwnerService {
     WeekendHouseOwner findByUsername(String username);
     WeekendHouseOwner changeWeekendHouseOwner(WeekendHouseOwnerDTO weekendHouseOwnerDTO);
 
-    void saveWeekendHouse(WeekendHouse weekendHouse);
+    WeekendHouse saveWeekendHouse(WeekendHouse weekendHouse);
 
     Collection<String> findAllUsernames();
 

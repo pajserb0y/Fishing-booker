@@ -1,10 +1,12 @@
 package com.springboot.app.controller;
 
+import com.springboot.app.model.ImageModel;
 import com.springboot.app.model.Term;
 import com.springboot.app.model.WeekendHouse;
 import com.springboot.app.model.WeekendHouseOwner;
 import com.springboot.app.model.dto.*;
 import com.springboot.app.service.EmailService;
+import com.springboot.app.service.PictureService;
 import com.springboot.app.service.WeekendHouseOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,10 +25,13 @@ import java.util.Set;
 public class WeekendHouseOwnerController {
     private final WeekendHouseOwnerService weekendHouseOwnerService;
     private final EmailService emailService;
+    private final PictureService pictureService;
+
     @Autowired
-    public WeekendHouseOwnerController(WeekendHouseOwnerService weekendHouseOwnerService, EmailService emailService) {
+    public WeekendHouseOwnerController(WeekendHouseOwnerService weekendHouseOwnerService, EmailService emailService, PictureService pictureService) {
         this.weekendHouseOwnerService = weekendHouseOwnerService;
         this.emailService = emailService;
+        this.pictureService = pictureService;
     }
     @PostMapping(path = "/create")
     public ResponseEntity<?> createWeekendHouseOwner(@RequestBody @Valid WeekendHouseOwnerDTO weekendHouseOwnerDTO, BindingResult result) throws Exception{
@@ -56,7 +61,13 @@ public class WeekendHouseOwnerController {
     @PostMapping(path = "/editWeekendHouse")
     public WeekendHouseDTO editWeekendHouse(@RequestBody WeekendHouseDTO weekendHouseDTO) {
         WeekendHouse editedWeekendHouse = weekendHouseOwnerService.changeWeekendHouse(weekendHouseDTO);
-        return new WeekendHouseDTO(editedWeekendHouse);
+
+        pictureService.deleteAll(weekendHouseDTO.getId(), "house");
+        pictureService.saveImagesForWeekendHouse(weekendHouseDTO.getImagePath(), weekendHouseDTO.getId());
+
+        WeekendHouseDTO dto = new WeekendHouseDTO(editedWeekendHouse);
+        //dto.setImagePath(repo.findByIdType());
+        return dto;
     }
 
 
@@ -66,7 +77,9 @@ public class WeekendHouseOwnerController {
         if(result.hasErrors()){
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
-        weekendHouseOwnerService.saveWeekendHouse(new WeekendHouse(weekendHouseDTO));
+
+        WeekendHouse house =  weekendHouseOwnerService.saveWeekendHouse(new WeekendHouse(weekendHouseDTO));
+        pictureService.saveImagesForWeekendHouse(weekendHouseDTO.getImagePath(), house.getId());
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -96,8 +109,10 @@ public class WeekendHouseOwnerController {
     @PreAuthorize("hasRole('WEEKEND_HOUSE_OWNER')")
     @PostMapping(path = "/removeWeekendHouse/{id}")
     public ResponseEntity<?> removeWeekendHouse(@PathVariable Integer id) {
-        if (weekendHouseOwnerService.removeWeekendHouse(id))
+        if (weekendHouseOwnerService.removeWeekendHouse(id)) {
+            pictureService.deleteAll(id, "house");
             return new ResponseEntity<>(HttpStatus.OK);
+        }
         else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -106,9 +121,13 @@ public class WeekendHouseOwnerController {
     public Set<WeekendHouseWithAvgGradeDTO> getAllWeekendHouses() {
         List<WeekendHouse> weekendHouses = weekendHouseOwnerService.findAllWeekendHouses();
         Set<WeekendHouseWithAvgGradeDTO> weekendHouseWithAvgGradeDTOs = new HashSet<>();
+
         for (WeekendHouse house : weekendHouses) {
             WeekendHouseWithAvgGradeDTO dto = new WeekendHouseWithAvgGradeDTO();
-            dto.setWeekendHouse(new WeekendHouseDTO(house));
+            WeekendHouseDTO dtoWithPictures = new WeekendHouseDTO(house);
+
+            dtoWithPictures.setImagePath(pictureService.getAllImagesForProperty(dtoWithPictures.getId(), "house"));
+            dto.setWeekendHouse(dtoWithPictures);
             dto.setAvgGrade(weekendHouseOwnerService.findAvgGradeForHouseId(house.getId()));
             weekendHouseWithAvgGradeDTOs.add(dto);
         }
@@ -122,9 +141,13 @@ public class WeekendHouseOwnerController {
         WeekendHouseOwner weekendHouseOwner = weekendHouseOwnerService.findByUsername(username);
         List<WeekendHouse> weekendHouses = weekendHouseOwnerService.findallWeekendHousesForOwner(weekendHouseOwner);
         Set<WeekendHouseWithAvgGradeDTO> weekendHouseWithAvgGradeDTOs = new HashSet<>();
+
         for (WeekendHouse house : weekendHouses) {
             WeekendHouseWithAvgGradeDTO dto = new WeekendHouseWithAvgGradeDTO();
-            dto.setWeekendHouse(new WeekendHouseDTO(house));
+            WeekendHouseDTO dtoWithPictures = new WeekendHouseDTO(house);
+
+            dtoWithPictures.setImagePath(pictureService.getAllImagesForProperty(dtoWithPictures.getId(), "house"));
+            dto.setWeekendHouse(dtoWithPictures);
             dto.setAvgGrade(weekendHouseOwnerService.findAvgGradeForHouseId(house.getId()));
             weekendHouseWithAvgGradeDTOs.add(dto);
         }

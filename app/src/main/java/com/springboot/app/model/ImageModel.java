@@ -1,4 +1,6 @@
 package com.springboot.app.model;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,6 +21,8 @@ public class ImageModel {
     @Column(name = "type")
     private String type;//house/fishing/boat
 
+    @Lob
+    @Type(type = "org.hibernate.type.StringType")
     @Column(name = "picBase64")
     private String picBase64;
 
