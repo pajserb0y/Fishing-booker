@@ -71,7 +71,7 @@ public class WeekendHouse {
         this.name = dto.getName();
         this.address = dto.getAddress();
         this.description = dto.getDescription();
-        this.imagePath = dto.getImagePath();
+        this.imagePath = "";
         this.bedNumber = dto.getBedNumber();
 
         Set<Term> terms = new HashSet<>();

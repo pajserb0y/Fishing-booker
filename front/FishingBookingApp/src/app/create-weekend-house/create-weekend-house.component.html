@@ -1,0 +1,69 @@
+<div class="create_weekend_house" style="margin-bottom: 10%; margin-top: 10%;" >
+    <h1>Create a profile for your Weekend House</h1>
+<form  #createForm="ngForm">                       
+    <mat-form-field appearance="fill" style="margin-right: 2%;">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" name="name" [(ngModel)]="weekendHouse.name" required>
+        <mat-hint *ngIf="weekendHouse.name == ''">Required</mat-hint>
+        <mat-icon matSuffix></mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="margin-right: 2%;">
+        <mat-label>Address</mat-label>
+        <input matInput type="text" name="address" [(ngModel)]="weekendHouse.address" required>
+        <mat-hint *ngIf="weekendHouse.address == ''">Required</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="margin-right: 2%;">
+        <mat-label>Description</mat-label>
+        <input matInput type="text" name="description" [(ngModel)]="weekendHouse.description" required>
+        <mat-hint *ngIf="weekendHouse.description == ''">Required</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="margin-right: 2%;">
+        <mat-label>Bed number</mat-label>
+        <input matInput type="text" name="bedNumber" [(ngModel)]="weekendHouse.bedNumber" required>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill" style="margin-right: 2%;">
+        <mat-label>Rules</mat-label>
+        <textarea required matInput  name="rules" placeholder="Rules" [(ngModel)]="weekendHouse.rules"  rows="5" cols="20" ></textarea>
+        <mat-hint *ngIf="weekendHouse.rules == ''">Required</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="margin-right: 2%;">
+        <mat-label>Price</mat-label>
+        <input matInput  id="price" name="price" [(ngModel)]="weekendHouse.price" required>
+    </mat-form-field>
+
+    <div>
+        <mat-label style="padding-top: 20px;" for="additionalServices">List of services</mat-label>
+        <mat-select name="additionalServices" [(ngModel)]="selectedServices" multiple>
+            <mat-option checkboxPosition="before" *ngFor="let service of weekendHouse.additionalServices" [value]="service">
+                {{ service.name }} - {{ service.price }}
+            </mat-option>
+        </mat-select>    
+        <button mat-raised-button color="warn" (click)="deleteService()" [disabled]="selectedServices === null" >Delete</button>
+    </div> 
+
+    <mat-form-field appearance="fill" style="margin-right: 2%;">
+        <mat-label>Add new service: </mat-label>
+        <input matInput placeholder="Name of new activity" name="newServiceName" id="newServiceName" [(ngModel)]="newService.name" >
+    </mat-form-field> 
+
+    <mat-form-field appearance="fill" style="margin-right: 2%;">
+        <mat-label>Price: </mat-label>
+        <input matInput placeholder="Price of new activity" name="newServicePrice" id="newServicePrice" [(ngModel)]="newService.price" >
+        <button mat-raised-button color="warn" (click)="addNewService()" [disabled]="newService.name === '' || newService.price === 0" >Add</button> 
+    </mat-form-field> 
+
+    <input style="display:none" id="input-file-id" accept="image/*" type="file" multiple="multiple" (change)="onFileSelected($event)"/>
+    <label for="input-file-id" class="mat-raised-button" title="Optional">Upload profile picture</label>
+    <label *ngFor="let name of selectedFiles">{{name + " "}}</label>
+
+    
+    <div >
+        <button mat-raised-button color="warn" (click)="createWeekendHouse()" [disabled]="!createForm.valid" >Create</button>
+    </div>
+    </form>
+</div>

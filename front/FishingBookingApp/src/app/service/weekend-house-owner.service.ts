@@ -50,6 +50,7 @@ export class WeekendHouseOwnerService {
   private _removeWeekendHouse = this._weekendHouseOwnerRegistration + '/removeWeekendHouse/';
   private _getAllHouseReservationsForHouseOwner = this._weekendHouseReservationController + '/getAllForWeekendHouseOwner/';
   private _submitReport = this._weekendHouseReservationController + '/reportCustomer';
+  private _createWeekendHouse = this._weekendHouseOwnerRegistration + '/createWeekendHouse';
 
 
   weekendHouse !: WeekendHouse;
@@ -66,6 +67,18 @@ export class WeekendHouseOwnerService {
     const body=JSON.stringify(weekendHouseOwner);
     console.log(body)
     return this._http.post(this._submitRegistration, body)
+  } 
+
+  createWeekendHouse(weekendHouse: WeekendHouse) : Observable<any> {
+    const body=JSON.stringify(weekendHouse);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
+   });
+    console.log(body)
+    return this._http.post(this._createWeekendHouse, body, {'headers':headers})
   } 
 
   sendFeedback(feedback: HouseFeedback) : Observable<any> {

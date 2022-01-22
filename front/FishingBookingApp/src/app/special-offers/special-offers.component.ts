@@ -67,7 +67,7 @@ export class SpecialOffersComponent implements OnInit {
       address: '' ,
       description: '' ,
           /* grade: number ;   ovo se dobavlja iz tabele svih ocena*/
-      imagePath : '' ,
+      imagePath : [] ,
       bedNumber: 0,
       freeTerms: [],
       rules: '' ,
