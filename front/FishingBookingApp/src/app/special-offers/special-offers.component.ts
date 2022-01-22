@@ -130,7 +130,7 @@ export class SpecialOffersComponent implements OnInit {
       engineNumber : 0,
       horsePower : 0,
       maxSpeed: 0,
-      imagePath : '' ,
+      imagePath : [] ,
       capacity: 0,
       freeTerms: [],
       rules: '' ,

@@ -62,11 +62,12 @@ public class WeekendHouseOwnerController {
     public WeekendHouseDTO editWeekendHouse(@RequestBody WeekendHouseDTO weekendHouseDTO) {
         WeekendHouse editedWeekendHouse = weekendHouseOwnerService.changeWeekendHouse(weekendHouseDTO);
 
-        pictureService.deleteAll(weekendHouseDTO.getId(), "house");
+        pictureService.deleteAll(editedWeekendHouse.getId(), "house");
         pictureService.saveImagesForWeekendHouse(weekendHouseDTO.getImagePath(), weekendHouseDTO.getId());
 
         WeekendHouseDTO dto = new WeekendHouseDTO(editedWeekendHouse);
-        //dto.setImagePath(repo.findByIdType());
+        dto.setImagePath(pictureService.getAllImagesForProperty(editedWeekendHouse.getId(), "house"));
+
         return dto;
     }
 
@@ -161,7 +162,10 @@ public class WeekendHouseOwnerController {
         Set<WeekendHouseWithAvgGradeDTO> weekendHouseWithAvgGradeDTOs = new HashSet<>();
         for (WeekendHouse house : weekendHouseOwnerService.findAvailableHousesForDateRange(dateRange)) {
             WeekendHouseWithAvgGradeDTO dto = new WeekendHouseWithAvgGradeDTO();
-            dto.setWeekendHouse(new WeekendHouseDTO(house));
+            WeekendHouseDTO dtoWithPictures = new WeekendHouseDTO(house);
+
+            dtoWithPictures.setImagePath(pictureService.getAllImagesForProperty(dtoWithPictures.getId(), "house"));
+            dto.setWeekendHouse(dtoWithPictures);
             dto.setAvgGrade(weekendHouseOwnerService.findAvgGradeForHouseId(house.getId()));
             weekendHouseWithAvgGradeDTOs.add(dto);
         }

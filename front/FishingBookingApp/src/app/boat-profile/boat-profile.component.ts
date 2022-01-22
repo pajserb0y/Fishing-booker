@@ -25,7 +25,7 @@ export class BoatProfileComponent implements OnInit {
     engineNumber: 0,
     horsePower: 0,
     maxSpeed: 0,
-    imagePath: '',
+    imagePath: [],
     capacity: 0,
     freeTerms: [],
     rules: '',
@@ -130,6 +130,8 @@ specialOffer  : BoatReservation = {
   }
 
   allFreeTerms : TermBoat[] = [];
+  pictures: any = [];
+  selectedFiles : string[] = []
 
   displayedColumns: string[] = ['startDateTime', 'endDateTime', 'price', 'customer', 'boat'];
 
@@ -138,6 +140,7 @@ specialOffer  : BoatReservation = {
 
   ngOnInit(): void {
     this.boat = this._boatOwnerService.boat
+    this.pictures = this.boat.imagePath
     if(this.boat == null)
       this._router.navigateByUrl("boats");
     this.getAllReservationsForBoat();
@@ -165,6 +168,7 @@ specialOffer  : BoatReservation = {
   }
   editBoat()
   {
+    this.boat.imagePath = this.pictures
     this._boatOwnerService.editBoat(this.boat)
     .subscribe(data => {
       console.log('Dobio: ', data)
@@ -179,6 +183,11 @@ specialOffer  : BoatReservation = {
 
     console.log(this.boat);
     this._snackBar.open('Successfully edited', 'Close', {duration: 5000});  
+  }
+
+  removePictures() {
+    this.pictures = []
+    this.boat.imagePath = []
   }
 
   reserveBoat()
@@ -298,6 +307,25 @@ specialOffer  : BoatReservation = {
                       this.allReservationsForBoat = this.allReservationsForBoat.filter(res => res.customer !== null)},
                   error => this.errorMessage = <any>error); 
 
+  }
+
+  onFileSelected(event : any) {
+    if(!event || !event.target || !event.target.files) {
+      return;
+    }
+
+    var file = event.target.files[0]
+    var reader = new FileReader();
+    var self = this
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      self.pictures.push(reader.result)
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+    this.boat.imagePath = this.pictures
+    console.log(this.pictures)
   }
 
   removeBoat()

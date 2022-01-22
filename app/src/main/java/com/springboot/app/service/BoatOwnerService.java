@@ -42,4 +42,6 @@ public interface BoatOwnerService {
     TermBoat addFreeTerm(TermBoat term);
 
     Boat changeBoat(BoatDTO boatDTO);
+
+    Boat saveBoat(Boat boat);
 }

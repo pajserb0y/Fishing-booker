@@ -210,7 +210,7 @@
   </mat-grid-tile>
 
   <!--IZMENA WEEKEND HOUSE-A-->
-  <mat-grid-tile style="border: solid;" colspan="3">
+  <mat-grid-tile style="border: solid;" colspan="4">
     <div class="edit_weekend_house" style="margin-bottom: 20%; margin-top: 20%;" >
       <h1>Weekend House: "{{weekendHouse.name}}" informations</h1>
     <form  #editForm="ngForm">                       
@@ -268,19 +268,24 @@
               <input matInput placeholder="Price of new activity" name="newServicePrice" id="newServicePrice" [(ngModel)]="newService.price" >
               <button mat-raised-button color="warn" (click)="addNewService()" [disabled]="newService.name === '' || newService.price === 0" >Add</button> 
           </mat-form-field> 
+
+          <input style="display:none" id="input-file-id" accept="image/*" type="file" multiple="multiple" (change)="onFileSelected($event)"/>
+          <label for="input-file-id" class="mat-raised-button" title="Optional">Upload pictures of property</label>
       
         <div >
           <button mat-raised-button color="warn" (click)="editWeekendHouse()" [disabled]="!editForm.valid" >Edit</button>
           <button mat-raised-button color="warn" style="margin-left: 4%;" (click)="removeWeekendHouse()" >Remove</button>
+          <button mat-raised-button color="warn" style="margin-left: 20%;" (click)="removePictures()" >Remove all pictures</button>
         </div>
        </form>
     </div>
 
   </mat-grid-tile>
   
-  <mat-grid-tile colspan="1">
-    <div class="images" style="margin-bottom: 20%; margin-top: 20%;" >
-        <img *ngFor="let img of weekendHouse.imagePath" style="object-fit: cover;" src="{{img}}">
+  <mat-grid-tile colspan="4">
+    <div>
+      <h2>Pictures of the Weekend House</h2>
+     <img *ngFor="let img of weekendHouse.imagePath" style="margin-top: 1%; margin-left:1%; height: 450px; " src="{{img}}">
     </div>
   </mat-grid-tile>
 
