@@ -67,6 +67,7 @@ import { ReportCustomersComponent } from './report-customers/report-customers.co
 import { CreateFishingLessonComponent } from './create-fishing-lesson/create-fishing-lesson.component';
 import { CreateBoatComponent } from './create-boat/create-boat.component';
 import { CreateWeekendHouseComponent } from './create-weekend-house/create-weekend-house.component';
+import { ViewChild } from '@angular/core';
 
 const MaterialComponents = [
   MatSliderModule,
@@ -131,7 +132,8 @@ const MaterialComponents = [
     FormsModule,
     MatButtonModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    ViewChild
     
   ],
   providers: [CustomerService, WeekendHouseProfileComponent, BoatOwnerService, WeekendHouseOwnerService, InstructorService,

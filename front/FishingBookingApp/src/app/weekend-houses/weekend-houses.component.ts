@@ -12,6 +12,7 @@ import {MatSort, Sort} from '@angular/material/sort';
 import { CustomerService } from '../service/customer.service';
 import { WeekendHouseWithAvgGrade } from '../model/weekend-house-with-avg-grade';
 import { Customer } from '../model/customer';
+import {} from 'googlemaps';
 
 @Component({
   selector: 'app-weekend-houses',
@@ -19,6 +20,9 @@ import { Customer } from '../model/customer';
   styleUrls: ['./weekend-houses.component.css']
 })
 export class WeekendHousesComponent implements OnInit {
+
+  @ViewChild('map') mapElement: any;
+  map!: google.maps.Map;
 
   minDate = new Date();
   range = new FormGroup({
@@ -107,6 +111,13 @@ export class WeekendHousesComponent implements OnInit {
         this.getAllWeekendHousesForOwner(this.username)   
     else
       this.getAllWeekendHouses();
+
+      const mapProperties = {
+        center: new google.maps.LatLng(45, 19),
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      this.map = new google.maps.Map(this.mapElement.nativeElement,    mapProperties);
   }
 
 
