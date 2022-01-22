@@ -144,5 +144,12 @@
     </div>
   </mat-grid-tile>
 
+  <mat-grid-tile colspan="3">
+    <div>
+      <h2>Pictures of the Weekend House</h2>
+     <img *ngFor="let img of selectedHouseInfo.imagePath" style="margin-top: 1%; margin-left:1%; height: 450px; " src="{{img}}">
+    </div>
+  </mat-grid-tile>
+
 </mat-grid-list>
 

@@ -1,5 +1,6 @@
 --Loinke za logovanje svih korisnika su istog naziva kao i korisničko ime
 --Primer po jednog korisnika za svaku rolu: Customer - username: milica, password: milica, WeekendHouseOwner - username: antonije, password: antonije
+--BoatOwner - username: nikola, password: nikola, Instructor - username: borisa, password: borisa
 
 SET datestyle = dmy;
 insert into role (name) values ('ROLE_CUSTOMER');
