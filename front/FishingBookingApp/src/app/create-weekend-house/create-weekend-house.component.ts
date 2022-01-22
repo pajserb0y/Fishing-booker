@@ -111,16 +111,4 @@ export class CreateWeekendHouseComponent implements OnInit {
     console.log(this.pictures)
   }
 
-  getBase64(file : any) : any {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    reader.onload = function () {
-      return reader.result
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
-  }
-
 }

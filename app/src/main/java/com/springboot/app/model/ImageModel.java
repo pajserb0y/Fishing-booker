@@ -21,8 +21,7 @@ public class ImageModel {
     @Column(name = "type")
     private String type;//house/fishing/boat
 
-
-    @Column(name = "picBase64",columnDefinition = "TEXT")
+    @Column(name = "picBase64", columnDefinition = "TEXT")
     private String picBase64;
 
     public ImageModel() {
@@ -37,5 +36,5 @@ public class ImageModel {
         this.picBase64 = picBase64;
     }
 
-    
+
 }

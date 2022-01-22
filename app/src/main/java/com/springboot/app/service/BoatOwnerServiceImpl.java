@@ -150,7 +150,7 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
         boat.get().setHorsePower(boatDTO.getHorsePower());
         boat.get().setMaxSpeed(boatDTO.getMaxSpeed());
         boat.get().setLength(boatDTO.getLength());
-        boat.get().setImagePath(boatDTO.getImagePath());
+        boat.get().setImagePath("");
         boat.get().setDescription(boatDTO.getDescription());
         boat.get().setCapacity(boatDTO.getCapacity());
         Set<TermBoat> terms = new HashSet<>();
@@ -174,7 +174,8 @@ public class BoatOwnerServiceImpl implements BoatOwnerService{
 
     }
 
-    public void saveBoat(Boat boat) {
-        boatRepository.save(boat);
+    @Override
+    public Boat saveBoat(Boat boat) {
+        return boatRepository.save(boat);
     }
 }

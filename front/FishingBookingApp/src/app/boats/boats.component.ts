@@ -30,7 +30,7 @@ export class BoatsComponent implements OnInit {
     address: '',
     description: '',
     /* grade: number ;   ovo se dobavlja iz tabele svih ocena*/
-    imagePath: '',
+    imagePath: [],
     capacity: 0,
     freeTerms: [],
     rules: '',

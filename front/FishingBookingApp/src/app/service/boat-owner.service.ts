@@ -11,12 +11,11 @@ import { BoatReservationWithDateAsString } from '../model/boat-reservation-with-
 import { BoatFeedback } from '../model/boat-feedback';
 import { BoatComplaint } from '../model/boat-complaint';
 import { CustomerReport } from '../model/customer-report';
+
 @Injectable({
   providedIn: 'root'
 })
 export class BoatOwnerService {
- 
-
   
   private _baseUrl = 'http://localhost:8080';  
   private _boatOwnerRegistration = this._baseUrl + '/api/boatowners';
@@ -43,6 +42,7 @@ export class BoatOwnerService {
   private _getAllBoatReservationsForBoatOwner = this._boatsReservationController + '/getAllForBoatOwner/';
   private _submitReport = this._boatsReservationController + '/reportCustomer';
   private _removeBoat = this._boatOwnerRegistration + '/removeBoat/';
+  private _createBoat = this._boatOwnerRegistration + '/createBoat'
   
 
 
@@ -118,6 +118,13 @@ export class BoatOwnerService {
     console.log(body)
     return this._http.post(this._submitRegistration, body)
   } 
+
+  createBoat(boat: Boat) : Observable<any> {
+    const body=JSON.stringify(boat);
+    console.log(body)
+    return this._http.post(this._createBoat, body)
+  }
+
   edit(boatOwner : BoatOwner):Observable<any>{
     const body = JSON.stringify(boatOwner);
     return this._http.post(this._editBoatOwner, body)

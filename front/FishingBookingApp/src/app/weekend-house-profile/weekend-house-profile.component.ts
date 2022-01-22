@@ -123,6 +123,9 @@ specialOffer  : WeekendHouseReservation = {
   }
 
   allFreeTerms : WeekendHouseTerm[] = [];
+  pictures: any = [];
+  selectedFiles : string[] = []
+  image : any;
 
   displayedColumns: string[] = ['startDateTime', 'endDateTime', 'price', 'customer', 'weekendHouse'];
 
@@ -132,6 +135,7 @@ specialOffer  : WeekendHouseReservation = {
 
   ngOnInit(): void {
       this.weekendHouse = this._weekendHouseownerService.weekendHouse;
+      this.pictures = this.weekendHouse.imagePath
       if(this.weekendHouse == null)
         this.router.navigateByUrl('weekend-houses');
       this.getAllReservationsForWeekendHouse();
@@ -162,6 +166,7 @@ specialOffer  : WeekendHouseReservation = {
   }
   editWeekendHouse()
   {
+    this.weekendHouse.imagePath = this.pictures
     this._weekendHouseownerService.editWeekendHouse(this.weekendHouse)
     .subscribe(data => {
       console.log('Dobio: ', data)
@@ -174,8 +179,13 @@ specialOffer  : WeekendHouseReservation = {
       },
     error => this.errorMessage = <any>error); 
 
-console.log(this.weekendHouse);
-this._snackBar.open('Successfully edited', 'Close', {duration: 5000});  
+    console.log(this.weekendHouse);
+    this._snackBar.open('Successfully edited', 'Close', {duration: 5000});  
+  }
+
+  removePictures() {
+    this.pictures = []
+    this.weekendHouse.imagePath = []
   }
 
   reserveWeekendHouse()
@@ -300,6 +310,25 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
                       this.allReservationsForWeekendHouse = this.allReservationsForWeekendHouse.filter(res => res.customer !== null)},
                   error => this.errorMessage = <any>error); 
 
+  }
+
+  onFileSelected(event : any) {
+    if(!event || !event.target || !event.target.files) {
+      return;
+    }
+
+    var file = event.target.files[0]
+    var reader = new FileReader();
+    var self = this
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      self.pictures.push(reader.result)
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+    this.weekendHouse.imagePath = this.pictures
+    console.log(this.pictures)
   }
 
   removeWeekendHouse() {

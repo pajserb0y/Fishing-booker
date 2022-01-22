@@ -16,40 +16,31 @@ public class BoatDTO {
     @NotEmpty(message = "Please fill out description")
     private String description;
 
-    //@NotEmpty(message = "Please fill out first name")
-    private String imagePath;
+    private Set<String> imagePath = new HashSet<>();
 
     @NotEmpty(message = "Please fill out type")
     private String type;
 
-    @NotEmpty(message = "Please fill out adress")
-    private String adress;
+    @NotEmpty(message = "Please fill out address")
+    private String address;
 
-    @NotEmpty(message = "Please fill out length")
     private Double length;
 
-    @NotEmpty(message = "Please fill out engine number")
     private Double engineNumber;
 
-    @NotEmpty(message = "Please fill out horse power")
     private Double horsePower;
 
-    @NotEmpty(message = "Please fill out max speed")
     private Double maxSpeed;
-
 
     private Set<TermBoatDTO> freeTerms = new HashSet<>();
 
-    @NotEmpty(message = "Please fill out price lists")
     private Float price;
 
     @NotEmpty(message = "Please fill out rules")
     private String rules;
 
-    @NotEmpty(message = "Please fill out number of beds in weekend house")
     private Integer capacity;
 
-    //@NotEmpty(message = "Please fill out services")
     private Set<AdditionalServiceDTO> additionalServices = new HashSet<>();
 
     private BoatOwnerDTO boatOwner;
@@ -77,21 +68,11 @@ public class BoatDTO {
         this.description = boat.getDescription();
         this.rules = boat.getRules();
         this.capacity = boat.getCapacity();
-        this.adress = boat.getAddress();
-//        Set<TermDto> terms = new HashSet<>();
-//        for (Term term : house.getFreeTerms())
-//            terms.add(new TermDto(term));
-//        this.freeTerms = terms;
-
+        this.address = boat.getAddress();
         this.name = boat.getName();
-        this.imagePath = boat.getImagePath();
+        this.imagePath = new HashSet<>();
         this.price = boat.getPrice();
         this.boatOwner = new BoatOwnerDTO(boat.getBoatOwner());
-
-//        Set<WeekendHouseReservationDTO> reservations = new HashSet<>();
-//        for (WeekendHouseReservation res : house.getWeekendHouseReservations())
-//            reservations.add(new WeekendHouseReservationDTO(res));
-//        this.weekendHouseReservations = reservations;
     }
 
 
@@ -132,11 +113,11 @@ public class BoatDTO {
     }
 
     public String getAddress() {
-        return adress;
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setEngineNumber(Double engineNumber) {
@@ -167,11 +148,11 @@ public class BoatDTO {
         this.description = description;
     }
 
-    public String getImagePath() {
+    public Set<String> getImagePath() {
         return imagePath;
     }
 
-    public void setImagePath(String imagePath) {
+    public void setImagePath(Set<String> imagePath) {
         this.imagePath = imagePath;
     }
 

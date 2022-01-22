@@ -33,7 +33,7 @@ export class WeekendHouseOwnerService {
   private _allWeekendHouses  = this._weekendHouseOwnerRegistration + '/allWeekendHouses';
   private _allWeekendHousesforOwner = this._weekendHouseOwnerRegistration + '/allWeekendHousesForOwner/';
   private _findAvailableWeekendHouses  = this._weekendHouseOwnerRegistration + '/findAvailableForDateRange';
-  
+
   private _makeReservation = this._weekendHouseReservationController + '/reserve';
   private _getFutureReservationsForCustomerUsername = this._weekendHouseReservationController + '/getFutureForCustomerUsername/';
   private _getPastReservationsForCustomerUsername = this._weekendHouseReservationController + '/getPastForCustomerUsername/';
@@ -50,7 +50,7 @@ export class WeekendHouseOwnerService {
   private _removeWeekendHouse = this._weekendHouseOwnerRegistration + '/removeWeekendHouse/';
   private _getAllHouseReservationsForHouseOwner = this._weekendHouseReservationController + '/getAllForWeekendHouseOwner/';
   private _submitReport = this._weekendHouseReservationController + '/reportCustomer';
-  private _createWeekendHouse = this._weekendHouseOwnerRegistration + '/createWeekendHouse';
+  private _createWeekendHouse = this._weekendHouseOwnerRegistration + '/createWeekendHouse'
 
 
   weekendHouse !: WeekendHouse;
@@ -59,39 +59,33 @@ export class WeekendHouseOwnerService {
 
   getCurrentSpecialOffers() : Observable<WeekendHouseReservationWithDateAsString[]>  {
     return this._http.get<WeekendHouseReservationWithDateAsString[]>(this._getCurrentSpecialOffers)
-                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
-                      catchError(this.handleError)); 
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),
+                      catchError(this.handleError));
   }
 
   createWeekendHouseOwner(weekendHouseOwner: WeekendHouseOwner) : Observable<any> {
     const body=JSON.stringify(weekendHouseOwner);
     console.log(body)
     return this._http.post(this._submitRegistration, body)
-  } 
+  }
 
   createWeekendHouse(weekendHouse: WeekendHouse) : Observable<any> {
     const body=JSON.stringify(weekendHouse);
-  //   const headers = new HttpHeaders({
-  //     'Content-Type': 'application/json',
-  //     'Access-Control-Allow-Origin': '*',
-  //     'Access-Control-Allow-Headers': 'Content-Type',
-  //     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
-  //  });
     console.log(body)
-    return this._http.post(this._createWeekendHouse, body/*, {'headers':headers}*/)
-  } 
+    return this._http.post(this._createWeekendHouse, body)
+  }
 
   sendFeedback(feedback: HouseFeedback) : Observable<any> {
     const body=JSON.stringify(feedback);
     console.log(body)
     return this._http.post(this._sendFeedback, body)
-  } 
+  }
 
   sendComplaint(complaint: ComplaintWeekendHouse) : Observable<any> {
     const body=JSON.stringify(complaint);
     console.log(body)
     return this._http.post(this._sendComplaint, body)
-  } 
+  }
 
   edit(weekendHouseOwner : WeekendHouseOwner):Observable<any>{
     const body = JSON.stringify(weekendHouseOwner);
@@ -103,24 +97,24 @@ export class WeekendHouseOwnerService {
     const body = JSON.stringify(weekendHouse);
     return this._http.post(this._editWeekendHouse, body)
   }
-  
+
   getWeekendHouseOwnerByUsername(username: string): Observable<WeekendHouseOwner> {
     return this._http.get<WeekendHouseOwner>(this._getWeekendHouseOwnerByUsername + username)
-                           .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
-                                catchError(this.handleError)); 
+                           .pipe(tap(data =>  console.log('Iz service-a: ', data)),
+                                catchError(this.handleError));
   }
 
 
   getAllWeekendHouses(): Observable<WeekendHouseWithAvgGrade[]> {
     return this._http.get<WeekendHouseWithAvgGrade[]>(this._allWeekendHouses)
-                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
-                      catchError(this.handleError)); 
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),
+                      catchError(this.handleError));
   }
 
   getAllWeekendHousesForOwner(username : String|null): Observable<WeekendHouseWithAvgGrade[]> {
     return this._http.get<WeekendHouseWithAvgGrade[]>(this._allWeekendHousesforOwner + username)
-                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
-                      catchError(this.handleError)); 
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),
+                      catchError(this.handleError));
   }
 
   findAvailableHousesForSelectedTerm(start: Date, end: Date) : Observable<any> {
@@ -150,14 +144,14 @@ export class WeekendHouseOwnerService {
 
   getFutureReservationsForCustomerUsername(username : string) : Observable<WeekendHouseReservationWithDateAsString[]>  {
     return this._http.get<WeekendHouseReservationWithDateAsString[]>(this._getFutureReservationsForCustomerUsername + username)
-                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
-                      catchError(this.handleError)); 
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),
+                      catchError(this.handleError));
   }
 
   getPastReservationsForCustomerUsername(username : string) : Observable<WeekendHouseReservationWithDateAsString[]>  {
     return this._http.get<WeekendHouseReservationWithDateAsString[]>(this._getPastReservationsForCustomerUsername + username)
-                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
-                      catchError(this.handleError)); 
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),
+                      catchError(this.handleError));
   }
 
   addFreeTerm(newFreeTerm :WeekendHouseTerm): Observable<any> {
@@ -168,13 +162,13 @@ export class WeekendHouseOwnerService {
   getAllFreeTermsForWeekendHouse(weekendHouse : WeekendHouse) :Observable<WeekendHouseTerm[]> {
     return this._http.get<WeekendHouseTerm[]>(this._getAllFreeTermsForWeekendHouse + weekendHouse.id)
                           .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
-                            catchError(this.handleError)); 
+                            catchError(this.handleError));
   }
 
   getAllReservationsForWeekendHouse(weekendHouse: WeekendHouse) :Observable<WeekendHouseReservation[]> {
     return this._http.get<WeekendHouseReservation[]>(this._getAllReservationsForWeekendHouse + weekendHouse.id)
                           .pipe(tap(data =>  console.log('All: ' + JSON.stringify(data))),
-                            catchError(this.handleError)); 
+                            catchError(this.handleError));
   }
 
   removeWeekendHouse(weekendHouseId : number) : Observable<any> {
@@ -183,8 +177,8 @@ export class WeekendHouseOwnerService {
 
   getAllReservationsForHouseOwner(username : string) {
     return this._http.get<WeekendHouseReservationWithDateAsString[]>(this._getAllHouseReservationsForHouseOwner + username)
-                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),                         
-                      catchError(this.handleError)); 
+                      .pipe(tap(data =>  console.log('Iz service-a: ', data)),
+                      catchError(this.handleError));
   }
 
   submitReport(report : CustomerReport): Observable<any> {
@@ -196,5 +190,5 @@ export class WeekendHouseOwnerService {
     console.log(err.message);
     return Observable.throw(err.message);
     throw new Error('Method not implemented.');
-  } 
+  }
 }

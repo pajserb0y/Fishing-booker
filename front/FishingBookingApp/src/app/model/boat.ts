@@ -13,7 +13,7 @@ export interface Boat {
     engineNumber : number;
     horsePower : number;
     maxSpeed: number;
-    imagePath : string;
+    imagePath : string[];
     freeTerms: TermBoat[];
     price: number; 
     rules: string;

@@ -4,6 +4,7 @@ import com.springboot.app.model.*;
 import com.springboot.app.model.dto.*;
 import com.springboot.app.service.BoatOwnerService;
 import com.springboot.app.service.EmailService;
+import com.springboot.app.service.PictureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,13 @@ import java.util.Set;
 public class BoatOwnerController {
     private final BoatOwnerService boatOwnerService;
     private final EmailService emailService;
+    private final PictureService pictureService;
+
     @Autowired
-    public BoatOwnerController(BoatOwnerService boatOwnerService, EmailService emailService) {
+    public BoatOwnerController(BoatOwnerService boatOwnerService, EmailService emailService, PictureService pictureService) {
         this.boatOwnerService = boatOwnerService;
         this.emailService = emailService;
+        this.pictureService = pictureService;
     }
 
     @PostMapping(path = "/create")
@@ -36,6 +40,20 @@ public class BoatOwnerController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping(path = "/createBoat")
+    public ResponseEntity<?> createBoat(@RequestBody @Valid BoatDTO boatDTO, BindingResult result) throws Exception{
+        if(result.hasErrors()){
+            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
+
+        Boat boat =  boatOwnerService.saveBoat(new Boat(boatDTO));
+        pictureService.saveImagesForBoat(boatDTO.getImagePath(), boat.getId());
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @GetMapping(path = "/{username}")
     public BoatOwnerDTO getBoatOwnerByUsername(@PathVariable String username) {
@@ -69,6 +87,7 @@ public class BoatOwnerController {
         for (Boat boat : boats) {
             BoatDTO dto = new BoatDTO(boat);
             dto.setAvgGrade(boatOwnerService.findAvgGradeForBoatId(boat.getId()));
+            dto.setImagePath(pictureService.getAllImagesForProperty(dto.getId(), "boat"));
             boatDTOS.add(dto);
         }
 
@@ -82,6 +101,7 @@ public class BoatOwnerController {
         for (Boat boat : boatOwnerService.findAvailableBoatsForDateRange(dateRange)) {
             BoatDTO dto = new BoatDTO(boat);
             dto.setAvgGrade(boatOwnerService.findAvgGradeForBoatId(boat.getId()));
+            dto.setImagePath(pictureService.getAllImagesForProperty(dto.getId(), "boat"));
             boatDTOS.add(dto);
         }
 
@@ -94,14 +114,17 @@ public class BoatOwnerController {
         BoatOwner boatOwner = boatOwnerService.findByUsername(username);
         List<Boat> boats = boatOwnerService.findAllBoatForOwner(boatOwner);
         Set<BoatDTO> boatDTOs = new HashSet<>();
+
         for (Boat boat : boats) {
             BoatDTO dto = new BoatDTO();
             dto = (new BoatDTO(boat));
+            dto.setImagePath(pictureService.getAllImagesForProperty(dto.getId(), "boat"));
             boatDTOs.add(dto);
         }
 
         return boatDTOs;
     }
+
 
     @PreAuthorize("hasAnyRole('BOAT_OWNER', 'CUSTOMER')")
     @GetMapping(path = "/getAllFreeTermsForBoat/{id}")
@@ -117,8 +140,10 @@ public class BoatOwnerController {
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @PostMapping(path = "/removeBoat/{id}")
     public ResponseEntity<?> removeBoat(@PathVariable Integer id) {
-        if (boatOwnerService.removeBoat(id))
+        if (boatOwnerService.removeBoat(id)) {
+            pictureService.deleteAll(id, "boat");
             return new ResponseEntity<>(HttpStatus.OK);
+        }
         else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -136,6 +161,13 @@ public class BoatOwnerController {
     @PostMapping(path = "/editBoat")
     public BoatDTO editBoat(@RequestBody BoatDTO boatDTO) {
         Boat editedBoat = boatOwnerService.changeBoat(boatDTO);
-        return new BoatDTO(editedBoat);
+
+        pictureService.deleteAll(editedBoat.getId(), "boat");
+        pictureService.saveImagesForBoat(boatDTO.getImagePath(), editedBoat.getId());
+
+        BoatDTO dto = new BoatDTO(editedBoat);
+        dto.setImagePath(pictureService.getAllImagesForProperty(editedBoat.getId(), "boat"));
+
+        return dto;
     }
 }

@@ -24,36 +24,27 @@ public class Boat {
     @NotEmpty(message = "Please fill out adress")
     private String address;
 
-    @NotEmpty(message = "Please fill out length")
     private Double length;
 
-    @NotEmpty(message = "Please fill out engine number")
     private Double engineNumber;
 
-    @NotEmpty(message = "Please fill out horse power")
     private Double horsePower;
 
-    @NotEmpty(message = "Please fill out max speed")
     private Double maxSpeed;
 
     @NotEmpty(message = "Please fill out description")
     private String description;
 
-    //@NotEmpty(message = "Please fill out first name")
-    private String imagePath; //ovo bi trebala biti lista??
+    private String imagePath;
 
-
-    //@NotEmpty(message = "Please fill out first name")
     @OneToMany(mappedBy = "boat", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<TermBoat> freeTerms = new HashSet<>();
 
-    @NotEmpty(message = "Please fill out price lists")
     private Float price;
 
     @NotEmpty(message = "Please fill out rules")
     private String rules;
 
-    @NotEmpty(message = "Please fill out number of beds in weekend house")
     private Integer capacity;
 
 
@@ -86,7 +77,7 @@ public class Boat {
         this.length = dto.getLength();
         this.maxSpeed = dto.getMaxSpeed();
         this.description = dto.getDescription();
-        this.imagePath = dto.getImagePath();
+        this.imagePath = "";
         this.address = dto.getAddress();
         Set<TermBoat> terms = new HashSet<>();
         for (TermBoatDTO termDto : dto.getFreeTerms())
