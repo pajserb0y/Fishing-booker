@@ -163,7 +163,11 @@ public class WeekendHouseOwnerServiceImpl implements WeekendHouseOwnerService{
         List<WeekendHouseReservation> weekendHouseReservations = weekendHouseReservationRepository.findByWeekendHouse(term.getWeekendHouse());
         for(WeekendHouseReservation res : weekendHouseReservations)
         {
-            if((term.getStartDateTime().after(res.getStartDateTime()) && term.getStartDateTime().before(res.getEndDateTime())) || (term.getEndDateTime().after(res.getStartDateTime()) && term.getEndDateTime().before(res.getEndDateTime())))
+            if(res.getStartDateTime().getDate() <= term.getStartDateTime().getDate() && term.getStartDateTime().getDate() <= res.getEndDateTime().getDate() )
+                return null;
+            if(res.getStartDateTime().getDate() <= term.getEndDateTime().getDate() && term.getEndDateTime().getDate() <= res.getEndDateTime().getDate() )
+                return null;
+            if(term.getStartDateTime().getDate() <= res.getStartDateTime().getDate() && res.getEndDateTime().getDate() <= term.getEndDateTime().getDate() )
                 return null;
         }
         termRepository.save(term);

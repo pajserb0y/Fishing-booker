@@ -21,9 +21,8 @@ public class ImageModel {
     @Column(name = "type")
     private String type;//house/fishing/boat
 
-    @Lob
-    @Type(type = "org.hibernate.type.StringType")
-    @Column(name = "picBase64")
+
+    @Column(name = "picBase64",columnDefinition = "TEXT")
     private String picBase64;
 
     public ImageModel() {

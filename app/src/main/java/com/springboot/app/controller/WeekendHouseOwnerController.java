@@ -88,7 +88,7 @@ public class WeekendHouseOwnerController {
     @PostMapping(path = "/addFreeTerm")
     public Set<TermDto> addFreeTerm(@RequestBody TermDto termDto){
         Term term = new Term(termDto);
-        if (weekendHouseOwnerService.addFreeTerm(term).equals(null))
+        if (weekendHouseOwnerService.addFreeTerm(term) == null)
             return null;
 
         return this.getAllFreeTermsForWeekendHouse(term.getWeekendHouse().getId());

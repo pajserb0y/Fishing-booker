@@ -149,6 +149,8 @@ specialOffer  : BoatReservation = {
   showUserInfo(boatReservation : BoatReservation)
   {
       this.boatReservation.customer = boatReservation.customer;
+      this.boatReservation.endDateTime = new Date(boatReservation.endDateTime);
+      this.boatReservation.startDateTime = new Date(boatReservation.startDateTime);
   }
 
   deleteService()
@@ -183,13 +185,13 @@ specialOffer  : BoatReservation = {
 
   reserveBoat()
   {
-    this.boatReservation.boat = this.boat
-    this.boatReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
-    this.boatReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
-    this.boatReservation.endSpecialOffer = null
-    this.boatReservation.price = this.boat.price
     let currentDate = new Date();
-    if(this.boatReservation.endDateTime.getTime() < currentDate.getTime()){
+    if(this.boatReservation.startDateTime.getTime() <= currentDate.getTime() && currentDate.getTime() <= this.boatReservation.endDateTime.getTime()){
+      this.boatReservation.boat = this.boat
+      this.boatReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
+      this.boatReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
+      this.boatReservation.endSpecialOffer = null
+      this.boatReservation.price = this.boat.price
         for (let service of this.boatReservation.services) {
           this.boatReservation.price += service.price
         }
@@ -199,7 +201,7 @@ specialOffer  : BoatReservation = {
                   this._snackBar.open('Someone has reserved boat in selected term before you. Please select other term.', 'Close', {duration: 5000});
                 else {
                   this.allReservationsForBoat = data,
-                  this.allReservationsForBoat.filter(res => res.customer != null),
+                  this.allReservationsForBoat = this.allReservationsForBoat.filter(res => res.customer != null),
                   this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
                 }}
                 ,error => this.errorMessage = <any>error); 
@@ -220,9 +222,9 @@ specialOffer  : BoatReservation = {
     this.specialOffer.startDateTime = this.getDateFromDatePickerRange(this.rangeOffer.value.startOffer);
     this.specialOffer.startSpecialOffer = this.getDateFromDatePickerRange(this.rangeDuration.value.startDuration);
     this.specialOffer.endSpecialOffer = this.getDateFromDatePickerRange(this.rangeDuration.value.endDuration);  
-    for (let service of this.specialOffer.services) {
-      this.specialOffer.price += service.price
-    }
+    //for (let service of this.specialOffer.services) {
+    //  this.specialOffer.price += service.price
+    //}
     this._boatOwnerService.makeSpecialOffer(this.specialOffer)
           .subscribe(data =>  {
             if(data == null)
@@ -267,9 +269,7 @@ specialOffer  : BoatReservation = {
     this.newFreeTerm.startDateTime = this.rangeTerm.value.startTerm;
     this.newFreeTerm.endDateTime = this.rangeTerm.value.endTerm;
     this.newFreeTerm.boat = this.boat;
-    if(this.newFreeTerm.startDateTime < this.newFreeTerm.endDateTime)
-        if(this.newFreeTerm.startDateTime >= new Date()) //OVDE CE VEROVATNO TREBATI DODATI NEW FREE TERM I PRE SUBSCRIBA DA BI BILO ODMAH VIDLJIVO
-          this._boatOwnerService.addFreeTerm(this.newFreeTerm)
+    this._boatOwnerService.addFreeTerm(this.newFreeTerm)
           .subscribe(data =>  {
             if(data == null)
               this._snackBar.open('Someone has reserved house in selected term. Please select other term.', 'Close', {duration: 5000});

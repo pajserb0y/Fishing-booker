@@ -71,14 +71,14 @@ export class WeekendHouseOwnerService {
 
   createWeekendHouse(weekendHouse: WeekendHouse) : Observable<any> {
     const body=JSON.stringify(weekendHouse);
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
-   });
+  //   const headers = new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //     'Access-Control-Allow-Origin': '*',
+  //     'Access-Control-Allow-Headers': 'Content-Type',
+  //     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
+  //  });
     console.log(body)
-    return this._http.post(this._createWeekendHouse, body, {'headers':headers})
+    return this._http.post(this._createWeekendHouse, body/*, {'headers':headers}*/)
   } 
 
   sendFeedback(feedback: HouseFeedback) : Observable<any> {

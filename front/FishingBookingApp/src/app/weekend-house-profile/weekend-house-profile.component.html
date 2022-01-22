@@ -5,18 +5,18 @@
    
     <div style="margin-right: 55%; margin-top: 0%;">
       <h2>Weekend house reservations: </h2>  
-      <table mat-table [dataSource]="allReservationsForWeekendHouse" class="mat_table_reservation" style="width: 240%;">
+      <table #myTable mat-table [dataSource]="allReservationsForWeekendHouse" class="mat_table_reservation" style="width: 240%;">
         <ng-container matColumnDef="startDateTime">
             <mat-header-cell *matHeaderCellDef> Start Date and Time </mat-header-cell>
                 <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.startDateTime | date : 'short' }}</ng-container>
+                  <ng-container >{{element.startDateTime | date  }}</ng-container>
                     </mat-cell>
           </ng-container>
     
           <ng-container matColumnDef="endDateTime">
             <mat-header-cell *matHeaderCellDef> End Date and Time </mat-header-cell>
                 <mat-cell *matCellDef="let element" >
-                  <ng-container >{{element.endDateTime | date : 'short'}}</ng-container>
+                  <ng-container >{{element.endDateTime | date }}</ng-container>
                     </mat-cell>
           </ng-container>
     

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdditionalService } from '../model/additional-service';
 import { WeekendHouse } from '../model/weekend-house';
 import { WeekendHouseReservation } from '../model/weekend-house-reservation';
@@ -7,13 +7,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, FormGroup } from '@angular/forms';
 import { WeekendHouseTerm } from '../model/term-weekend-house';
 import { Router } from '@angular/router';
+import { MatTable } from '@angular/material/table';
 @Component({
   selector: 'app-weekend-house-profile',
   templateUrl: './weekend-house-profile.component.html',
   styleUrls: ['./weekend-house-profile.component.css']
 })
 export class WeekendHouseProfileComponent implements OnInit {
-
+  @ViewChild(MatTable) myTable!: MatTable<any>;
   weekendHouse : WeekendHouse = 
   {
     id: 0,
@@ -143,6 +144,8 @@ specialOffer  : WeekendHouseReservation = {
   showUserInfo(weekendHouseReservation : WeekendHouseReservation)
   {
       this.weekendHouseReservation.customer = weekendHouseReservation.customer;
+      this.weekendHouseReservation.endDateTime = new Date(weekendHouseReservation.endDateTime);
+      this.weekendHouseReservation.startDateTime = new Date(weekendHouseReservation.startDateTime);
   }
 
   deleteService()
@@ -177,26 +180,30 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
 
   reserveWeekendHouse()
   {
-    this.weekendHouseReservation.weekendHouse = this.weekendHouse
-    this.weekendHouseReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
-    this.weekendHouseReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
-    this.weekendHouseReservation.endSpecialOffer = null
-    this.weekendHouseReservation.price = this.weekendHouse.price
     let currentDate = new Date();
-    if(this.weekendHouseReservation.endDateTime.getTime() < currentDate.getTime()){
+    if(this.weekendHouseReservation.startDateTime.getTime() <= currentDate.getTime() && currentDate.getTime() <= this.weekendHouseReservation.endDateTime.getTime()){
+
+      this.weekendHouseReservation.weekendHouse = this.weekendHouse
+      this.weekendHouseReservation.endDateTime = this.getDateFromDatePickerRange(this.range.value.end)
+      this.weekendHouseReservation.startDateTime = this.getDateFromDatePickerRange(this.range.value.start)
+      this.weekendHouseReservation.endSpecialOffer = null
+      this.weekendHouseReservation.price = this.weekendHouse.price
+  
+    
         for (let service of this.weekendHouseReservation.services) {
           this.weekendHouseReservation.price += service.price
         }
         this._weekendHouseownerService.reserve(this.weekendHouseReservation)
               .subscribe(data => {
                 if(data == null)
-                  this._snackBar.open('Someone has reserved house in selected term before you. Please select other term.', 'Close', {duration: 5000});
+                  this._snackBar.open('Someone has reserved house in selected term before you. Please select other term.', 'Close', {duration: 4000});
                 else {
                   this.allReservationsForWeekendHouse = data,
-                  this.allReservationsForWeekendHouse.filter(res => res.customer != null),
-                  this._snackBar.open('Reservation successful', 'Close', {duration: 5000});
+                  this.allReservationsForWeekendHouse =  this.allReservationsForWeekendHouse.filter(res => res.customer != null),
+                  //this.myTable.renderRows(),
+                  this._snackBar.open('Reservation successful', 'Close', {duration: 2000});
                 }}
-                ,error => this.errorMessage = <any>error); 
+                ,error => this.errorMessage = <any>error);
         this.weekendHouseReservation.customer = null;
         this.range.value.start = null;
         this.range.value.end = null;
@@ -204,7 +211,12 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
         this.weekendHouseReservation.price = 0;
     }
     else
-        this._snackBar.open('Reservation is not possible to make if current reservation has expired!', 'Close', {duration: 5000});   
+        this._snackBar.open('Reservation is not possible to make if current reservation has expired!', 'Close', {duration: 4000});   
+  }
+
+  checkIfReservationAvailable()
+  {
+
   }
 
   makeSpecialOffer()
@@ -214,13 +226,13 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
     this.specialOffer.startDateTime = this.getDateFromDatePickerRange(this.rangeOffer.value.startOffer);
     this.specialOffer.startSpecialOffer = this.getDateFromDatePickerRange(this.rangeDuration.value.startDuration);
     this.specialOffer.endSpecialOffer = this.getDateFromDatePickerRange(this.rangeDuration.value.endDuration);  
-    for (let service of this.specialOffer.services) {
-      this.specialOffer.price += service.price
-    }
+    //for (let service of this.specialOffer.services) {
+    //  this.specialOffer.price += service.price
+    //}
     this._weekendHouseownerService.makeSpecialOffer(this.specialOffer)
           .subscribe(data =>  {
             if(data == null)
-              this._snackBar.open('Someone has reserved house in selected term. Please select other term.', 'Close', {duration: 5000});
+              this._snackBar.open('Someone has reserved house in selected term. Please select other term.', 'Close', {duration: 4000});
             else {
               this.specialOffers = data,     
               this.specialOffers = this.specialOffers.filter(offer => offer.customer == null),
@@ -259,10 +271,8 @@ this._snackBar.open('Successfully edited', 'Close', {duration: 5000});
   {
     this.newFreeTerm.startDateTime = this.rangeTerm.value.startTerm;
     this.newFreeTerm.endDateTime = this.rangeTerm.value.endTerm;
-    this.newFreeTerm.weekendHouse = this.weekendHouse;
-    if(this.newFreeTerm.startDateTime < this.newFreeTerm.endDateTime)
-        if(this.newFreeTerm.startDateTime >= new Date()) //OVDE CE VEROVATNO TREBATI DODATI NEW FREE TERM I PRE SUBSCRIBA DA BI BILO ODMAH VIDLJIVO
-          this._weekendHouseownerService.addFreeTerm(this.newFreeTerm)
+    this.newFreeTerm.weekendHouse = this.weekendHouse; 
+    this._weekendHouseownerService.addFreeTerm(this.newFreeTerm)
           .subscribe(data =>{
             if(data == null)
               this._snackBar.open('Someone has reserved house in selected term. Please select other term.', 'Close', {duration: 5000});

@@ -9,14 +9,14 @@
           <ng-container matColumnDef="startDateTime">
               <mat-header-cell *matHeaderCellDef> Start Date and Time </mat-header-cell>
                   <mat-cell *matCellDef="let element" >
-                    <ng-container >{{element.startDateTime | date : 'short' }}</ng-container>
+                    <ng-container >{{element.startDateTime | date }}</ng-container>
                       </mat-cell>
             </ng-container>
       
             <ng-container matColumnDef="endDateTime">
               <mat-header-cell *matHeaderCellDef> End Date and Time </mat-header-cell>
                   <mat-cell *matCellDef="let element" >
-                    <ng-container >{{element.endDateTime | date : 'short'}}</ng-container>
+                    <ng-container >{{element.endDateTime | date }}</ng-container>
                       </mat-cell>
             </ng-container>
       
