@@ -80,16 +80,13 @@ export class CreateWeekendHouseComponent implements OnInit {
     this.weekendHouse.imagePath = this.pictures
     this._weekendHouseownerService.createWeekendHouse(this.weekendHouse)
       .subscribe(data => {
-        console.log('Dobio: ', data)
-        if(data == null)
-          this._snackBar.open('Incorrect filling of form! Check and send again create request', 'Close', {duration: 5000});
-        else
-          this.weekendHouse = data     
+        console.log('Dobio: ', data) 
         },
         error => this.errorMessage = <any>error); 
 
     console.log(this.weekendHouse);
-    this._snackBar.open('Successfully create Weekend House', 'Close', {duration: 5000});  
+    this._snackBar.open('Successfully create Weekend House', 'Close', {duration: 5000}); 
+    this.router.navigateByUrl("");
   }
 
   onFileSelected(event : any) {

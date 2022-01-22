@@ -281,7 +281,7 @@ specialOffer  : BoatReservation = {
     this._boatOwnerService.addFreeTerm(this.newFreeTerm)
           .subscribe(data =>  {
             if(data == null)
-              this._snackBar.open('Someone has reserved house in selected term. Please select other term.', 'Close', {duration: 5000});
+              this._snackBar.open('Someone has reserved boat in selected term. Please select other term.', 'Close', {duration: 5000});
             else {
               this.allFreeTerms = data,
               this._snackBar.open('Free term created successfuly', 'Close', {duration: 5000});

@@ -152,7 +152,7 @@ public class BoatOwnerController {
     @PostMapping(path = "/addFreeTerm")
     public Set<TermBoatDTO> addFreeTerm(@RequestBody TermBoatDTO termDto){
         TermBoat term = new TermBoat(termDto);
-        if(boatOwnerService.addFreeTerm(term) ==null)
+        if(boatOwnerService.addFreeTerm(term) == null)
             return null;
         return this.getAllFreeTermsForBoat(term.getBoat().getId());
     }

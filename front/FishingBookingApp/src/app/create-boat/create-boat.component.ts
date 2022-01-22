@@ -86,16 +86,13 @@ export class CreateBoatComponent implements OnInit {
     this.boat.imagePath = this.pictures
     this._boatOwnerService.createBoat(this.boat)
       .subscribe(data => {
-        console.log('Dobio: ', data)
-        if(data == null)
-          this._snackBar.open('Incorrect filling of form! Check and send again create request', 'Close', {duration: 5000});
-        else
-          this.boat = data     
+        console.log('Dobio: ', data)   
         },
         error => this.errorMessage = <any>error); 
 
     console.log(this.boat);
     this._snackBar.open('Successfully created Boat', 'Close', {duration: 5000});  
+    this.router.navigateByUrl("");
   }
 
   onFileSelected(event : any) {
