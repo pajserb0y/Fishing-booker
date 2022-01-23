@@ -63,6 +63,12 @@ public class BoatReservationServiceImpl implements BoatReservationService {
                         boatReservationRepository.cancellAllActionsForThisDateRangeForThisBoat(boatReservation.getStartDateTime(),
                                 boatReservation.getEndDateTime(), boat.get().getId());
                     }
+                } else {
+                    if (boat.isPresent()) {        //pravljenje akcije, nije konfliktno jer samo house owner to moze da radi
+                        boatReservation.setBoat(boat.get());
+                        boatReservation.setCustomer(null);
+                        boatReservationRepository.save(boatReservation);
+                    }
                 }
                 return boatReservation;
             }
