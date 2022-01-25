@@ -56,7 +56,14 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
                         fishingLessonReservationRepository.cancellAllActionsForThisDateRangeForThisFishingLesson(fishingLessonReservation.getStartDateTime(),
                                 fishingLessonReservation.getEndDateTime(), fishingLesson.get().getId());
                     }
+                } else {
+                    if (fishingLesson.isPresent()) {  
+                        fishingLessonReservation.setFishingLesson(fishingLesson.get());
+                        fishingLessonReservation.setCustomer(null);
+                        fishingLessonReservationRepository.save(fishingLessonReservation);
+                    }
                 }
+
                 return fishingLessonReservation;
             }
         } catch (LockTimeoutException e) { return null; }
