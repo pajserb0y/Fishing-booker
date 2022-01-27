@@ -57,7 +57,7 @@ public class FishingLessonReservationServiceImpl implements FishingLessonReserva
                                 fishingLessonReservation.getEndDateTime(), fishingLesson.get().getId());
                     }
                 } else {
-                    if (fishingLesson.isPresent()) {  
+                    if (fishingLesson.isPresent()) {
                         fishingLessonReservation.setFishingLesson(fishingLesson.get());
                         fishingLessonReservation.setCustomer(null);
                         fishingLessonReservationRepository.save(fishingLessonReservation);
