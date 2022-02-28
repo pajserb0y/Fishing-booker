@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     public Customer saveCustomer(Customer customer) {
         try {
-            if (customerRepository.findOneByUsername(customer.getUsername()) != null)
+            if (customerRepository.findOneByUsername(customer.getUsername()) != null && customer.getId() == 0)
                 return null;
             List<Role> roles = roleService.findByName("ROLE_CUSTOMER");
             customer.setRole(roles.get(0));
