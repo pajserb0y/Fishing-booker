@@ -1,0 +1,46 @@
+.mat-column-username {
+    flex: 0 0 12%;
+}
+.mat-column-email {
+    flex: 0 0 30%;
+}
+.mat-column-block {
+    flex: 0 0 10%;
+}
+
+.mat-row:hover {
+    background-color: rgb(236, 234, 234);
+    cursor: pointer;
+  }
+
+.searchPosition {
+   /*  margin-left: 20%; */
+  }
+
+  .selected {
+    background-color: red!important;
+  }
+
+.reserve {
+    margin-top: -20%;
+}
+
+.infoDiv{
+  margin-bottom: 8%;
+  position: sticky;
+}
+
+.tableViewNonCustomer {
+    
+}
+
+.tableView {
+    height: 400px;
+    width: 200%;
+    overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
